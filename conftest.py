@@ -1,32 +1,17 @@
 import os,sys,json,shutil
-import pytest
 from py.xml import html
 from config import RunConfig
-path = r'C:\cc\python\epwork\dms\job_manage\epcam'
-sys.path.append(path)
+sys.path.append(RunConfig.epcam_python_path)
 import epcam
-import sys
-import json
-from time import sleep
 import pytest
 from os.path import dirname, abspath
-import os,sys,json,shutil
-path = r'C:\cc\python\epwork\dms\job_manage\epcam'
-sys.path.append(path)
-import epcam
 import epcam_api
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
-sys.path.append(r'C:\cc\python\epwork\dms\job_manage')
-from django.conf import settings
-import django
-sys.path.append(r'C:\cc\python\epwork\dms')
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dms.settings')
-django.setup()
-# from job_manage.epcam_cc_method import EpGerberToODB
-import job_manage.epcam_cc_method as epcam_cc_method
 
-# epcam.init()
+
+
+
 
 # 项目目录配置
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -111,8 +96,8 @@ def capture_screenshots(case_name):
     global driver
     file_name = case_name.split("/")[-1]
     if RunConfig.NEW_REPORT is None:
-        # pass
-        raise NameError('没有初始化测试报告目录')
+        pass
+        # raise NameError('没有初始化测试报告目录')
     else:
         image_dir = os.path.join(RunConfig.NEW_REPORT, "image", file_name)
         # RunConfig.driver.save_screenshot(image_dir)
@@ -129,7 +114,7 @@ def epcam():
     if RunConfig.driver_type == "epcam":
         import epcam
         epcam.init()
-        epcam_api.set_config_path(settings.EP_CAM_PATH)
+        epcam_api.set_config_path(RunConfig.ep_cam_path)
         driver = None
 
     else:

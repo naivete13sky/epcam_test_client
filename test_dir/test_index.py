@@ -1,6 +1,4 @@
-import sys
-import json
-from time import sleep
+from cc_method import GetTestData,DMS
 import pytest
 from os.path import dirname, abspath
 import os,sys,json,shutil
@@ -9,18 +7,7 @@ sys.path.append(path)
 import epcam,job_operation,epcam_api
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
-sys.path.append(r'C:\cc\python\epwork\dms\job_manage')
-from django.conf import settings
-import django
-sys.path.append(r'C:\cc\python\epwork\dms')
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dms.settings')
-django.setup()
-# from job_manage.epcam_cc_method import EpGerberToODB
-import job_manage.epcam_cc_method as epcam_cc_method
-from job_manage.g_cc_method import Asw
-from cc_method import GetTestData,DMS
-from job_manage.models import Job,Layer
-
+from g_cc_method import Asw
 
 from os.path import dirname, abspath
 import os,sys,json,shutil
@@ -32,10 +19,6 @@ import re
 import psycopg2
 import requests
 import rarfile
-
-
-
-
 
 def get_data(file_path):
     """
@@ -52,7 +35,6 @@ def get_data(file_path):
 
 
 
-@pytest.mark.django_db
 def atest_index():
     pass
     job = 'test1'
@@ -61,98 +43,112 @@ def atest_index():
     file_path = r'C:\job\test\gerber\eol80610'
     out_path = r'C:\job\test\odb'
     job_id=1772
-    cc=epcam_cc_method.EpGerberToODB()
-    epcam_cc_method.EpGerberToODB().ep_gerber_to_odb_pytest(job, step, file_path, out_path,job_id)
     # EpGerberToODB().ep_vs(job, step, file_path, out_path)
     assert 1==1
 
-@pytest.mark.django_db
+
+
 @pytest.mark.parametrize("job_id",GetTestData().get_job_id('Input'))
 def test_index(job_id):
     pass
-    print("job_id:",job_id)
-
+    print("G软件VS")
+    # return HttpResponse("G软件VS" + str(job_id))
     data = {}
     g_vs_total_result_flag = True  # True表示最新一次G比对通过
     vs_time_g = str(int(time.time()))
-    data["vs_time_g"] = vs_time_g
-    data["job_id"] = job_id
-    job=Job.objects.get(id=job_id)
-    print(job)
+    data["vs_time_g"]=vs_time_g
+    data["job_id"]=job_id
 
-    #创建临时文件夹
+    conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147", port="5432")
+    cursor = conn.cursor()
+    sql = '''SELECT a.file_odb_current,a.file_odb_g from job a
+        where a.id = {}
+            '''.format(job_id)
+    cursor.execute(sql)
+    conn.commit()
+    ans = cursor.fetchall()
+    conn.close()
+    file_odb_current_name=str(ans[0][0]).split("/")[1]
+    print("file_odb_current_name:", file_odb_current_name)
+
+    file_odb_g_name = str(ans[0][1]).split("/")[1]
+    print("file_odb_g_name:", file_odb_g_name)
+
+
+
+    # 拿到job_ep和job_g
     temp_path = r'C:\cc\share\temp' + "_" + str(job_id) + "_" + vs_time_g
-    temp_gerber_path = os.path.join(temp_path, 'gerber')
-    temp_ep_path = os.path.join(temp_path, 'ep')
-    temp_g_path = os.path.join(temp_path, 'g')
     if not os.path.exists(temp_path):
         os.mkdir(temp_path)
-    if not os.path.exists(temp_gerber_path):
-        os.mkdir(temp_gerber_path)
-    if not os.path.exists(temp_ep_path):
-        os.mkdir(temp_ep_path)
-    if not os.path.exists(temp_g_path):
-        os.mkdir(temp_g_path)
+    if not os.path.exists(os.path.join(temp_path, 'ep')):
+        os.mkdir(os.path.join(temp_path, 'ep'))
+    if not os.path.exists(os.path.join(temp_path, 'g')):
+        os.mkdir(os.path.join(temp_path, 'g'))
 
 
 
-    # 下载原始gerber压缩包
-    file_compressed = str(job.file_compressed)
-    file_compressed_name=file_compressed.split("/")[1]
-    print('file_compressed:',file_compressed)
-    if not os.path.exists(os.path.join(temp_gerber_path, file_compressed_name)):
+    # 下载文件
+    def file_downloand(need_file_path,save_path):  #######文件下载
+        if os.path.exists(need_file_path) == False:  # 判断是否存在文件
+
+            # 文件url
+            file_url = 'http://10.97.80.147/media/files/{}'.format(os.path.basename(need_file_path))
+
+            # 文件基准路径
+            # basedir = os.path.abspath(os.path.dirname(__file__))
+            # 下载到服务器的地址
+            file_path = save_path
+
+            try:
+                # 如果没有这个path则直接创建
+                if not os.path.exists(file_path):
+                    os.makedirs(file_path)
+                # file_suffix = os.path.splitext(file_url)[1]
+                # filename = '{}{}'.format(file_path, file_suffix)  # 拼接文件名。
+                filename=os.path.join(file_path,os.path.basename(need_file_path))
+                urllib.request.urlretrieve(file_url, filename=filename)
+                print("成功下载文件")
+            except IOError as exception_first:  # 设置抛出异常
+                print(1, exception_first)
+
+            except Exception as exception_second:  # 设置抛出异常
+                print(2, exception_second)
+        else:
+            print("文件已经存在！")
+
+    temp_ep_path = os.path.join(temp_path, 'ep')
+    if not os.path.exists(os.path.join(temp_ep_path,file_odb_current_name)):
         print("not have")
-        DMS().file_downloand(os.path.join(temp_gerber_path, file_compressed_name), temp_gerber_path)
+        file_downloand(os.path.join(temp_ep_path,file_odb_current_name),temp_ep_path)
     time.sleep(0.5)
-    file_compressed_file_path = os.listdir(temp_gerber_path)[0]
-    print("file_compressed_file_path:", file_compressed_file_path)
+    ep_tgz_file = os.listdir(temp_ep_path)[0]
+    print("ep_tgz_file:", ep_tgz_file)
+    print("os.listdir(temp_ep_path)[0]:",os.listdir(temp_ep_path)[0])
+    job_operation.untgz(os.path.join(temp_ep_path,os.listdir(temp_ep_path)[0]), temp_ep_path)
+    if os.path.exists(os.path.join(temp_ep_path, ep_tgz_file)):
+        os.remove(os.path.join(temp_ep_path, ep_tgz_file))
+    print("ep_tgz_file_now:", os.listdir(temp_ep_path)[0])
 
-    rf = rarfile.RarFile(os.path.join(temp_gerber_path, file_compressed.split("/")[1]))
-    rf.extractall(temp_gerber_path)
-    temp_compressed = os.path.join(temp_gerber_path, file_compressed.split("/")[1])
-    #删除gerber压缩包
-    if os.path.exists(temp_compressed):
-        os.remove(temp_compressed)
 
-    #******************************悦谱转图--开始******************************#
-    file_path_gerber = os.listdir(temp_gerber_path)[0]
-    job_name = file_path_gerber + '_ep'
-    step = 'orig'
-    file_path = os.path.join(temp_gerber_path, file_path_gerber)
-    out_path = temp_ep_path
 
-    #先清空同名料号
-    # epcam_api.delete_job(job_name)
-    epcam_api.close_job(job_name)
-
-    cc = epcam_cc_method.EpGerberToODB()
-    print("*" * 100, job_name, step, file_path, out_path, job_id)
-    cc.ep_gerber_to_odb2(job_name, step, file_path, out_path, job_id)
-
-    # datashow = {"cmd":"show_layer", "job":job_name, "step": step, "layer":""}
-    # js = json.dumps(datashow)
-    # epcam.view_cmd(js)
-    # print("*" * 100, "temp_gerber_path:", temp_gerber_path, "job_name:", job_name)
-    # job_operation.maketgz(os.path.join(temp_gerber_path, job_name), temp_gerber_path, job_name + '.tgz')
-    # ******************************悦谱转图--结束******************************#
-
-    # ******************************下载G转图--开始******************************#
-    file_odb_g = str(job.file_odb_g)
-    file_odb_g_name = file_odb_g.split("/")[1]
-    if not os.path.exists(os.path.join(temp_g_path, file_odb_g_name)):
+    temp_g_path = os.path.join(temp_path, 'g')
+    if not os.path.exists(os.path.join(temp_g_path,file_odb_g_name)):
         print("not have")
-        DMS().file_downloand(os.path.join(temp_g_path, file_odb_g_name), temp_g_path)
+        file_downloand(os.path.join(temp_g_path,file_odb_g_name),temp_g_path)
     time.sleep(0.2)
     g_tgz_file = os.listdir(temp_g_path)[0]
     print("g_tgz_file:", g_tgz_file)
-    job_operation.untgz(os.path.join(temp_g_path, os.listdir(temp_g_path)[0]), temp_g_path)
+    job_operation.untgz(os.path.join(temp_g_path,os.listdir(temp_g_path)[0]), temp_g_path)
     if os.path.exists(os.path.join(temp_g_path, g_tgz_file)):
         os.remove(os.path.join(temp_g_path, g_tgz_file))
     print("g_tgz_file_now:", os.listdir(temp_g_path)[0])
-    # ******************************下载G转图--结束******************************#
 
-    # ******************************打开料号--开始******************************#
+
+
+    epcam.init()
+
     # 打开job_ep
+    # job_ep_name=str(job.file_odb_current).split('/')[-1][:-4]
     job_ep_name = os.listdir(temp_ep_path)[0]
     new_job_path_ep = os.path.join(temp_ep_path, job_ep_name)
     print("temp_ep_path:", temp_ep_path, "job_ep_name:", job_ep_name)
@@ -165,6 +161,7 @@ def test_index(job_id):
         print("最新-EP-ODB++打开失败！！！！！")
 
     # 打开job_g
+    # job_g_name = str(job.file_odb_g).split('/')[-1][:-4]
     job_g_name = os.listdir(temp_g_path)[0]
     new_job_path_g = os.path.join(temp_g_path, job_g_name)
     print("temp_g_path:", temp_g_path, "job_g_name:", job_g_name)
@@ -175,18 +172,38 @@ def test_index(job_id):
         pass
         g_vs_total_result_flag = False
         print("G-ODB++打开失败！！！！！")
-    # ******************************打开料号--结束******************************#
 
-    # ******************************比图--开始******************************#
     all_result = {}  # 存放所有层比对结果
-    step = "orig"
-    all_layer_from_org = []
-    all_layer = Layer.objects.filter(job=job)
-    print('all_layer:',all_layer)
 
-    for each in all_layer:
-        all_layer_from_org.append(each.layer_org)
-    print('all_layer_from_org:',all_layer_from_org)
+    step = "orig"
+
+    # 原始层文件信息，最全的
+    # all_layer_from_org = models.Layer.objects.filter(job=job)
+
+
+    conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147", port="5432")
+    cursor = conn.cursor()
+    sql = '''SELECT a.layer_org from layer a
+    where a.job_id = {}
+        '''.format(job_id)
+    cursor.execute(sql)
+    conn.commit()
+    ans = cursor.fetchall()
+    conn.close()
+    print(ans)
+
+    all_layer_from_org=[]
+    for each in ans:
+        # print(each[0])
+        all_layer_from_org.append(each)
+
+
+
+
+
+
+
+    print("all_layer_from_org:", all_layer_from_org)
 
     # 以G软件解析好的为主，来VS
     all_layer_g = job_operation.get_all_layers(job_g_name)
@@ -212,14 +229,16 @@ def test_index(job_id):
 
     job1 = os.listdir(os.path.join(temp_path, 'g'))[0]
     # jobpath1 = r'Z:/share/temp_{}_{}/g/{}'.format(str(request.user),str(job_id),job1)
-    jobpath1 = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g,job1)
+    # jobpath1 = r'\\vmware-host\Shared Folders\share/temp/g/{}'.format(job1)
+    jobpath1 = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job1)
     step1 = 'orig'
     layer1 = 'bottom.art'
 
     job2 = os.listdir(os.path.join(temp_path, 'ep'))[0]
 
     # jobpath2 = r'Z:/share/temp_{}_{}/ep/{}'.format(str(request.user),str(job_id),job2)
-    jobpath2 = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g,job2)
+    # jobpath2 = r'\\vmware-host\Shared Folders\share/temp/ep/{}'.format(job2)
+    jobpath2 = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job2)
     step2 = 'orig'
     layer2 = 'bottom.art'
 
@@ -235,9 +254,11 @@ def test_index(job_id):
 
     print("job1:", job1, "job2:", job2)
 
-    # 先删除同名料号
+    #先删除同名料号
     asw.delete_job(job1)
     asw.delete_job(job2)
+
+
 
     asw.import_odb_folder(jobpath1)  # 导入要比图的资料,G的
     asw.import_odb_folder(jobpath2)  # 导入要比图的资料，悦谱的
@@ -261,16 +282,17 @@ def test_index(job_id):
     asw.save_job(job1)
     asw.save_job(job2)
 
+
+
     asw.layer_compare_close_job(jobpath1, step1, layer1, jobpath2, step2, layer2, layer2_ext, tol, map_layer,
                                 map_layer_res)
 
-    temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
+    temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
+        'temp' + "_" + str(job_id) + "_" + vs_time_g)
 
-
-    if not os.path.exists(os.path.join(temp_path,'ze')):
-        os.mkdir(os.path.join(temp_path,'ze'))
-
-
+    if not os.path.exists(os.path.join(temp_path, 'ze')):
+        os.mkdir(os.path.join(temp_path, 'ze'))
+    # asw.g_export(job1, r'Z:/share/temp')
     asw.g_export(job1, temp_path_g_export)
     # asw.delete_job(job1)
     # asw.delete_job(job2)
@@ -283,8 +305,9 @@ def test_index(job_id):
     for layer in all_layer_g:
         pass
         print(layer)
-        layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step1, layer, jobpath2, step2, layer, layer2_ext, tol,
-                                                  layer + '-com', map_layer_res,temp_path)
+        layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step1, layer, jobpath2, step2, layer, layer2_ext,
+                                                            tol,
+                                                            layer + '-com', map_layer_res, temp_path)
         # print(layer_result)
 
         all_result[layer] = layer_result
@@ -302,12 +325,12 @@ def test_index(job_id):
                 try:
                     # print('layer_result_dict["result"]:',layer_result_dict["result"])
                     if layer_result == "正常":
-                        print(layer, "比对通过！")
+                        print(layer,"比对通过！")
                     elif layer_result == "错误":
-                        print(layer, "未通过！")
+                        print(layer,"未通过！")
                         g_vs_total_result_flag = False
                     elif layer_result == "未比对":
-                        print(layer, "未比对！")
+                        print(layer,"未比对！")
                         g_vs_total_result_flag = False
                     else:
                         print("异常，状态异常！！！")
@@ -332,7 +355,9 @@ def test_index(job_id):
         os.remove(r'C:\EPSemicon\cc\result.json')
 
     with open(r'C:\EPSemicon\cc\result.json', 'w') as f:
-        json.dump(all_result, f, indent=4, ensure_ascii=False)
+        json.dump(all_result, f,indent=4, ensure_ascii=False)
+
+
 
     # 删除temp_path
     # if os.path.exists(temp_path):
@@ -340,10 +365,10 @@ def test_index(job_id):
 
     # if os.path.exists(r'C:\cc\share\temp' + "_" + str(request.user) + "_" + str(job_id)):
     #     shutil.rmtree(r'C:\cc\share\temp' + "_" + str(request.user) + "_" + str(job_id))
-    data = {}
+    data={}
     data["vs_time_g"] = vs_time_g
-    data["job_id"] = job_id
-    data["all_result"] = all_result
+    data["job_id"]=job_id
+    data["all_result"]=all_result
 
     print(data)
 
@@ -352,8 +377,3 @@ def test_index(job_id):
     for key in all_result:
         print(key + ':' + all_result[key])
         assert all_result[key] == "正常"
-    # ******************************比图--结束******************************#
-
-
-
-    assert 1==1
