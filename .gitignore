@@ -142,3 +142,4 @@ cython_debug/
 # cc
 test_report/
 .idea
+config.xlsx
