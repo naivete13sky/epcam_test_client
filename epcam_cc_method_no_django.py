@@ -141,7 +141,7 @@ class EpGerberToODB:
                     print('layer_e2_number_format_A_ep:', layer_e2_number_format_A_ep)
                     layer_e2_number_format_B_ep = ans[0][5]
                     print('layer_e2_number_format_B_ep:', layer_e2_number_format_B_ep)
-                    layer_e2_tool_units_ep = ans[0][5]
+                    layer_e2_tool_units_ep = ans[0][6]
                     print('layer_e2_tool_units_ep:', layer_e2_tool_units_ep)
 
 
