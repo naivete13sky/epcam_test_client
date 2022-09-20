@@ -121,7 +121,7 @@ class EpGerberToODB:
                     print('''file.replace(' ','-').replace('(','-').replace(')','-'):''',file.replace(' ','-').replace('(','-').replace(')','-'))
                     conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147",port="5432")
                     cursor = conn.cursor()
-                    sql = '''SELECT a.layer,a.status,a.units_ep,a.zeroes_omitted_ep,a."number_format_A_ep",a."number_format_B_ep,a.tool_units_ep" from layer a
+                    sql = '''SELECT a.layer,a.status,a.units_ep,a.zeroes_omitted_ep,a."number_format_A_ep",a."number_format_B_ep",a.tool_units_ep from layer a
                                 where a.job_id = {} and a.layer = '{}'
                                     '''.format(job_id,file.replace(' ','-').replace('(','-').replace(')','-'))
                     print("sql：",sql)
