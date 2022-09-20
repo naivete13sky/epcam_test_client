@@ -7,7 +7,7 @@ sys.path.append(path)
 import epcam,job_operation,epcam_api
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
-from g_cc_method import Asw
+from g_cc_method_no_django import Asw
 
 from os.path import dirname, abspath
 import os,sys,json,shutil

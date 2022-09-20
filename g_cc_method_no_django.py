@@ -8,14 +8,7 @@ import time
 import linecache
 import gl as gl
 LAYER_COMPARE_JSON = 'layer_compare.json'
-sys.path.append(r'C:\cc\python\epwork\dms\job_manage')
-from django.conf import settings
-import django
-sys.path.append(r'C:\cc\python\epwork\dms')
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'dms.settings')
-django.setup()
-from job_manage import models
-from job_manage.epcam import job_operation
+
 
 
 
