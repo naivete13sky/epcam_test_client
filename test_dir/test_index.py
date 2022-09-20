@@ -398,8 +398,8 @@ def test_gerber_to_odb_ep_local_convert(job_id):
     conn.commit()
     ans = cursor.fetchall()
     conn.close()
-    file_odb_current_name=str(ans[0][0]).split("/")[1]
-    print("file_odb_current_name:", file_odb_current_name)
+    # file_odb_current_name=str(ans[0][0]).split("/")[1]
+    # print("file_odb_current_name:", file_odb_current_name)
 
     file_odb_g_name = str(ans[0][1]).split("/")[1]
     print("file_odb_g_name:", file_odb_g_name)

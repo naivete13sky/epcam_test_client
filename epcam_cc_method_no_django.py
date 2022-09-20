@@ -7,7 +7,7 @@ import psycopg2
 import pytest
 from os.path import dirname, abspath
 import os,sys,json,shutil
-sys.path.append(r'C:\cc\ep_local\product\EP-CAM\version\20220919\EP-CAM_beta_2.28.054_s36_jiami\Release')
+# sys.path.append(r'C:\cc\ep_local\product\EP-CAM\version\20220919\EP-CAM_beta_2.28.054_s36_jiami\Release')
 sys.path.append(r'C:\EPSemicon\cc\epcam')
 import epcam
 import epcam_api
@@ -121,7 +121,7 @@ class EpGerberToODB:
                     print('''file.replace(' ','-').replace('(','-').replace(')','-'):''',file.replace(' ','-').replace('(','-').replace(')','-'))
                     conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147",port="5432")
                     cursor = conn.cursor()
-                    sql = '''SELECT a.layer,a.status,a.units_ep,a.zeroes_omitted_ep,a."number_format_A_ep",a."number_format_B_ep" from layer a
+                    sql = '''SELECT a.layer,a.status,a.units_ep,a.zeroes_omitted_ep,a."number_format_A_ep",a."number_format_B_ep,a.tool_units_ep" from layer a
                                 where a.job_id = {} and a.layer = '{}'
                                     '''.format(job_id,file.replace(' ','-').replace('(','-').replace(')','-'))
                     print("sql：",sql)
@@ -141,6 +141,8 @@ class EpGerberToODB:
                     print('layer_e2_number_format_A_ep:', layer_e2_number_format_A_ep)
                     layer_e2_number_format_B_ep = ans[0][5]
                     print('layer_e2_number_format_B_ep:', layer_e2_number_format_B_ep)
+                    layer_e2_tool_units_ep = ans[0][5]
+                    print('layer_e2_tool_units_ep:', layer_e2_tool_units_ep)
 
 
                     print('原来：',file_param)
@@ -150,7 +152,7 @@ class EpGerberToODB:
                             file_param['zeroes_omitted'] = layer_e2_zeroes_omitted_ep
                             file_param['Number_format_integer'] = int(layer_e2_number_format_A_ep)
                             file_param['Number_format_decimal'] = int(layer_e2_number_format_B_ep)
-                            file_param['tool_units'] = layer_e2.tool_units_ep
+                            file_param['tool_units'] = layer_e2_tool_units_ep
                         print('现在：',file_param)
                         re = epcam_api.file_translate(os.path.join(root, file.replace(' ','-').replace('(','-').replace(')','-')), job, step, file_name, file_param, '', '', '',[])
                     except:
@@ -212,7 +214,7 @@ if __name__ == "__main__":
     epcam.init()
     job = 'test1'
     step = 'orig'
-    file_path = r'C:\Users\cheng.chen\Desktop\760'
+    file_path = r'C:\Users\cheng.chen\Desktop\nccb'
     out_path = r'C:\job\test\odb'
     cc=EpGerberToODB()
-    cc.ep_gerber_to_odb_pytest(job, step, file_path, out_path,268)
+    cc.ep_gerber_to_odb_pytest(job, step, file_path, out_path,250)

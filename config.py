@@ -12,7 +12,7 @@ class RunConfig:
 
     driver_type = "epcam"
 
-    ep_cam_path=r'C:\cc\ep_local\product\EP-CAM\version\20220919\EP-CAM_beta_2.28.054_s36_jiami\Release'
+    ep_cam_path=r'C:\cc\ep_local\product\EP-CAM\version\20220920\EP-CAM_beta_2.28.054_s37_jiami\Release'
     epcam_python_path=r'C:\EPSemicon\cc\epcam'
 
     # 配置运行的 URL
