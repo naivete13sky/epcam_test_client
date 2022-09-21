@@ -1140,7 +1140,7 @@ def getFlist(path):
 
 if __name__ == '__main__':
     pass
-    asw = Asw(gl.gateway_path)
+    asw = Asw(gl.g_getway_path)
 
     #删除所有料号
     # asw.clean_g_all_pre_get_job_list(r'//vmware-host/Shared Folders/share/job_list.txt')
