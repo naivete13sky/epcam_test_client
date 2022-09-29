@@ -765,28 +765,20 @@ def atest_gerber_to_odb_ep_local_convert(job_id):
 
 @pytest.mark.parametrize("job_id", GetTestData().get_job_id('Input'))
 def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
-    pass
     print("G软件VS")
     asw = Asw(r"C:\EPSemicon\cc\gateway.exe")#拿到G软件
-
 
     data = {}#存放当前测试料号的每一层的比对结果。
     g_vs_total_result_flag = True  # True表示最新一次G比对通过
     vs_time_g = str(int(time.time()))#比对时间
-    data["vs_time_g"] = vs_time_g
+    data["vs_time_g"] = vs_time_g#比对时间存入字典
     data["job_id"] = job_id
-
-
-
 
     sql = '''SELECT a.file_odb_current,a.file_odb_g,a.file_compressed from job a
         where a.id = {}
             '''.format(job_id)
     print('sql:', sql)
     ans = DMS().get_data_from_db(sql)
-
-    # file_odb_current_name=str(ans[0][0]).split("/")[1]
-    # print("file_odb_current_name:", file_odb_current_name)
 
     file_odb_g_name = str(ans[0][1]).split("/")[1]
     print("file_odb_g_name:", file_odb_g_name)
@@ -808,38 +800,11 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     if not os.path.exists(temp_g_path):
         os.mkdir(temp_g_path)
 
-    # 下载文件
-    def file_downloand(need_file_path, save_path):  #######文件下载
-        if os.path.exists(need_file_path) == False:  # 判断是否存在文件
 
-            # 文件url
-            file_url = 'http://10.97.80.147/media/files/{}'.format(os.path.basename(need_file_path))
-
-            # 文件基准路径
-            # basedir = os.path.abspath(os.path.dirname(__file__))
-            # 下载到服务器的地址
-            file_path = save_path
-
-            try:
-                # 如果没有这个path则直接创建
-                if not os.path.exists(file_path):
-                    os.makedirs(file_path)
-                # file_suffix = os.path.splitext(file_url)[1]
-                # filename = '{}{}'.format(file_path, file_suffix)  # 拼接文件名。
-                filename = os.path.join(file_path, os.path.basename(need_file_path))
-                urllib.request.urlretrieve(file_url, filename=filename)
-                print("成功下载文件")
-            except IOError as exception_first:  # 设置抛出异常
-                print(1, exception_first)
-
-            except Exception as exception_second:  # 设置抛出异常
-                print(2, exception_second)
-        else:
-            print("文件已经存在！")
 
     if not os.path.exists(os.path.join(temp_gerber_path, file_gerber_name)):
         print("not have")
-        file_downloand(os.path.join(temp_gerber_path, file_gerber_name), temp_gerber_path)
+        DMS().file_downloand(os.path.join(temp_gerber_path, file_gerber_name), temp_gerber_path)
     time.sleep(0.5)
     file_compressed_file_path = os.listdir(temp_gerber_path)[0]
     print("file_compressed_file_path:", file_compressed_file_path)
@@ -880,7 +845,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     if not os.path.exists(os.path.join(temp_g_path, file_odb_g_name)):
         print("not have")
-        file_downloand(os.path.join(temp_g_path, file_odb_g_name), temp_g_path)
+        DMS().file_downloand(os.path.join(temp_g_path, file_odb_g_name), temp_g_path)
     time.sleep(0.2)
     g_tgz_file = os.listdir(temp_g_path)[0]
     print("g_tgz_file:", g_tgz_file)
