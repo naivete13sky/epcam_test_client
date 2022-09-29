@@ -65,15 +65,14 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     #下载并解压原始gerber文件
     DMS().get_file_from_dms_db(temp_path, job_id, field='file_compressed', decompress='rar')
 
-    file_path_gerber = os.listdir(temp_gerber_path)[0]
-    job_name = file_path_gerber + '_ep'
-    step = 'orig'
-    file_path = os.path.join(temp_gerber_path, file_path_gerber)
+    # 悦谱转图
+    job_name_ep = os.listdir(temp_gerber_path)[0] + '_ep'
+    file_path_gerber = os.path.join(temp_gerber_path, os.listdir(temp_gerber_path)[0])
     out_path = os.path.join(temp_path, 'ep')
-
-    # 悦谱转图，先清空同名料号
-    epcam_api.close_job(job_name)
-    EpGerberToODB().ep_gerber_to_odb_pytest(job_name, step, file_path, out_path, job_id)
+    #先清空同名料号
+    print("job_name_ep::::::::::::::::::::::",job_name_ep)
+    epcam_api.close_job(job_name_ep)
+    EpGerberToODB().ep_gerber_to_odb_pytest(job_name_ep, 'orig', file_path_gerber, out_path, job_id)
 
     #下载G转图tgz，并解压好
     DMS().get_file_from_dms_db(temp_path, job_id, field='file_odb_g', decompress='tgz')
@@ -101,10 +100,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         print('G软件tgz中的层信息：', all_layer_g)
 
     step = "orig"
-    # 获取原始层文件信息，最全的
-    ans = DMS().get_job_layer_fields_from_dms_db_pandas(job_id,field='layer_org')
-    all_layer_from_org = [each for each in ans]
-    print("all_layer_from_org:", all_layer_from_org)
 
 
     #以G转图为主来比对
@@ -155,8 +150,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     asw.save_job(job1)
     asw.save_job(job2)
 
-    asw.layer_compare_close_job(jobpath1, step1, layer1, jobpath2, step2, layer2, layer2_ext, tol, map_layer,
-                                map_layer_res)
+    asw.layer_compare_close_job(jobpath1=jobpath1, jobpath2=jobpath2)
 
     temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
         'temp' + "_" + str(job_id) + "_" + vs_time_g)
@@ -168,7 +162,14 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     # asw.delete_job(job1)
     # asw.delete_job(job2)
 
+
+
+
     # 开始查看比对结果
+    # 获取原始层文件信息，最全的
+    ans = DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer_org')
+    all_layer_from_org = [each for each in ans]
+    print("all_layer_from_org:", all_layer_from_org)
     # 先解压
     temp_path_ze = r'C:\cc\share\{}\ze'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
     job_operation.untgz(os.path.join(temp_path_ze, os.listdir(temp_path_ze)[0]), temp_path)
