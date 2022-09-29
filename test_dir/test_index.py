@@ -774,11 +774,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["vs_time_g"] = vs_time_g#比对时间存入字典
     data["job_id"] = job_id
 
-    job_current_all_fields = DMS().get_job_fields_from_dms_db_pandas(job_id)
-
-    file_odb_g_name = job_current_all_fields['file_odb_g'].split("/")[1]
-    # print("file_odb_g_name:", file_odb_g_name,"file_gerber_name:", file_gerber_name)
-
     #准备好临时目录
     temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
     temp_gerber_path = os.path.join(temp_path, 'gerber')
@@ -808,46 +803,30 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     print("*" * 100, job_name, step, file_path, out_path, job_id)
     cc.ep_gerber_to_odb_pytest(job_name, step, file_path, out_path, job_id)
 
-
     #下载G转图tgz，并解压好
-    if not os.path.exists(os.path.join(temp_g_path, file_odb_g_name)):
-        print("not have")
-        DMS().file_downloand(os.path.join(temp_g_path, file_odb_g_name), temp_g_path)
-    time.sleep(0.2)
-    g_tgz_file = os.listdir(temp_g_path)[0]
-    print("g_tgz_file:", g_tgz_file)
-    job_operation.untgz(os.path.join(temp_g_path, os.listdir(temp_g_path)[0]), temp_g_path)
-    if os.path.exists(os.path.join(temp_g_path, g_tgz_file)):
-        os.remove(os.path.join(temp_g_path, g_tgz_file))
-    print("g_tgz_file_now:", os.listdir(temp_g_path)[0])
+    DMS().get_file_from_dms_db(temp_path, job_id, field='file_odb_g', decompress='tgz')
 
 
     # 打开job_ep
     job_ep_name = os.listdir(temp_ep_path)[0]
-    new_job_path_ep = os.path.join(temp_ep_path, job_ep_name)
-    print("temp_ep_path:", temp_ep_path, "job_ep_name:", job_ep_name)
     res = job_operation.open_job(temp_ep_path, job_ep_name)
-    print("open ep tgz:", res)
+    print("open ep result:", res)
     print("job_ep_layer:", job_operation.get_all_layers(job_ep_name))
     if len(job_operation.get_all_layers(job_ep_name)) == 0:
-        pass
         g_vs_total_result_flag = False
         print("最新-EP-ODB++打开失败！！！！！")
 
     # 打开job_g
-    # job_g_name = str(job.file_odb_g).split('/')[-1][:-4]
     job_g_name = os.listdir(temp_g_path)[0]
-    new_job_path_g = os.path.join(temp_g_path, job_g_name)
     print("temp_g_path:", temp_g_path, "job_g_name:", job_g_name)
     job_operation.open_job(temp_g_path, job_g_name)
-    print("open gp tgz:", res)
+    print("open g result:", res)
     print("job_g_layer:", job_operation.get_all_layers(job_g_name))
     if len(job_operation.get_all_layers(job_g_name)) == 0:
-        pass
         g_vs_total_result_flag = False
         print("G-ODB++打开失败！！！！！")
 
-    all_result = {}  # 存放所有层比对结果
+
 
     step = "orig"
 

@@ -126,7 +126,7 @@ class DMS():
                     job_operation.untgz(os.path.join(temp_g_path, os.listdir(temp_g_path)[0]), temp_g_path)
                     if os.path.exists(os.path.join(temp_g_path, g_tgz_file)):
                         os.remove(os.path.join(temp_g_path, g_tgz_file))
-                    print("g_tgz_file_now:", os.listdir(temp_g_path)[0])
+
 
 
 if __name__ == "__main__":
