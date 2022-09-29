@@ -82,58 +82,38 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     job_ep_name = os.listdir(temp_ep_path)[0]
     res = job_operation.open_job(temp_ep_path, job_ep_name)
     print("open ep result:", res)
-    print("job_ep_layer:", job_operation.get_all_layers(job_ep_name))
-    if len(job_operation.get_all_layers(job_ep_name)) == 0:
+    all_layer_ep=job_operation.get_all_layers(job_ep_name)
+    if len(all_layer_ep) == 0:
         g_vs_total_result_flag = False
         print("最新-EP-ODB++打开失败！！！！！")
+    else:
+        print('悦谱软件tgz中的层信息：', all_layer_ep)
 
     # 打开job_g
     job_g_name = os.listdir(temp_g_path)[0]
-    print("temp_g_path:", temp_g_path, "job_g_name:", job_g_name)
     job_operation.open_job(temp_g_path, job_g_name)
     print("open g result:", res)
-    print("job_g_layer:", job_operation.get_all_layers(job_g_name))
-    if len(job_operation.get_all_layers(job_g_name)) == 0:
+    all_layer_g=job_operation.get_all_layers(job_g_name)
+    if len(all_layer_g) == 0:
         g_vs_total_result_flag = False
         print("G-ODB++打开失败！！！！！")
+    else:
+        print('G软件tgz中的层信息：', all_layer_g)
 
     step = "orig"
-    # 原始层文件信息，最全的
+    # 获取原始层文件信息，最全的
     ans = DMS().get_job_layer_fields_from_dms_db_pandas(job_id,field='layer_org')
     all_layer_from_org = [each for each in ans]
     print("all_layer_from_org:", all_layer_from_org)
 
-    # 以G软件解析好的为主，来VS
-    all_layer_g = job_operation.get_all_layers(job_g_name)
-    print('G软件tgz中的层信息：', all_layer_g)
 
-    all_layer_ep = job_operation.get_all_layers(job_ep_name)
-    print('悦谱软件tgz中的层信息：', all_layer_ep)
-
-    if len(all_layer_g) == 0:
-        pass
-        g_vs_total_result_flag = False
-
-    if len(all_layer_ep) == 0:
-        pass
-        g_vs_total_result_flag = False
-
-    # g_temp_path = r'Z:/share/temp' + "_" + str(request.user) + "_" + str(job_id)
-    g_temp_path = r'\\vmware-host\Shared Folders\share/temp'
-    rets = []
-    paras = {}
-
+    #以G转图为主来比对
     job1 = os.listdir(os.path.join(temp_path, 'g'))[0]
-    # jobpath1 = r'Z:/share/temp_{}_{}/g/{}'.format(str(request.user),str(job_id),job1)
-    # jobpath1 = r'\\vmware-host\Shared Folders\share/temp/g/{}'.format(job1)
     jobpath1 = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job1)
     step1 = 'orig'
     layer1 = 'bottom.art'
 
     job2 = os.listdir(os.path.join(temp_path, 'ep'))[0]
-
-    # jobpath2 = r'Z:/share/temp_{}_{}/ep/{}'.format(str(request.user),str(job_id),job2)
-    # jobpath2 = r'\\vmware-host\Shared Folders\share/temp/ep/{}'.format(job2)
     jobpath2 = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job2)
     step2 = 'orig'
     layer2 = 'bottom.art'
@@ -205,17 +185,12 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         all_result[layer] = layer_result
 
         for each in all_layer_from_org:
-            # print("each[0]:",each[0])
-            # print("layer:",layer,"str(each[0]):",str(each[0]).lower().replace(" ","-").replace("(","-").replace(")","-"))
             if layer == str(each[0]).lower().replace(" ", "-").replace("(", "-").replace(")", "-"):
                 print("I find it!!!!!!!!!!!!!!")
                 print(layer_result, type(layer_result))
-                # layer_result_dict=json.loads(layer_result)
-                # print(layer_result_dict)
-                # print(len(layer_result_dict["result"]))
+
 
                 try:
-                    # print('layer_result_dict["result"]:',layer_result_dict["result"])
                     if layer_result == "正常":
                         print(layer, "比对通过！")
                     elif layer_result == "错误":
