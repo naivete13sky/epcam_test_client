@@ -1,11 +1,15 @@
-import os
-import pandas as pd
-import urllib
+import os,sys
+import urllib  # 导入urllib库
+import urllib.request
 import time
 import psycopg2
 import rarfile
 from sqlalchemy import create_engine
 import pandas as pd
+from config import RunConfig
+
+sys.path.append(RunConfig.epcam_python_path)
+import epcam,job_operation,epcam_api
 
 class GetTestData():
     pass
@@ -46,7 +50,7 @@ class DMS():
         else:
             print("文件已经存在！")
 
-    def get_data_from_dms_db_sql(self,sql):
+    def get_job_fields_from_dms_db_sql(self,sql):
         pass
         conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147", port="5432")
         cursor = conn.cursor()
@@ -58,7 +62,7 @@ class DMS():
         conn.close()
         return ans
 
-    def get_data_from_dms_db_pandas(self, job_id,*args, **kw):
+    def get_job_fields_from_dms_db_pandas(self, job_id,*args, **kw):
         sql = '''SELECT a.* from job a
                 where a.id = {}
                 '''.format(job_id)
@@ -70,20 +74,59 @@ class DMS():
             return pd_job_current
 
 
-    def get_file_compressed_from_dms_db(self,need_file_path, save_path,decompress_bool):
-        pass
-        self.file_downloand(need_file_path, save_path)
-        if decompress_bool == True:
-            pass
-            # time.sleep(0.1)
-            # file_compressed_file_path = os.listdir(temp_gerber_path)[0]
-            # print("file_compressed_file_path:", file_compressed_file_path)
-            # temp_compressed = os.path.join(temp_gerber_path, file_gerber_name)
-            # rf = rarfile.RarFile(temp_compressed)
-            # rf.extractall(temp_gerber_path)
-            # # 删除gerber压缩包
-            # if os.path.exists(temp_compressed):
-            #     os.remove(temp_compressed)
+    def get_file_from_dms_db(self,temp_path,job_id,*args, **kw):
+        job_current_all_fields = self.get_job_fields_from_dms_db_pandas(job_id)
+        if not os.path.exists(temp_path):
+            os.mkdir(temp_path)
+
+        #判断是要下载哪个类型的文件
+        if 'field' in kw:
+            print('field:',kw['field'])
+            #如果下载的是整理过的gerber压缩包
+            if kw['field'] == 'file_compressed':
+                temp_gerber_path = os.path.join(temp_path, 'gerber')
+                if not os.path.exists(temp_gerber_path):
+                    os.mkdir(temp_gerber_path)
+                file_gerber_name = job_current_all_fields['file_compressed'].split("/")[1]
+
+                # 下载并解压原始gerber文件
+                if not os.path.exists(os.path.join(temp_gerber_path, file_gerber_name)):
+                    print("not have")
+                    self.file_downloand(os.path.join(temp_gerber_path, file_gerber_name), temp_gerber_path)
+
+                if 'decompress' in kw:
+                    print('decompress',kw['decompress'])
+                    time.sleep(0.1)
+                    file_compressed_file_path = os.listdir(temp_gerber_path)[0]
+                    print("file_compressed_file_path:", file_compressed_file_path)
+                    temp_compressed = os.path.join(temp_gerber_path, file_gerber_name)
+                    rf = rarfile.RarFile(temp_compressed)
+                    rf.extractall(temp_gerber_path)
+                    # 删除gerber压缩包
+                    if os.path.exists(temp_compressed):
+                        os.remove(temp_compressed)
+
+            # 如果下载的是G转图的tgz
+            if kw['field'] == 'file_odb_g':
+                temp_g_path = os.path.join(temp_path, 'g')
+                if not os.path.exists(temp_g_path):
+                    os.mkdir(temp_g_path)
+                file_odb_g_name = job_current_all_fields['file_odb_g'].split("/")[1]
+
+                # 下载并解压原始gerber文件
+                if not os.path.exists(os.path.join(temp_g_path, file_odb_g_name)):
+                    print("not have")
+                    self.file_downloand(os.path.join(temp_g_path, file_odb_g_name), temp_g_path)
+
+                if 'decompress' in kw:
+                    print('decompress', kw['decompress'])
+                    time.sleep(0.1)
+                    g_tgz_file = os.listdir(temp_g_path)[0]
+                    print("g_tgz_file:", g_tgz_file)
+                    job_operation.untgz(os.path.join(temp_g_path, os.listdir(temp_g_path)[0]), temp_g_path)
+                    if os.path.exists(os.path.join(temp_g_path, g_tgz_file)):
+                        os.remove(os.path.join(temp_g_path, g_tgz_file))
+                    print("g_tgz_file_now:", os.listdir(temp_g_path)[0])
 
 
 if __name__ == "__main__":

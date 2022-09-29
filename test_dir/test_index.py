@@ -774,10 +774,10 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["vs_time_g"] = vs_time_g#比对时间存入字典
     data["job_id"] = job_id
 
-    job_current_all_fields = DMS().get_data_from_dms_db_pandas(job_id)
-    file_gerber_name = job_current_all_fields['file_compressed'].split("/")[1]
+    job_current_all_fields = DMS().get_job_fields_from_dms_db_pandas(job_id)
+
     file_odb_g_name = job_current_all_fields['file_odb_g'].split("/")[1]
-    print("file_odb_g_name:", file_odb_g_name,"file_gerber_name:", file_gerber_name)
+    # print("file_odb_g_name:", file_odb_g_name,"file_gerber_name:", file_gerber_name)
 
     #准备好临时目录
     temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
@@ -794,18 +794,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         os.mkdir(temp_g_path)
 
     #下载并解压原始gerber文件
-    if not os.path.exists(os.path.join(temp_gerber_path, file_gerber_name)):
-        print("not have")
-        DMS().file_downloand(os.path.join(temp_gerber_path, file_gerber_name), temp_gerber_path)
-    time.sleep(0.1)
-    file_compressed_file_path = os.listdir(temp_gerber_path)[0]
-    print("file_compressed_file_path:", file_compressed_file_path)
-    temp_compressed = os.path.join(temp_gerber_path, file_gerber_name)
-    rf = rarfile.RarFile(temp_compressed)
-    rf.extractall(temp_gerber_path)
-    # 删除gerber压缩包
-    if os.path.exists(temp_compressed):
-        os.remove(temp_compressed)
+    DMS().get_file_from_dms_db(temp_path, job_id, field='file_compressed', decompress='rar')
 
     file_path_gerber = os.listdir(temp_gerber_path)[0]
     job_name = file_path_gerber + '_ep'
@@ -813,15 +802,14 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     file_path = os.path.join(temp_gerber_path, file_path_gerber)
     out_path = os.path.join(temp_path, 'ep')
 
-    # 先清空同名料号
+    # 悦谱转图，先清空同名料号
     epcam_api.close_job(job_name)
-
     cc = EpGerberToODB()
     print("*" * 100, job_name, step, file_path, out_path, job_id)
     cc.ep_gerber_to_odb_pytest(job_name, step, file_path, out_path, job_id)
 
 
-
+    #下载G转图tgz，并解压好
     if not os.path.exists(os.path.join(temp_g_path, file_odb_g_name)):
         print("not have")
         DMS().file_downloand(os.path.join(temp_g_path, file_odb_g_name), temp_g_path)
