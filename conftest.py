@@ -9,7 +9,7 @@ import epcam_api
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
 
-
+from g_cc_method_no_django import Asw
 
 
 
@@ -78,7 +78,7 @@ def description_html(desc):
             desc_ = desc_ + ";"
         else:
             desc_ = desc_ + desc[i]
-    
+
     desc_lines = desc_.split(";")
     desc_html = html.html(
         html.head(
@@ -124,20 +124,16 @@ def epcam():
 
     return driver
 
+@pytest.fixture(scope='function', autouse=False)
+def prepare_test_job_clean_g():
+    pass
+    # 删除所有料号
+    asw = Asw(r"C:\EPSemicon\cc\gateway.exe")
+    asw.clean_g_all_pre_get_job_list(r'//vmware-host/Shared Folders/share/job_list.txt')
+    asw.clean_g_all_do_clean(r'C:\cc\share\job_list.txt')
 
-
-@pytest.fixture(scope='session')
-def django_db_setup():
-    settings.DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'dms',
-        # 'NAME': 'ep_develop',
-        'USER': 'postgres',
-        'PASSWORD': 'cc',
-        'HOST': '10.97.80.147',
-        # 'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+    #yield前是前置操作
+    yield
 
 
 
