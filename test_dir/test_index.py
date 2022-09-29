@@ -774,13 +774,9 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["vs_time_g"] = vs_time_g#比对时间存入字典
     data["job_id"] = job_id
 
-    sql = '''SELECT a.file_odb_current,a.file_odb_g,a.file_compressed from job a
-        where a.id = {}
-        '''.format(job_id)
-    ans = DMS().get_data_from_dms_db_sql(sql)
-
-    file_gerber_name = str(DMS().get_data_from_dms_db_pandas(job_id, field='file_compressed')).split("/")[1]
-    file_odb_g_name = str(DMS().get_data_from_dms_db_pandas(job_id, field='file_odb_g')).split("/")[1]
+    job_current_all_fields = DMS().get_data_from_dms_db_pandas(job_id)
+    file_gerber_name = job_current_all_fields['file_compressed'].split("/")[1]
+    file_odb_g_name = job_current_all_fields['file_odb_g'].split("/")[1]
     print("file_odb_g_name:", file_odb_g_name,"file_gerber_name:", file_gerber_name)
 
     #准备好临时目录
