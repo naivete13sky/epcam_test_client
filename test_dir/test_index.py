@@ -19,6 +19,10 @@ import re
 import psycopg2
 import requests
 import rarfile
+from  cc_method import DMS
+
+
+
 
 def get_data(file_path):
     """
@@ -762,26 +766,25 @@ def atest_gerber_to_odb_ep_local_convert(job_id):
 @pytest.mark.parametrize("job_id", GetTestData().get_job_id('Input'))
 def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     pass
-    asw = Asw(r"C:\EPSemicon\cc\gateway.exe")
-
     print("G软件VS")
-    # return HttpResponse("G软件VS" + str(job_id))
-    data = {}
+    asw = Asw(r"C:\EPSemicon\cc\gateway.exe")#拿到G软件
+
+
+    data = {}#存放当前测试料号的每一层的比对结果。
     g_vs_total_result_flag = True  # True表示最新一次G比对通过
-    vs_time_g = str(int(time.time()))
+    vs_time_g = str(int(time.time()))#比对时间
     data["vs_time_g"] = vs_time_g
     data["job_id"] = job_id
 
-    conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147", port="5432")
-    cursor = conn.cursor()
+
+
+
     sql = '''SELECT a.file_odb_current,a.file_odb_g,a.file_compressed from job a
         where a.id = {}
             '''.format(job_id)
     print('sql:', sql)
-    cursor.execute(sql)
-    conn.commit()
-    ans = cursor.fetchall()
-    conn.close()
+    ans = DMS().get_data_from_db(sql)
+
     # file_odb_current_name=str(ans[0][0]).split("/")[1]
     # print("file_odb_current_name:", file_odb_current_name)
 

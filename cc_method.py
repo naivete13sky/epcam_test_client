@@ -2,6 +2,8 @@ import os
 import pandas as pd
 import urllib
 
+import psycopg2
+
 
 class GetTestData():
     pass
@@ -41,6 +43,18 @@ class DMS():
                 print(2, exception_second)
         else:
             print("文件已经存在！")
+
+    def get_data_from_db(self,sql):
+        pass
+        conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147", port="5432")
+        cursor = conn.cursor()
+        sql = sql
+        print('sql:', sql)
+        cursor.execute(sql)
+        conn.commit()
+        ans = cursor.fetchall()
+        conn.close()
+        return ans
 
 
 if __name__ == "__main__":
