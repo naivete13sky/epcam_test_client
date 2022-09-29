@@ -381,6 +381,15 @@ def atest_gerber_to_odb_ep(job_id):
 @pytest.mark.parametrize("job_id",GetTestData().get_job_id('Input'))
 def test_gerber_to_odb_ep_local_convert(job_id):
     pass
+    
+    
+    #删除所有料号
+    asw = Asw(r"C:\EPSemicon\cc\gateway.exe")
+    asw.clean_g_all_pre_get_job_list(r'//vmware-host/Shared Folders/share/job_list.txt')
+    asw.clean_g_all_do_clean(r'C:\cc\share\job_list.txt')
+
+    
+    
     print("G软件VS")
     # return HttpResponse("G软件VS" + str(job_id))
     data = {}
@@ -394,12 +403,13 @@ def test_gerber_to_odb_ep_local_convert(job_id):
     sql = '''SELECT a.file_odb_current,a.file_odb_g,a.file_compressed from job a
         where a.id = {}
             '''.format(job_id)
+    print('sql:',sql)
     cursor.execute(sql)
     conn.commit()
     ans = cursor.fetchall()
     conn.close()
-    # file_odb_current_name=str(ans[0][0]).split("/")[1]
-    # print("file_odb_current_name:", file_odb_current_name)
+    #file_odb_current_name=str(ans[0][0]).split("/")[1]
+    #print("file_odb_current_name:", file_odb_current_name)
 
     file_odb_g_name = str(ans[0][1]).split("/")[1]
     print("file_odb_g_name:", file_odb_g_name)
@@ -590,7 +600,7 @@ def test_gerber_to_odb_ep_local_convert(job_id):
         pass
         g_vs_total_result_flag = False
 
-    asw = Asw(r"C:\EPSemicon\cc\gateway.exe")
+    
 
     # g_temp_path = r'Z:/share/temp' + "_" + str(request.user) + "_" + str(job_id)
     g_temp_path = r'\\vmware-host\Shared Folders\share/temp'

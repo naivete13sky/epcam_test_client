@@ -161,8 +161,7 @@ class EpGerberToODB:
 
                 if file_format == 'Gerber274x':
                     print(file)
-                    if (offsetFlag == False) and (min_1 < 2.1e9 and min_2 < 2.1e9):
-                        offset1 = min_1
+                    if (offsetFlag == False) and (abs(min_1 - sys.maxsize) > 1e-6 and abs(min_2 - sys.maxsize) > 1e-6):
                         offset2 = min_2
                         offsetFlag = True
                     file_param['offset_numbers'] = {'first': offset1, 'second': offset2}
