@@ -512,32 +512,20 @@ class Asw():
 
         return result
 
-    def layer_compare_close_job(self, jobpath1,step1,layer1,jobpath2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res):
+    def layer_compare_close_job(self, *args,**kwargs):
         print("*" * 100, "close job")
         results = []
         try:
-            self.jobpath1 = jobpath1
-            # self.job_name_1=self.jobpath1.split("\\")[-1]
-            self.step1 = step1
-            self.layer1 = layer1
-            self.jobpath2 = jobpath2
-            self.step2 = step2
-            self.layer2 = layer2
-            self.layer2_ext = layer2_ext
-            self.tol = tol
-            self.map_layer = map_layer
-            self.map_layer_res = map_layer_res
+            self.jobpath1 = kwargs['jobpath1']
+            self.jobpath2 = kwargs['jobpath2']
         except Exception as e:
             print(e)
             print("*" * 100)
             return results
-
-        self.job1 = os.path.basename(jobpath1)
-        self.job2 = os.path.basename(jobpath2)
-        layer_cp = layer2 + layer2_ext
+        self.job1 = os.path.basename(self.jobpath1)
+        self.job2 = os.path.basename(self.jobpath2)
 
         cmd_list1 = [
-
             'COM editor_page_close',
             'COM check_inout,mode=out,type=job,job={}'.format(self.job1),
             'COM close_job,job={}'.format(self.job1),
@@ -547,24 +535,9 @@ class Asw():
             'COM close_job,job={}'.format(self.job2),
             'COM close_form,job={}'.format(self.job2),
             'COM close_flow,job={}'.format(self.job2)
-
         ]
 
         cmd_list2 = [
-            # 'COM editor_page_close',
-            # 'COM check_inout,mode=in,type=job,job={}'.format(job1),
-            # 'COM close_job,job={}'.format(job1),
-            # 'COM close_form,job={}'.format(job1),
-            # 'COM close_flow,job={}'.format(job1),
-            # 'COM delete_entity,job=,type=job,name={}'.format(job1),
-            # 'COM close_form,job={}'.format(job1),
-            # 'COM close_flow,job={}'.format(job1),
-            # # 'COM close_job,job={}'.format(job2),
-            # # 'COM close_form,job={}'.format(job2),
-            # # 'COM close_flow,job={}'.format(job2),
-            # 'COM delete_entity,job=,type=job,name={}'.format(job2),
-            # 'COM close_form,job={}'.format(job2),
-            # 'COM close_flow,job={}'.format(job2)
         ]
 
         for cmd in cmd_list1:
@@ -573,7 +546,6 @@ class Asw():
             if ret != 0:
                 print('inner error')
                 return results
-
         time.sleep(1)
 
     def clean_g(self, paras):

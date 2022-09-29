@@ -117,7 +117,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     jobpath2 = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job2)
     step2 = 'orig'
     layer2 = 'bottom.art'
-
     layer2_ext = '_copy'
 
     # 读取配置文件
@@ -134,8 +133,9 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     asw.delete_job(job1)
     asw.delete_job(job2)
 
-    asw.import_odb_folder(jobpath1)  # 导入要比图的资料,G的
-    asw.import_odb_folder(jobpath2)  # 导入要比图的资料，悦谱的
+    # 导入要比图的资料
+    asw.import_odb_folder(jobpath1)
+    asw.import_odb_folder(jobpath2)
 
     asw.layer_compare_g_open_2_job(jobpath1=jobpath1, step='orig',jobpath2=jobpath2)
     for layer in all_layer_g:
