@@ -34,3 +34,5 @@ class RunConfig:
 
     # 报告路径（不需要修改）
     NEW_REPORT = None
+
+    temp_path_base = r'C:\cc\share\temp'

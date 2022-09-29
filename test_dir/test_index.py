@@ -19,8 +19,8 @@ import re
 import psycopg2
 import requests
 import rarfile
-from  cc_method import DMS
-
+from cc_method import DMS
+from config import RunConfig
 
 
 
@@ -765,7 +765,7 @@ def atest_gerber_to_odb_ep_local_convert(job_id):
 
 @pytest.mark.parametrize("job_id", GetTestData().get_job_id('Input'))
 def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
-    print("G软件VS")
+    print("G软件VS开始啦！")
     asw = Asw(r"C:\EPSemicon\cc\gateway.exe")#拿到G软件
 
     data = {}#存放当前测试料号的每一层的比对结果。
@@ -776,18 +776,15 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     sql = '''SELECT a.file_odb_current,a.file_odb_g,a.file_compressed from job a
         where a.id = {}
-            '''.format(job_id)
-    print('sql:', sql)
-    ans = DMS().get_data_from_db(sql)
+        '''.format(job_id)
+    ans = DMS().get_data_from_dms_db_sql(sql)
 
-    file_odb_g_name = str(ans[0][1]).split("/")[1]
-    print("file_odb_g_name:", file_odb_g_name)
+    file_gerber_name = str(DMS().get_data_from_dms_db_pandas(job_id, field='file_compressed')).split("/")[1]
+    file_odb_g_name = str(DMS().get_data_from_dms_db_pandas(job_id, field='file_odb_g')).split("/")[1]
+    print("file_odb_g_name:", file_odb_g_name,"file_gerber_name:", file_gerber_name)
 
-    file_gerber_name = str(ans[0][2]).split("/")[1]
-    print("file_gerber_name:", file_gerber_name)
-
-    # 拿到job_ep和job_g
-    temp_path = r'C:\cc\share\temp' + "_" + str(job_id) + "_" + vs_time_g
+    #准备好临时目录
+    temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
     temp_gerber_path = os.path.join(temp_path, 'gerber')
     temp_ep_path = os.path.join(temp_path, 'ep')
     temp_g_path = os.path.join(temp_path, 'g')
@@ -800,18 +797,16 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     if not os.path.exists(temp_g_path):
         os.mkdir(temp_g_path)
 
-
-
+    #下载并解压原始gerber文件
     if not os.path.exists(os.path.join(temp_gerber_path, file_gerber_name)):
         print("not have")
         DMS().file_downloand(os.path.join(temp_gerber_path, file_gerber_name), temp_gerber_path)
-    time.sleep(0.5)
+    time.sleep(0.1)
     file_compressed_file_path = os.listdir(temp_gerber_path)[0]
     print("file_compressed_file_path:", file_compressed_file_path)
-
-    rf = rarfile.RarFile(os.path.join(temp_gerber_path, file_gerber_name))
-    rf.extractall(temp_gerber_path)
     temp_compressed = os.path.join(temp_gerber_path, file_gerber_name)
+    rf = rarfile.RarFile(temp_compressed)
+    rf.extractall(temp_gerber_path)
     # 删除gerber压缩包
     if os.path.exists(temp_compressed):
         os.remove(temp_compressed)
@@ -823,25 +818,13 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     out_path = os.path.join(temp_path, 'ep')
 
     # 先清空同名料号
-    # epcam_api.delete_job(job_name)
     epcam_api.close_job(job_name)
 
     cc = EpGerberToODB()
     print("*" * 100, job_name, step, file_path, out_path, job_id)
     cc.ep_gerber_to_odb_pytest(job_name, step, file_path, out_path, job_id)
 
-    # temp_ep_path = os.path.join(temp_path, 'ep')
-    # if not os.path.exists(os.path.join(temp_ep_path,file_odb_current_name)):
-    #     print("not have")
-    #     file_downloand(os.path.join(temp_ep_path,file_odb_current_name),temp_ep_path)
-    # time.sleep(0.5)
-    # ep_tgz_file = os.listdir(temp_ep_path)[0]
-    # print("ep_tgz_file:", ep_tgz_file)
-    # print("os.listdir(temp_ep_path)[0]:",os.listdir(temp_ep_path)[0])
-    # job_operation.untgz(os.path.join(temp_ep_path,os.listdir(temp_ep_path)[0]), temp_ep_path)
-    # if os.path.exists(os.path.join(temp_ep_path, ep_tgz_file)):
-    #     os.remove(os.path.join(temp_ep_path, ep_tgz_file))
-    # print("ep_tgz_file_now:", os.listdir(temp_ep_path)[0])
+
 
     if not os.path.exists(os.path.join(temp_g_path, file_odb_g_name)):
         print("not have")
@@ -854,10 +837,8 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         os.remove(os.path.join(temp_g_path, g_tgz_file))
     print("g_tgz_file_now:", os.listdir(temp_g_path)[0])
 
-    epcam.init()
 
     # 打开job_ep
-    # job_ep_name=str(job.file_odb_current).split('/')[-1][:-4]
     job_ep_name = os.listdir(temp_ep_path)[0]
     new_job_path_ep = os.path.join(temp_ep_path, job_ep_name)
     print("temp_ep_path:", temp_ep_path, "job_ep_name:", job_ep_name)

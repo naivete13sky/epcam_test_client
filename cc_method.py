@@ -1,9 +1,11 @@
 import os
 import pandas as pd
 import urllib
-
+import time
 import psycopg2
-
+import rarfile
+from sqlalchemy import create_engine
+import pandas as pd
 
 class GetTestData():
     pass
@@ -44,7 +46,7 @@ class DMS():
         else:
             print("文件已经存在！")
 
-    def get_data_from_db(self,sql):
+    def get_data_from_dms_db_sql(self,sql):
         pass
         conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147", port="5432")
         cursor = conn.cursor()
@@ -55,6 +57,33 @@ class DMS():
         ans = cursor.fetchall()
         conn.close()
         return ans
+
+    def get_data_from_dms_db_pandas(self, job_id,*args, **kw):
+        sql = '''SELECT a.* from job a
+                where a.id = {}
+                '''.format(job_id)
+        engine = create_engine('postgresql+psycopg2://readonly:123456@10.97.80.147/dms')
+        pd_job_current = pd.read_sql(sql=sql, con=engine).loc[0]
+        if 'field' in kw:
+            return pd_job_current[kw['field']]
+        else:
+            return pd_job_current
+
+
+    def get_file_compressed_from_dms_db(self,need_file_path, save_path,decompress_bool):
+        pass
+        self.file_downloand(need_file_path, save_path)
+        if decompress_bool == True:
+            pass
+            # time.sleep(0.1)
+            # file_compressed_file_path = os.listdir(temp_gerber_path)[0]
+            # print("file_compressed_file_path:", file_compressed_file_path)
+            # temp_compressed = os.path.join(temp_gerber_path, file_gerber_name)
+            # rf = rarfile.RarFile(temp_compressed)
+            # rf.extractall(temp_gerber_path)
+            # # 删除gerber压缩包
+            # if os.path.exists(temp_compressed):
+            #     os.remove(temp_compressed)
 
 
 if __name__ == "__main__":
