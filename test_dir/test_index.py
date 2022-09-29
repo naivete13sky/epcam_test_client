@@ -137,8 +137,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     asw.import_odb_folder(jobpath1)  # 导入要比图的资料,G的
     asw.import_odb_folder(jobpath2)  # 导入要比图的资料，悦谱的
 
-    asw.layer_compare_g_open_2_job(jobpath1, step1, layer1, jobpath2, step2, layer1, layer2_ext, tol, map_layer,
-                                   map_layer_res)
+    asw.layer_compare_g_open_2_job(jobpath1=jobpath1, step='orig',jobpath2=jobpath2)
     for layer in all_layer_g:
         print("g_layer:", layer)
         print("比对参数", job_g_name, step, layer, job_ep_name, step, layer)

@@ -62,38 +62,38 @@ class DMS():
         conn.close()
         return ans
 
-    def get_job_fields_from_dms_db_pandas(self, job_id,*args, **kw):
+    def get_job_fields_from_dms_db_pandas(self, job_id,*args, **kwargs):
         sql = '''SELECT a.* from job a
                 where a.id = {}
                 '''.format(job_id)
         engine = create_engine('postgresql+psycopg2://readonly:123456@10.97.80.147/dms')
         pd_job_current = pd.read_sql(sql=sql, con=engine).loc[0]
-        if 'field' in kw:
-            return pd_job_current[kw['field']]
+        if 'field' in kwargs:
+            return pd_job_current[kwargs['field']]
         else:
             return pd_job_current
 
-    def get_job_layer_fields_from_dms_db_pandas(self, job_id,*args, **kw):
+    def get_job_layer_fields_from_dms_db_pandas(self, job_id,*args, **kwargs):
         sql = '''SELECT a.* from layer a
             where a.job_id = {}
                 '''.format(job_id)
         engine = create_engine('postgresql+psycopg2://readonly:123456@10.97.80.147/dms')
         pd_job_current_layers = pd.read_sql(sql=sql, con=engine)
-        if 'field' in kw:
-            return pd_job_current_layers[kw['field']]
+        if 'field' in kwargs:
+            return pd_job_current_layers[kwargs['field']]
         else:
             return pd_job_current_layers
 
-    def get_file_from_dms_db(self,temp_path,job_id,*args, **kw):
+    def get_file_from_dms_db(self,temp_path,job_id,*args, **kwargs):
         job_current_all_fields = self.get_job_fields_from_dms_db_pandas(job_id)
         if not os.path.exists(temp_path):
             os.mkdir(temp_path)
 
         #判断是要下载哪个类型的文件
-        if 'field' in kw:
-            print('field:',kw['field'])
+        if 'field' in kwargs:
+            print('field:',kwargs['field'])
             #如果下载的是整理过的gerber压缩包
-            if kw['field'] == 'file_compressed':
+            if kwargs['field'] == 'file_compressed':
                 temp_gerber_path = os.path.join(temp_path, 'gerber')
                 if not os.path.exists(temp_gerber_path):
                     os.mkdir(temp_gerber_path)
@@ -104,8 +104,8 @@ class DMS():
                     print("not have")
                     self.file_downloand(os.path.join(temp_gerber_path, file_gerber_name), temp_gerber_path)
 
-                if 'decompress' in kw:
-                    print('decompress',kw['decompress'])
+                if 'decompress' in kwargs:
+                    print('decompress',kwargs['decompress'])
                     time.sleep(0.1)
                     file_compressed_file_path = os.listdir(temp_gerber_path)[0]
                     print("file_compressed_file_path:", file_compressed_file_path)
@@ -117,7 +117,7 @@ class DMS():
                         os.remove(temp_compressed)
 
             # 如果下载的是G转图的tgz
-            if kw['field'] == 'file_odb_g':
+            if kwargs['field'] == 'file_odb_g':
                 temp_g_path = os.path.join(temp_path, 'g')
                 if not os.path.exists(temp_g_path):
                     os.mkdir(temp_g_path)
@@ -128,8 +128,8 @@ class DMS():
                     print("not have")
                     self.file_downloand(os.path.join(temp_g_path, file_odb_g_name), temp_g_path)
 
-                if 'decompress' in kw:
-                    print('decompress', kw['decompress'])
+                if 'decompress' in kwargs:
+                    print('decompress', kwargs['decompress'])
                     time.sleep(0.1)
                     g_tgz_file = os.listdir(temp_g_path)[0]
                     print("g_tgz_file:", g_tgz_file)

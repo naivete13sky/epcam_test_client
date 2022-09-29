@@ -32,7 +32,7 @@ class Asw():
         ret = int(line.decode().strip())
         # print("*"*100,ret)
         return ret
-        
+
     def layer_compare_g1(self, paras, _type):
         print("*" * 100)
         result=""
@@ -47,7 +47,7 @@ class Asw():
             #layer2_ext = paras['layer2_ext']
             tol = paras['tol']
             #map_layer = paras['map_layer']
-            #map_layer_res = paras['map_layer_res']            
+            #map_layer_res = paras['map_layer_res']
         except Exception as e:
             print(e)
             print("*"*100)
@@ -210,69 +210,31 @@ class Asw():
 
         return results
 
-    def layer_compare_g_open_2_job(self, jobpath1,step1,layer1,jobpath2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res):
+    def layer_compare_g_open_2_job(self, *args,**kwargs):
         print("*" * 100,"comare_open_2_job")
         results=[]
         try:
-            self.jobpath1 = jobpath1
-            # self.job_name_1=self.jobpath1.split("\\")[-1]
-            self.step1 = step1
-            self.layer1 = layer1
-            self.jobpath2 = jobpath2
-            self.step2 = step2
-            self.layer2 = layer2
-            self.layer2_ext = layer2_ext
-            self.tol = tol
-            self.map_layer = map_layer
-            self.map_layer_res = map_layer_res
+            self.jobpath1 = kwargs['jobpath1']
+            self.step = kwargs['step']
+            self.jobpath2 = kwargs['jobpath2']
         except Exception as e:
             print(e)
             print("*"*100)
             return results
-
         job1 = os.path.basename(self.jobpath1).lower()
         job2 = os.path.basename(self.jobpath2).lower()
-        layer_cp = layer2 + layer2_ext
-
-
         cmd_list1 = [
             'COM check_inout,mode=out,type=job,job={}'.format(job1),
             'COM clipb_open_job,job={},update_clipboard=view_job'.format(job1),
             'COM open_job,job={}'.format(job1),
-            'COM open_entity,job={},type=step,name={},iconic=no'.format(job1, step1),
+            'COM open_entity,job={},type=step,name={},iconic=no'.format(job1, self.step),
             'COM units,type=inch',
             'COM open_job,job={}'.format(job2),
-            # 'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
-            #     layer1, job2, step2, layer2, layer2_ext, tol, map_layer, map_layer_res),
-
-            # 'COM save_job,job={},override=no'.format(job1),
-            # 'COM editor_page_close',
-            # 'COM check_inout,mode=out,type=job,job={}'.format(job1),
-            # 'COM close_job,job={}'.format(job1),
-            # 'COM close_form,job={}'.format(job1),
-            # 'COM close_flow,job={}'.format(job1),
-            #
-            # 'COM close_job,job={}'.format(job2),
-            # 'COM close_form,job={}'.format(job2),
-            # 'COM close_flow,job={}'.format(job2)
 
         ]
 
         cmd_list2 = [
-            # 'COM editor_page_close',
-            # 'COM check_inout,mode=in,type=job,job={}'.format(job1),
-            # 'COM close_job,job={}'.format(job1),
-            # 'COM close_form,job={}'.format(job1),
-            # 'COM close_flow,job={}'.format(job1),
-            # 'COM delete_entity,job=,type=job,name={}'.format(job1),
-            # 'COM close_form,job={}'.format(job1),
-            # 'COM close_flow,job={}'.format(job1),
-            # # 'COM close_job,job={}'.format(job2),
-            # # 'COM close_form,job={}'.format(job2),
-            # # 'COM close_flow,job={}'.format(job2),
-            # 'COM delete_entity,job=,type=job,name={}'.format(job2),
-            # 'COM close_form,job={}'.format(job2),
-            # 'COM close_flow,job={}'.format(job2)
+
         ]
 
 
