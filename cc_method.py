@@ -73,6 +73,16 @@ class DMS():
         else:
             return pd_job_current
 
+    def get_job_layer_fields_from_dms_db_pandas(self, job_id,*args, **kw):
+        sql = '''SELECT a.* from layer a
+            where a.job_id = {}
+                '''.format(job_id)
+        engine = create_engine('postgresql+psycopg2://readonly:123456@10.97.80.147/dms')
+        pd_job_current_layers = pd.read_sql(sql=sql, con=engine)
+        if 'field' in kw:
+            return pd_job_current_layers[kw['field']]
+        else:
+            return pd_job_current_layers
 
     def get_file_from_dms_db(self,temp_path,job_id,*args, **kw):
         job_current_all_fields = self.get_job_fields_from_dms_db_pandas(job_id)
@@ -126,6 +136,7 @@ class DMS():
                     job_operation.untgz(os.path.join(temp_g_path, os.listdir(temp_g_path)[0]), temp_g_path)
                     if os.path.exists(os.path.join(temp_g_path, g_tgz_file)):
                         os.remove(os.path.join(temp_g_path, g_tgz_file))
+
 
 
 

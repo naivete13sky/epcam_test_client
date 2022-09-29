@@ -799,13 +799,10 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     # 悦谱转图，先清空同名料号
     epcam_api.close_job(job_name)
-    cc = EpGerberToODB()
-    print("*" * 100, job_name, step, file_path, out_path, job_id)
-    cc.ep_gerber_to_odb_pytest(job_name, step, file_path, out_path, job_id)
+    EpGerberToODB().ep_gerber_to_odb_pytest(job_name, step, file_path, out_path, job_id)
 
     #下载G转图tgz，并解压好
     DMS().get_file_from_dms_db(temp_path, job_id, field='file_odb_g', decompress='tgz')
-
 
     # 打开job_ep
     job_ep_name = os.listdir(temp_ep_path)[0]
@@ -829,26 +826,9 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
 
     step = "orig"
-
     # 原始层文件信息，最全的
-    # all_layer_from_org = models.Layer.objects.filter(job=job)
-
-    conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147", port="5432")
-    cursor = conn.cursor()
-    sql = '''SELECT a.layer_org from layer a
-    where a.job_id = {}
-        '''.format(job_id)
-    cursor.execute(sql)
-    conn.commit()
-    ans = cursor.fetchall()
-    conn.close()
-    print(ans)
-
-    all_layer_from_org = []
-    for each in ans:
-        # print(each[0])
-        all_layer_from_org.append(each)
-
+    ans = DMS().get_job_layer_fields_from_dms_db_pandas(job_id,field='layer_org')
+    all_layer_from_org = [each for each in ans]
     print("all_layer_from_org:", all_layer_from_org)
 
     # 以G软件解析好的为主，来VS
