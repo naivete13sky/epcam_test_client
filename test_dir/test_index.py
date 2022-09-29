@@ -70,7 +70,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     file_path_gerber = os.path.join(temp_gerber_path, os.listdir(temp_gerber_path)[0])
     out_path = os.path.join(temp_path, 'ep')
     #先清空同名料号
-    print("job_name_ep::::::::::::::::::::::",job_name_ep)
     epcam_api.close_job(job_name_ep)
     EpGerberToODB().ep_gerber_to_odb_pytest(job_name_ep, 'orig', file_path_gerber, out_path, job_id)
 
@@ -99,7 +98,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     else:
         print('G软件tgz中的层信息：', all_layer_g)
 
-    step = "orig"
+
 
 
     #以G转图为主来比对
@@ -131,11 +130,12 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     # 导入要比图的资料
     asw.import_odb_folder(jobpath1)
     asw.import_odb_folder(jobpath2)
-
+    #G打开要比图的2个料号
     asw.layer_compare_g_open_2_job(jobpath1=jobpath1, step='orig',jobpath2=jobpath2)
+    step = "orig"
     for layer in all_layer_g:
         print("g_layer:", layer)
-        print("比对参数", job_g_name, step, layer, job_ep_name, step, layer)
+        print("比对参数:", job_g_name, step, layer, job_ep_name, step, layer)
         if layer in all_layer_ep:
             map_layer = layer + '-com'
             result = asw.layer_compare_do_compare(jobpath1, step1, layer, jobpath2, step2, layer, layer2_ext, tol,

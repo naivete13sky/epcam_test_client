@@ -251,7 +251,6 @@ class Asw():
         results = []
         try:
             self.jobpath1 = jobpath1
-            # self.job_name_1=self.jobpath1.split("\\")[-1]
             self.step1 = step1
             self.layer1 = layer1
             self.jobpath2 = jobpath2
@@ -274,34 +273,10 @@ class Asw():
             'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
                 self.layer1, self.job2, self.step2, self.layer2, self.layer2_ext, self.tol, self.map_layer, self.map_layer_res),
 
-            # 'COM save_job,job={},override=no'.format(self.job1),
-            # 'COM editor_page_close',
-            # 'COM check_inout,mode=out,type=job,job={}'.format(job1),
-            # 'COM close_job,job={}'.format(job1),
-            # 'COM close_form,job={}'.format(job1),
-            # 'COM close_flow,job={}'.format(job1),
-            #
-            # 'COM close_job,job={}'.format(job2),
-            # 'COM close_form,job={}'.format(job2),
-            # 'COM close_flow,job={}'.format(job2)
-
         ]
 
         cmd_list2 = [
-            # 'COM editor_page_close',
-            # 'COM check_inout,mode=in,type=job,job={}'.format(job1),
-            # 'COM close_job,job={}'.format(job1),
-            # 'COM close_form,job={}'.format(job1),
-            # 'COM close_flow,job={}'.format(job1),
-            # 'COM delete_entity,job=,type=job,name={}'.format(job1),
-            # 'COM close_form,job={}'.format(job1),
-            # 'COM close_flow,job={}'.format(job1),
-            # # 'COM close_job,job={}'.format(job2),
-            # # 'COM close_form,job={}'.format(job2),
-            # # 'COM close_flow,job={}'.format(job2),
-            # 'COM delete_entity,job=,type=job,name={}'.format(job2),
-            # 'COM close_form,job={}'.format(job2),
-            # 'COM close_flow,job={}'.format(job2)
+
         ]
 
         for cmd in cmd_list1:
