@@ -399,7 +399,7 @@ class Asw():
         return result
 
     def layer_compare_analysis_temp_path(self, jobpath,step,layer2,layer2_ext,map_layer,temp_path):
-        print("*" * 100, "comare")
+        print("*" * 80, "查看比图结果--开始","*" * 80)
         results = []
 
         job = os.path.basename(jobpath)
@@ -458,6 +458,7 @@ class Asw():
         except:
             print("查看结果失败！")
             result='未比对'
+        print("*" * 80, "查看比图结果--结束", "*" * 80,'\n')
 
         return result
 
@@ -960,21 +961,19 @@ class Asw():
         return results
 
     def g_export(self,job,export_to_path):
-        pass
-        'COM export_job,job=test-zm,path=Z:/share/temp,mode=tar_gzip,submode=full,overwrite=yes'
+        print("*" * 80,"导出",'--','开始',"*" * 80)
         cmd_list1 = [
-            # 'COM abc',
             'COM export_job,job={},path={},mode=tar_gzip,submode=full,overwrite=yes'.format(job,export_to_path),
-
         ]
 
         for cmd in cmd_list1:
             print(cmd)
             ret = self.exec_cmd(cmd)
-            print("*" * 100, ret)
+
             if ret != 0:
                 print('inner error')
                 return False
+        print("*" * 80, "导出", '--', '结束', "*" * 80,'\n')
         return True
 
 

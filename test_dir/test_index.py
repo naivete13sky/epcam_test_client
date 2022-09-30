@@ -144,7 +144,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     if not os.path.exists(os.path.join(temp_path, 'ze')):
         os.mkdir(os.path.join(temp_path, 'ze'))
-    # asw.g_export(job1, r'Z:/share/temp')
+
     asw.g_export(job1, temp_path_g_export)
     # asw.delete_job(job1)
     # asw.delete_job(job2)
@@ -154,8 +154,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     # 开始查看比对结果
     # 获取原始层文件信息，最全的
-    ans = DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer_org')
-    all_layer_from_org = [each for each in ans]
+    all_layer_from_org = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer_org')]
     print("all_layer_from_org:", all_layer_from_org)
     # 先解压
     temp_path_ze = r'C:\cc\share\{}\ze'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
@@ -197,7 +196,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         pass
         print("Sorry！料号比对未通过，请人工检查！")
 
-    print("*" * 100)
+    print("*" * 100,'\n')
     if os.path.exists(r'C:\EPSemicon\cc\result.json'):
         os.remove(r'C:\EPSemicon\cc\result.json')
 
@@ -214,7 +213,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["job_id"] = job_id
     data["all_result"] = all_result
 
-    print("*" * 100,data)
+    print("*" * 100,'\n',data,'\n',"*" * 100,'\n')
 
     #断言
     assert g_vs_total_result_flag == True
