@@ -1,4 +1,4 @@
-from cc_method import GetTestData,DMS
+from cc_method import GetTestData,DMS,Print
 import pytest
 from os.path import dirname, abspath
 import os,sys,time,json,shutil
@@ -165,17 +165,18 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["all_result_g"] = all_result_g
     data["all_result"] = all_result
 
-    print("*" * 80,'比对结果信息展示--开始',"*" * 80)
+
+    Print().print_with_delimiter('比对结果信息展示--开始')
     if g_vs_total_result_flag == True:
         print("恭喜您！料号比对通过！")
         # print("\033[1;32m 字体颜色：深黄色\033[0m")
     if g_vs_total_result_flag == False:
         print("Sorry！料号比对未通过，请人工检查！")
-    print("-" * 80, '分割线', "-" * 80)
+    Print().print_with_delimiter('分割线',sign='-')
     print('G转图的层：',all_result_g)
-    print("-"*80,'分割线',"-"*80)
+    Print().print_with_delimiter('分割线',sign='-')
     print('所有层：',all_result)
-    print("*" * 80,'比对结果信息展示--结束',"*" * 80,'\n')
+    Print().print_with_delimiter('比对结果信息展示--结束')
 
     #断言
     assert g_vs_total_result_flag == True

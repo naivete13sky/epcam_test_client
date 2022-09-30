@@ -30,9 +30,9 @@ class Asw():
         self.process.stdin.write((cmd + '\n').encode())
         self.process.stdin.flush()
         line = self.process.stdout.readline()
-        print(line)
+        # print(line)
+        print(line.decode('utf-8'))
         ret = int(line.decode().strip())
-        # print("*"*100,ret)
         return ret
 
     def layer_compare_g1(self, paras, _type):
@@ -463,7 +463,6 @@ class Asw():
         return result
 
     def layer_compare_close_job(self, *args,**kwargs):
-        print("*" * 100, "close job")
         Print().print_with_delimiter('close job',sign='-')
         results = []
         try:
