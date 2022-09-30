@@ -152,7 +152,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     # 开始查看比对结果
     # 获取原始层文件信息，最全的
     all_layer_from_org = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer_org')]
-    print("all_layer_from_org:", all_layer_from_org)
+    # print("all_layer_from_org:", all_layer_from_org)
     # 先解压
     temp_path_ze = r'C:\cc\share\{}\ze'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
     job_operation.untgz(os.path.join(temp_path_ze, os.listdir(temp_path_ze)[0]), temp_path)
