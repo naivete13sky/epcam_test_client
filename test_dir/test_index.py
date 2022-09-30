@@ -48,6 +48,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["vs_time_g"] = vs_time_g#比对时间存入字典
     data["job_id"] = job_id
 
+
     #准备好临时目录
     temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
     temp_gerber_path = os.path.join(temp_path, 'gerber')
