@@ -434,7 +434,7 @@ class Asw():
                 try:
                     diff = False
                     matrix_path = r"{}\{}\matrix\matrix".format(temp_path,job)
-                    print('matrix_path:',matrix_path)
+                    # print('matrix_path:',matrix_path)
                     with open(matrix_path, 'r') as f:
                         for var in f.readlines():
                             line = var.strip()
@@ -449,9 +449,7 @@ class Asw():
                     if diff == True:
                         print('Difference were found')
                         result = "错误"
-                    else:
-                        print('Layers Match')
-                        result = "正常"
+
                 except:
                     print("matrix查看方法失败")
 
