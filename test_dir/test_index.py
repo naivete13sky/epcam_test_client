@@ -164,10 +164,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     for layer in all_layer_g:
         pass
         print(layer)
-        layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step1, layer, jobpath2, step2, layer, layer2_ext,
-                                                            tol,
-                                                            layer + '-com', map_layer_res, temp_path)
-        # print(layer_result)
+        layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step, layer, layer2_ext, layer + '-com', temp_path)
 
         all_result[layer] = layer_result
 

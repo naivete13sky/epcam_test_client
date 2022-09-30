@@ -398,16 +398,16 @@ class Asw():
 
         return result
 
-    def layer_compare_analysis_temp_path(self, jobpath1,step1,layer1,jobpath2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res,temp_path):
+    def layer_compare_analysis_temp_path(self, jobpath,step,layer2,layer2_ext,map_layer,temp_path):
         print("*" * 100, "comare")
         results = []
 
-        job1 = os.path.basename(jobpath1)
+        job = os.path.basename(jobpath)
         layer_cp = layer2 + layer2_ext
         temp_path = temp_path
 
-        features = (r"{}\{}\steps\{}\layers\{}\features".format(temp_path,job1, step1,self.map_layer))
-        features_Z = (r"{}\{}\steps\{}\layers\{}\features.Z".format(temp_path,job1, step1,self.map_layer))
+        features = (r"{}\{}\steps\{}\layers\{}\features".format(temp_path,job, step,map_layer))
+        features_Z = (r"{}\{}\steps\{}\layers\{}\features.Z".format(temp_path,job, step,map_layer))
         print(features, "\n", features_Z)
         if os.path.isfile(features_Z):
             pass
@@ -433,7 +433,7 @@ class Asw():
 
                 try:
                     diff = False
-                    matrix_path = r"{}\{}\matrix\matrix".format(temp_path,job1)
+                    matrix_path = r"{}\{}\matrix\matrix".format(temp_path,job)
                     print('matrix_path:',matrix_path)
                     with open(matrix_path, 'r') as f:
                         for var in f.readlines():
