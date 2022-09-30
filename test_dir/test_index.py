@@ -1,41 +1,19 @@
 from cc_method import GetTestData,DMS
 import pytest
 from os.path import dirname, abspath
-import os,sys,json,shutil
-path = r'C:\cc\python\epwork\dms\job_manage\epcam'
-sys.path.append(path)
+import os,sys,time,json,shutil
+sys.path.append(r'C:\cc\python\epwork\dms\job_manage\epcam')
 import epcam,job_operation,epcam_api
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
 from g_cc_method_no_django import Asw
 from epcam_cc_method_no_django import EpGerberToODB
-from os.path import dirname, abspath
-import os,sys,json,shutil
-# from g_cc_method_local import Asw
-import time
 import urllib  # 导入urllib库
 import urllib.request
-import re
-import psycopg2
-import requests
-import rarfile
 from cc_method import DMS
 from config import RunConfig
 
 
-
-def get_data(file_path):
-    """
-    读取参数化文件
-    :param file_path:
-    :return:
-    """
-    data = []
-    with(open(file_path, "r")) as f:
-        dict_data = json.loads(f.read())
-        for i in dict_data:
-            data.append(tuple(i.values()))
-    return data
 
 @pytest.mark.parametrize("job_id", GetTestData().get_job_id('Input'))
 def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
@@ -172,7 +150,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
             if each_layer_g_result == str(layer_org).lower().replace(" ", "-").replace("(", "-").replace(")", "-"):
                 layer_org_find_flag = True
                 layer_org_vs_value = all_result_g[each_layer_g_result]
-
         if layer_org_find_flag == True:
             all_result[layer_org] = layer_org_vs_value
         else:

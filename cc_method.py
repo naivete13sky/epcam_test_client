@@ -141,6 +141,22 @@ class DMS():
                     if os.path.exists(os.path.join(temp_g_path, g_tgz_file)):
                         os.remove(os.path.join(temp_g_path, g_tgz_file))
 
+
+
+
+def get_data(file_path):
+    """
+    读取参数化文件
+    :param file_path:
+    :return:
+    """
+    data = []
+    with(open(file_path, "r")) as f:
+        dict_data = json.loads(f.read())
+        for i in dict_data:
+            data.append(tuple(i.values()))
+    return data
+
 #存储为json文件的方法
 def else1():
     pass

@@ -247,7 +247,7 @@ class Asw():
                 return results
 
     def layer_compare_do_compare(self, jobpath1,step1,layer1,jobpath2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res):
-        print("*" * 100, "do_comare")
+        print("*" * 80, "do_comare","*" * 80)
         results = []
         try:
             self.jobpath1 = jobpath1
