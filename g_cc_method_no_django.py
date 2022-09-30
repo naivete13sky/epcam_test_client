@@ -7,6 +7,8 @@ import subprocess
 import time
 import linecache
 import gl as gl
+from cc_method import Print
+
 LAYER_COMPARE_JSON = 'layer_compare.json'
 
 
@@ -247,7 +249,7 @@ class Asw():
                 return results
 
     def layer_compare_do_compare(self, jobpath1,step1,layer1,jobpath2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res):
-        print("*" * 80, "do_comare","*" * 80)
+        Print().print_with_delimiter("do_comare")
         results = []
         try:
             self.jobpath1 = jobpath1
@@ -289,7 +291,7 @@ class Asw():
         time.sleep(1)
 
     def save_job(self, job):
-        print("*" * 100, "save")
+        print("*" * 100, "save","*" * 100)
         results = []
 
         cmd_list1 = [

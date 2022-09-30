@@ -141,7 +141,10 @@ class DMS():
                     if os.path.exists(os.path.join(temp_g_path, g_tgz_file)):
                         os.remove(os.path.join(temp_g_path, g_tgz_file))
 
-
+class Print():
+    def print_with_delimiter(self,text, sign='*', numbers=198):
+        pass
+        print(str(sign) * int((numbers - len(text)) / 2), text, str(sign) * int((numbers - len(text)) / 2))
 
 
 def get_data(file_path):

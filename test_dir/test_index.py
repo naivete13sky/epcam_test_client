@@ -3,7 +3,7 @@ import pytest
 from os.path import dirname, abspath
 import os,sys,time,json,shutil
 sys.path.append(r'C:\cc\python\epwork\dms\job_manage\epcam')
-import epcam,job_operation,epcam_api
+import job_operation,epcam_api
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
 from g_cc_method_no_django import Asw
