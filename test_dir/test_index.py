@@ -163,17 +163,13 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     all_result = {}
     for layer in all_layer_g:
         pass
-        print(layer)
+        print('each layer of all_layer_g:',layer)
         layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step, layer, layer2_ext, layer + '-com', temp_path)
-
         all_result[layer] = layer_result
-
         for each in all_layer_from_org:
-            if layer == str(each[0]).lower().replace(" ", "-").replace("(", "-").replace(")", "-"):
+            if layer == str(each).lower().replace(" ", "-").replace("(", "-").replace(")", "-"):
                 print("I find it!!!!!!!!!!!!!!")
                 print(layer_result, type(layer_result))
-
-
                 try:
                     if layer_result == "正常":
                         print(layer, "比对通过！")
@@ -209,11 +205,10 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         json.dump(all_result, f, indent=4, ensure_ascii=False)
 
     # 删除temp_path
-    # if os.path.exists(temp_path):
-    #     shutil.rmtree(temp_path)
+    if os.path.exists(temp_path):
+        shutil.rmtree(temp_path)
 
-    # if os.path.exists(r'C:\cc\share\temp' + "_" + str(request.user) + "_" + str(job_id)):
-    #     shutil.rmtree(r'C:\cc\share\temp' + "_" + str(request.user) + "_" + str(job_id))
+
     data = {}
     data["vs_time_g"] = vs_time_g
     data["job_id"] = job_id
