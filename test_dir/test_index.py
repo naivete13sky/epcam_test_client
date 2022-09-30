@@ -96,7 +96,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     jobpath1 = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job1)
     step1 = 'orig'
 
-
     job2 = os.listdir(os.path.join(temp_path, 'ep'))[0]
     jobpath2 = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job2)
     step2 = 'orig'
