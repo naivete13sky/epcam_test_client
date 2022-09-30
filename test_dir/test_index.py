@@ -49,19 +49,11 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["job_id"] = job_id
 
 
-    #准备好临时目录
+    #取到临时目录
     temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
     temp_gerber_path = os.path.join(temp_path, 'gerber')
     temp_ep_path = os.path.join(temp_path, 'ep')
     temp_g_path = os.path.join(temp_path, 'g')
-    if not os.path.exists(temp_path):
-        os.mkdir(temp_path)
-    if not os.path.exists(temp_gerber_path):
-        os.mkdir(temp_gerber_path)
-    if not os.path.exists(temp_ep_path):
-        os.mkdir(temp_ep_path)
-    if not os.path.exists(temp_g_path):
-        os.mkdir(temp_g_path)
 
     #下载并解压原始gerber文件
     DMS().get_file_from_dms_db(temp_path, job_id, field='file_compressed', decompress='rar')
@@ -99,19 +91,15 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     else:
         print('G软件tgz中的层信息：', all_layer_g)
 
-
-
-
     #以G转图为主来比对
     job1 = os.listdir(os.path.join(temp_path, 'g'))[0]
     jobpath1 = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job1)
     step1 = 'orig'
-    layer1 = 'bottom.art'
+
 
     job2 = os.listdir(os.path.join(temp_path, 'ep'))[0]
     jobpath2 = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job2)
     step2 = 'orig'
-    layer2 = 'bottom.art'
     layer2_ext = '_copy'
 
     # 读取配置文件
@@ -119,7 +107,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         cfg = json.load(f)
     tol = cfg['job_manage']['vs']['vs_tol_g']
     print("tol:", tol)
-    map_layer = layer2 + '-com'
     map_layer_res = 200
 
     print("job1:", job1, "job2:", job2)

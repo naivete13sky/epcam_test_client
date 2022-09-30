@@ -97,6 +97,9 @@ class DMS():
                 temp_gerber_path = os.path.join(temp_path, 'gerber')
                 if not os.path.exists(temp_gerber_path):
                     os.mkdir(temp_gerber_path)
+                temp_ep_path = os.path.join(temp_path, 'ep')
+                if not os.path.exists(temp_ep_path):
+                    os.mkdir(temp_ep_path)
                 file_gerber_name = job_current_all_fields['file_compressed'].split("/")[1]
 
                 # 下载并解压原始gerber文件
