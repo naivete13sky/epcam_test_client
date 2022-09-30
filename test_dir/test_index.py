@@ -186,8 +186,8 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
                     pass
                     print("异常！")
 
-    print("*" * 100)
-    print(all_result)
+
+
     print("*" * 100)
 
     if g_vs_total_result_flag == True:
@@ -214,10 +214,10 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["job_id"] = job_id
     data["all_result"] = all_result
 
-    print(data)
+    print("*" * 100,data)
 
+    #断言
     assert g_vs_total_result_flag == True
-
     for key in all_result:
-        print(key + ':' + all_result[key])
+        # print(key + ':' + all_result[key])
         assert all_result[key] == "正常"
