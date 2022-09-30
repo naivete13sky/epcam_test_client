@@ -149,9 +149,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     # asw.delete_job(job1)
     # asw.delete_job(job2)
 
-
-
-
     # 开始查看比对结果
     # 获取原始层文件信息，最全的
     all_layer_from_org = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer_org')]
@@ -161,8 +158,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     job_operation.untgz(os.path.join(temp_path_ze, os.listdir(temp_path_ze)[0]), temp_path)
     all_result = {}
     for layer in all_layer_g:
-        pass
-        print('each layer of all_layer_g:',layer)
         layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step, layer, layer2_ext, layer + '-com', temp_path)
         all_result[layer] = layer_result
         for each in all_layer_from_org:
@@ -180,40 +175,33 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
                         g_vs_total_result_flag = False
                     else:
                         print("异常，状态异常！！！")
-
                 except:
                     pass
                     print("异常！")
 
 
-
-    print("*" * 100)
-
-    if g_vs_total_result_flag == True:
-        pass
-        print("恭喜您！料号比对通过！")
-    if g_vs_total_result_flag == False:
-        pass
-        print("Sorry！料号比对未通过，请人工检查！")
-
-    print("*" * 100,'\n')
-    if os.path.exists(r'C:\EPSemicon\cc\result.json'):
-        os.remove(r'C:\EPSemicon\cc\result.json')
-
-    with open(r'C:\EPSemicon\cc\result.json', 'w') as f:
-        json.dump(all_result, f, indent=4, ensure_ascii=False)
+    # #结果存入josn文件，如果有需要的话
+    # if os.path.exists(r'C:\EPSemicon\cc\result.json'):
+    #     os.remove(r'C:\EPSemicon\cc\result.json')
+    # with open(r'C:\EPSemicon\cc\result.json', 'w') as f:
+    #     json.dump(all_result, f, indent=4, ensure_ascii=False)
 
     # 删除temp_path
     if os.path.exists(temp_path):
         shutil.rmtree(temp_path)
-
 
     data = {}
     data["vs_time_g"] = vs_time_g
     data["job_id"] = job_id
     data["all_result"] = all_result
 
-    print("*" * 100,'\n',data,'\n',"*" * 100,'\n')
+    print("*" * 80,'比对结果信息--开始',"*" * 80)
+    if g_vs_total_result_flag == True:
+        print("恭喜您！料号比对通过！")
+    if g_vs_total_result_flag == False:
+        print("Sorry！料号比对未通过，请人工检查！")
+    print(data)
+    print("*" * 80,'比对结果信息--结束',"*" * 80,'\n')
 
     #断言
     assert g_vs_total_result_flag == True

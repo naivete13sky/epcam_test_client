@@ -399,7 +399,7 @@ class Asw():
         return result
 
     def layer_compare_analysis_temp_path(self, jobpath,step,layer2,layer2_ext,map_layer,temp_path):
-        print("*" * 80, "查看比图结果--开始","*" * 80)
+        print("*" * 80,layer2 ,":查看比图结果--开始","*" * 80)
         results = []
 
         job = os.path.basename(jobpath)
@@ -408,7 +408,7 @@ class Asw():
 
         features = (r"{}\{}\steps\{}\layers\{}\features".format(temp_path,job, step,map_layer))
         features_Z = (r"{}\{}\steps\{}\layers\{}\features.Z".format(temp_path,job, step,map_layer))
-        print(features, "\n", features_Z)
+        # print(features, "\n", features_Z)
         if os.path.isfile(features_Z):
             pass
             compress = Compress()
@@ -458,7 +458,7 @@ class Asw():
         except:
             print("查看结果失败！")
             result='未比对'
-        print("*" * 80, "查看比图结果--结束", "*" * 80,'\n')
+        print("*" * 80, layer2,":查看比图结果--结束", "*" * 80,'\n')
 
         return result
 
