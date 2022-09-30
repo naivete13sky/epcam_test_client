@@ -173,5 +173,5 @@ def else1():
 
 if __name__ == "__main__":
     print("我是main()")
-    cc=GetTestData().get_job_id('Input')
+    cc=Print().print_with_delimiter("abc")
     print(cc)

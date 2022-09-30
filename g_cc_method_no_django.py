@@ -188,7 +188,7 @@ class Asw():
         return result
 
     def import_odb_folder(self, jobpath):
-        print("*" * 100,"import job")
+        Print().print_with_delimiter('import job')
         results=[]
         self.jobpath = jobpath
         #远程调用时不能判断下面这个
@@ -213,7 +213,7 @@ class Asw():
         return results
 
     def layer_compare_g_open_2_job(self, *args,**kwargs):
-        print("*" * 100,"comare_open_2_job")
+        Print().print_with_delimiter('comare_open_2_job')
         results=[]
         try:
             self.jobpath1 = kwargs['jobpath1']
@@ -238,7 +238,6 @@ class Asw():
         cmd_list2 = [
 
         ]
-
 
         for cmd in cmd_list1:
             print(cmd)
@@ -291,7 +290,7 @@ class Asw():
         time.sleep(1)
 
     def save_job(self, job):
-        print("*" * 100, "save","*" * 100)
+        Print().print_with_delimiter("save")
         results = []
 
         cmd_list1 = [
@@ -465,6 +464,7 @@ class Asw():
 
     def layer_compare_close_job(self, *args,**kwargs):
         print("*" * 100, "close job")
+        Print().print_with_delimiter('close job',sign='-')
         results = []
         try:
             self.jobpath1 = kwargs['jobpath1']
@@ -962,7 +962,7 @@ class Asw():
         return results
 
     def g_export(self,job,export_to_path):
-        print("*" * 80,"导出",'--','开始',"*" * 80)
+        Print().print_with_delimiter("导出--开始")
         cmd_list1 = [
             'COM export_job,job={},path={},mode=tar_gzip,submode=full,overwrite=yes'.format(job,export_to_path),
         ]
@@ -974,7 +974,7 @@ class Asw():
             if ret != 0:
                 print('inner error')
                 return False
-        print("*" * 80, "导出", '--', '结束', "*" * 80,'\n')
+        Print().print_with_delimiter("导出--结束")
         return True
 
 
