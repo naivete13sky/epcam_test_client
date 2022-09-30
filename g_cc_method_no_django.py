@@ -399,7 +399,7 @@ class Asw():
         return result
 
     def layer_compare_analysis_temp_path(self, jobpath,step,layer2,layer2_ext,map_layer,temp_path):
-        print("*" * 80,layer2 ,":查看比图结果--开始","*" * 80)
+        # print("*" * 80,layer2 ,":查看比图结果--开始","*" * 80)
         results = []
 
         job = os.path.basename(jobpath)
@@ -423,14 +423,15 @@ class Asw():
         try:
             with open(features, "r") as f:
                 s = f.readlines()
-                print(s[3])
+                # print(s[3])
             if "r0" in s[3]:
-                print("比对发现有差异！！！！！！")
+                # print("比对发现有差异！！！！！！")
                 result = "错误"
             else:
-                print("恭喜！比对通过！！！")
+                # print("恭喜！比对通过！！！")
                 result = "正常"
 
+                #再通过matrix方法来校验一下比图结果
                 try:
                     diff = False
                     matrix_path = r"{}\{}\matrix\matrix".format(temp_path,job)
@@ -456,7 +457,7 @@ class Asw():
         except:
             print("查看结果失败！")
             result='未比对'
-        print("*" * 80, layer2,":查看比图结果--结束", "*" * 80,'\n')
+        # print("*" * 80, layer2,":查看比图结果--结束", "*" * 80,'\n')
 
         return result
 
