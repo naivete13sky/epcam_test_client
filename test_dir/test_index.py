@@ -160,18 +160,20 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     for layer in all_layer_g:
         layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step, layer, layer2_ext, layer + '-com', temp_path)
         all_result[layer] = layer_result
-        for each in all_layer_from_org:
-            if layer == str(each).lower().replace(" ", "-").replace("(", "-").replace(")", "-"):
+    #下方代码有问题，要改的
+    for layer_org in all_layer_from_org:
+        for each_layer_g_result in all_result:
+            if each_layer_g_result == str(layer_org).lower().replace(" ", "-").replace("(", "-").replace(")", "-"):
                 print("I find it!!!!!!!!!!!!!!")
-                print(layer_result, type(layer_result))
+                print(each_layer_g_result,all_result[each_layer_g_result])
                 try:
-                    if layer_result == "正常":
-                        print(layer, "比对通过！")
-                    elif layer_result == "错误":
-                        print(layer, "未通过！")
+                    if all_result[each_layer_g_result] == "正常":
+                        print(each_layer_g_result, "比对通过！")
+                    elif all_result[each_layer_g_result] == "错误":
+                        print(each_layer_g_result, "未通过！")
                         g_vs_total_result_flag = False
-                    elif layer_result == "未比对":
-                        print(layer, "未比对！")
+                    elif all_result[each_layer_g_result] == "未比对":
+                        print(each_layer_g_result, "未比对！")
                         g_vs_total_result_flag = False
                     else:
                         print("异常，状态异常！！！")
