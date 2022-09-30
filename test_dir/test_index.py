@@ -156,37 +156,27 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     # 先解压
     temp_path_ze = r'C:\cc\share\{}\ze'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
     job_operation.untgz(os.path.join(temp_path_ze, os.listdir(temp_path_ze)[0]), temp_path)
-    all_result = {}
+    all_result_g = {}
     for layer in all_layer_g:
         layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step, layer, layer2_ext, layer + '-com', temp_path)
-        all_result[layer] = layer_result
-    #下方代码有问题，要改的
+        all_result_g[layer] = layer_result
+        if layer_result != "正常":
+            g_vs_total_result_flag = False
+
+    #all_result存放原始文件中所有层的比对信息
+    all_result = {}
     for layer_org in all_layer_from_org:
-        for each_layer_g_result in all_result:
+        layer_org_find_flag = False
+        layer_org_vs_value = ''
+        for each_layer_g_result in all_result_g:
             if each_layer_g_result == str(layer_org).lower().replace(" ", "-").replace("(", "-").replace(")", "-"):
-                print("I find it!!!!!!!!!!!!!!")
-                print(each_layer_g_result,all_result[each_layer_g_result])
-                try:
-                    if all_result[each_layer_g_result] == "正常":
-                        print(each_layer_g_result, "比对通过！")
-                    elif all_result[each_layer_g_result] == "错误":
-                        print(each_layer_g_result, "未通过！")
-                        g_vs_total_result_flag = False
-                    elif all_result[each_layer_g_result] == "未比对":
-                        print(each_layer_g_result, "未比对！")
-                        g_vs_total_result_flag = False
-                    else:
-                        print("异常，状态异常！！！")
-                except:
-                    pass
-                    print("异常！")
+                layer_org_find_flag = True
+                layer_org_vs_value = all_result_g[each_layer_g_result]
 
-
-    # #结果存入josn文件，如果有需要的话
-    # if os.path.exists(r'C:\EPSemicon\cc\result.json'):
-    #     os.remove(r'C:\EPSemicon\cc\result.json')
-    # with open(r'C:\EPSemicon\cc\result.json', 'w') as f:
-    #     json.dump(all_result, f, indent=4, ensure_ascii=False)
+        if layer_org_find_flag == True:
+            all_result[layer_org] = layer_org_vs_value
+        else:
+            all_result[layer_org] = 'G转图中无此层'
 
     # 删除temp_path
     if os.path.exists(temp_path):
@@ -195,18 +185,22 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data = {}
     data["vs_time_g"] = vs_time_g
     data["job_id"] = job_id
+    data["all_result_g"] = all_result_g
     data["all_result"] = all_result
 
-    print("*" * 80,'比对结果信息--开始',"*" * 80)
+    print("*" * 80,'比对结果信息展示--开始',"*" * 80)
     if g_vs_total_result_flag == True:
         print("恭喜您！料号比对通过！")
     if g_vs_total_result_flag == False:
         print("Sorry！料号比对未通过，请人工检查！")
-    print(data)
-    print("*" * 80,'比对结果信息--结束',"*" * 80,'\n')
+    print("-" * 80, '分割线', "-" * 80)
+    print('G转图的层：',all_result_g)
+    print("-"*80,'分割线',"-"*80)
+    print('所有层：',all_result)
+    print("*" * 80,'比对结果信息展示--结束',"*" * 80,'\n')
 
     #断言
     assert g_vs_total_result_flag == True
-    for key in all_result:
+    for key in all_result_g:
         # print(key + ':' + all_result[key])
-        assert all_result[key] == "正常"
+        assert all_result_g[key] == "正常"
