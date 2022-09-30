@@ -191,6 +191,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     print("*" * 80,'比对结果信息展示--开始',"*" * 80)
     if g_vs_total_result_flag == True:
         print("恭喜您！料号比对通过！")
+        # print("\033[1;32m 字体颜色：深黄色\033[0m")
     if g_vs_total_result_flag == False:
         print("Sorry！料号比对未通过，请人工检查！")
     print("-" * 80, '分割线', "-" * 80)
