@@ -39,7 +39,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     # 悦谱转图
     job_name_ep = os.listdir(temp_gerber_path)[0] + '_ep'
     file_path_gerber = os.path.join(temp_gerber_path, os.listdir(temp_gerber_path)[0])
-    out_path = os.path.join(temp_path, 'ep')
+    out_path = temp_ep_path
     #先清空同名料号
     epcam_api.close_job(job_name_ep)
     EpGerberToODB().ep_gerber_to_odb_pytest(job_name_ep, 'orig', file_path_gerber, out_path, job_id)
@@ -159,9 +159,9 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     if os.path.exists(temp_path):
         shutil.rmtree(temp_path)
 
-    data = {}
-    data["vs_time_g"] = vs_time_g
-    data["job_id"] = job_id
+    # data = {}
+    # data["vs_time_g"] = vs_time_g
+    # data["job_id"] = job_id
     data["all_result_g"] = all_result_g
     data["all_result"] = all_result
 
