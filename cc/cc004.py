@@ -19,5 +19,9 @@ temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
 # print(cc2)
 
 
-cc3=DMS().get_job_layer_fields_from_dms_db_pandas(job_id,field='layer_org')
-print(cc3)
+# cc3=DMS().get_job_layer_fields_from_dms_db_pandas(job_id,field='layer_org')
+# print(cc3)
+
+
+layer_all = DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer')
+print("layer_all", layer_all)

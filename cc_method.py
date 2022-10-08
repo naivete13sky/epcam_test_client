@@ -85,6 +85,16 @@ class DMS():
         else:
             return pd_job_current_layers
 
+    def get_job_layer_fields_from_dms_db_pandas_one_layer(self, job_id,*args, **kwargs):
+        layer=kwargs['filter']
+        sql = '''SELECT a.* from layer a
+            where a.job_id = {} and a.layer={}
+                '''.format(job_id,layer)
+        engine = create_engine('postgresql+psycopg2://readonly:123456@10.97.80.147/dms')
+        pd_job_current_layer = pd.read_sql(sql=sql, con=engine)
+        return pd_job_current_layer
+
+
     def get_file_from_dms_db(self,temp_path,job_id,*args, **kwargs):
         job_current_all_fields = self.get_job_fields_from_dms_db_pandas(job_id)
         if not os.path.exists(temp_path):
@@ -159,6 +169,16 @@ def get_data(file_path):
         for i in dict_data:
             data.append(tuple(i.values()))
     return data
+
+
+def getFlist(path):
+    for root, dirs, files in os.walk(path):
+        print('root_dir:', root)  #当前路径
+        print('sub_dirs:', dirs)   #子文件夹
+        print('files:', files)     #文件名称，返回list类型
+    return files
+
+
 
 #存储为json文件的方法
 def else1():

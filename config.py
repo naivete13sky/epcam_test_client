@@ -37,3 +37,5 @@ class RunConfig:
     NEW_REPORT = None
 
     temp_path_base = r'C:\cc\share\temp'
+
+    config_ep_output = r'C:\cc\python\epwork\epcam_test_client\config_ep\outcfg.json'

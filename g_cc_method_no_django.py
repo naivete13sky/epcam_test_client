@@ -7,7 +7,8 @@ import subprocess
 import time
 import linecache
 import gl as gl
-from cc_method import Print
+from cc_method import Print,DMS
+
 
 LAYER_COMPARE_JSON = 'layer_compare.json'
 
@@ -870,6 +871,138 @@ class Asw():
                 return False
         return True
 
+    def Gerber2ODB2_no_django(self, paras, _type,job_id):
+        # print("*"*100,"gerber2odb")
+
+
+
+        try:
+            path = paras['path']
+            job = paras['job']
+            step = paras['step']
+            format = paras['format']
+            data_type = paras['data_type']
+            units = paras['units']
+            coordinates = paras['coordinates']
+            zeroes = paras['zeroes']
+            nf1 = paras['nf1']
+            nf2 = paras['nf2']
+            decimal = paras['decimal']
+            separator = paras['separator']
+            tool_units = paras['tool_units']
+            layer = paras['layer']
+            print("layer"*10,layer)
+            layer=layer.replace(' ','-').replace('(', '-').replace(')', '-')
+            print("layer" * 10, layer)
+            wheel = paras['wheel']
+            wheel_template = paras['wheel_template']
+            nf_comp = paras['nf_comp']
+            multiplier = paras['multiplier']
+            text_line_width = paras['text_line_width']
+            signed_coords = paras['signed_coords']
+            break_sr = paras['break_sr']
+            drill_only = paras['drill_only']
+            merge_by_rule = paras['merge_by_rule']
+            threshold = paras['threshold']
+            resolution = paras['resolution']
+        except Exception as e:
+            print(e)
+            return False
+
+
+        try:
+            print("开始定位"*10)
+            layer_all = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer')]
+            print("layer_all []:",layer_all)
+            print(path.replace(' ', '-').replace('(', '-').replace(')', '-'))
+            print(os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
+
+            layer_e2=DMS().get_job_layer_fields_from_dms_db_pandas_one_layer(job_id,filter=os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
+
+            print('*'*100,"layer_e2:",layer_e2)
+
+            print("*"*100,layer_e2.layer_file_type)
+            if layer_e2.status == 'published' and layer_e2.layer_file_type=='excellon2':
+                pass
+                print("我是Excellon2!!!!!")
+                format='Excellon2'
+                units=layer_e2.units_g.lower()
+                zeroes=layer_e2.zeroes_omitted_g.lower()
+                nf1 = int(layer_e2.number_format_A_g)
+                nf2 = int(layer_e2.number_format_B_g)
+                #g软件的tool_units没有mils选项
+                if layer_e2.tool_units_g.lower() == 'mils':
+                    tool_units = 'inch'
+                else:
+                    tool_units = layer_e2.tool_units_g.lower()
+
+                separator='nl'
+            else:
+                print("我不是孔Excellon2!")
+
+            print("结束定位" * 10)
+        except:
+            pass
+            print("有异常啊！")
+        # print("p"*100,path)
+
+        # if not os.path.exists(path):
+        #     print('{} does not exist'.format(path))
+        #     return False
+
+
+
+
+        trans_COM = 'COM input_manual_set,'
+        trans_COM += 'path={},job={},step={},format={},data_type={},units={},coordinates={},zeroes={},'.format(path.replace("\\","/"),
+                                                                                                               job,
+                                                                                                               step,
+                                                                                                               format,
+                                                                                                               data_type,
+                                                                                                               units,
+                                                                                                               coordinates,
+                                                                                                               zeroes)
+        trans_COM += 'nf1={},nf2={},decimal={},separator={},tool_units={},layer={},wheel={},wheel_template={},'.format(
+            nf1, nf2, decimal, separator, tool_units, layer, wheel, wheel_template)
+        trans_COM += 'nf_comp={},multiplier={},text_line_width={},signed_coords={},break_sr={},drill_only={},'.format(
+            nf_comp, multiplier, text_line_width, signed_coords, break_sr, drill_only)
+        trans_COM += 'merge_by_rule={},threshold={},resolution={}'.format(merge_by_rule, threshold, resolution)
+
+        cmd_list1 = []
+        cmd_list2 = []
+        # trans_COM = 'COM input_manual_set,path=C:/Users/EPSZ15/Desktop/2222/YH-DT3.9-FM1921_64X64-8SF2-04.GTL,job=6566,step=777,format=Gerber274x,data_type=ascii,units=mm,coordinates=absolute,zeroes=leading,nf1=4,nf2=4,decimal=no,separator=*,tool_units=inch,layer=yh-dt3.9-fm1921_64x64-8sf2-04.gtl,wheel=,wheel_template=,nf_comp=0,multiplier=1,text_line_width=0.0024,signed_coords=no,break_sr=yes,drill_only=no,merge_by_rule=no,threshold=200,resolution=3'
+        if _type == 0:
+            cmd_list1 = [
+                'COM input_manual_reset',
+                # 'COM input_manual_set,path={},job={},step={},format={},data_type{},units={},coordinates={},zeroes={},nf1={},nf2={},decimal={},separator={},\
+                #     tool_units={},layer={},wheel={},wheel_template={},nf_comp={},multiplier={},text_line_width={},signed_coords={},break_sr={},drill_only={},\
+                #     merge_by_rule={},threshold={},resolution={}'.format(path, job, step, format, data_type, units, coordinates, zeroes, nf1, nf2, decimal,
+                #     separator, tool_units, layer, wheel, wheel_template, nf_comp, multiplier, text_line_width, signed_coords, break_sr, drill_only, merge_by_rule,
+                #     threshold, resolution),
+                trans_COM,
+                ('COM input_manual,script_path={}'.format(''))
+            ]
+            cmd_list2 = [
+                'COM input_manual_reset',
+                trans_COM,
+                'COM input_manual,script_path={}'.format('')
+            ]
+        else:
+            cmd_list1 = [
+                'COM save_job,job={},override=no'.format(job)
+            ]
+            cmd_list2 = [
+                'COM save_job,job={},override=no'.format(job)
+            ]
+
+        for cmd in cmd_list1:
+            print(cmd)
+            ret = self.exec_cmd(cmd)
+            if ret != 0:
+                print('inner error')
+                return False
+        return True
+
     def g_Gerber2Odb(self,gerberList, job, step):
         paras = {}
         paras['path'] = ''
@@ -955,6 +1088,51 @@ class Asw():
             paras['path'] = gerberPath
             paras['layer'] = os.path.basename(gerberPath).lower()
             ret = self.Gerber2ODB2(paras, 0,job_id)
+            result['result'] = ret
+            results.append(result)
+        self.Gerber2ODB2(paras, 1,job_id)#保存
+        return results
+
+    def g_Gerber2Odb2_no_django(self,job_name, step, gerberList_path, out_path,job_id):
+        paras = {}
+        paras['path'] = ''
+        paras['job'] = job_name
+        paras['step'] = step
+        paras['format'] = 'Gerber274x'
+        paras['data_type'] = 'ascii'
+        paras['layer'] = ''
+        paras['units'] = 'mm'
+        paras['coordinates'] = 'absolute'
+        paras['zeroes'] = 'leading'
+        paras['nf1'] = '4'
+        paras['nf2'] = '4'
+        paras['decimal'] = 'no'
+        paras['separator'] = '*'
+        paras['tool_units'] = 'inch'
+        paras['wheel'] = ''
+        paras['wheel_template'] = ''
+        paras['nf_comp'] = '0'
+        paras['multiplier'] = '1'
+        paras['text_line_width'] = '0.0024'
+        paras['signed_coords'] = 'no'
+        paras['break_sr'] = 'yes'
+        paras['drill_only'] = 'no'
+        paras['merge_by_rule'] = 'no'
+        paras['threshold'] = '200'
+        paras['resolution'] = '3'
+        # 先创建job, step
+        jobpath = r'C:\genesis\fw\jobs' + '/' + job_name
+        # print("jobpath"*30,jobpath)
+        results = []
+        if os.path.exists(jobpath):
+            shutil.rmtree(jobpath)
+        self.Create_Entity(job_name, step)
+        for gerberPath in gerberList_path:
+            # print("g"*100,gerberPath)
+            result = {'gerber': gerberPath}
+            paras['path'] = gerberPath
+            paras['layer'] = os.path.basename(gerberPath).lower()
+            ret = self.Gerber2ODB2_no_django(paras, 0,job_id)
             result['result'] = ret
             results.append(result)
         self.Gerber2ODB2(paras, 1,job_id)#保存
