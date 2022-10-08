@@ -908,7 +908,7 @@ class Asw():
 
 
         try:
-            print("开始定位"*10)
+            Print().print_with_delimiter("开始定位")
             layer_all = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer')]
             print("layer_all []:",layer_all)
             print(path.replace(' ', '-').replace('(', '-').replace(')', '-'))
@@ -917,9 +917,9 @@ class Asw():
 
             layer_e2=DMS().get_job_layer_fields_from_dms_db_pandas_one_layer(job_id,filter=os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
 
-            print('*'*50,'\n',"layer_e2:",layer_e2)
+            # print('*'*50,'\n',"layer_e2:",layer_e2)
 
-            print("*"*50,'\n','layer_e2.status:',layer_e2.status.values[0],'layer_e2.layer_file_type:',layer_e2.layer_file_type.values[0])
+            # print("*"*50,'\n','layer_e2.status:',layer_e2.status.values[0],'layer_e2.layer_file_type:',layer_e2.layer_file_type.values[0])
             if layer_e2.status.values[0] == 'published' and layer_e2.layer_file_type.values[0]=='excellon2':
                 print("我是Excellon2!!!!!")
                 format='Excellon2'
@@ -937,7 +937,7 @@ class Asw():
             else:
                 print("我不是孔Excellon2!")
 
-            print("结束定位" * 10)
+            Print().print_with_delimiter("结束定位")
         except:
             pass
             print("有异常啊！")

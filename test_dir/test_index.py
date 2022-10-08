@@ -475,7 +475,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     print("file_path:",file_path)
     gerberList = cc_method.getFlist(file_path)
     print(gerberList)
-    g_temp_path = r'//vmware-host/Shared Folders/share/temp_{}_{}'.format(job_id,vs_time_g)
+    g_temp_path = r'//vmware-host/Shared Folders/share/temp_{}_{}/g2'.format(job_id,vs_time_g)
     gerberList_path = []
     for each in gerberList:
         gerberList_path.append(os.path.join(g_temp_path, r'output_gerber',job_name_ep,r'orig', each))
