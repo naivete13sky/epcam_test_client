@@ -216,21 +216,14 @@ class Asw():
     def layer_compare_g_open_2_job(self, *args,**kwargs):
         Print().print_with_delimiter('comare_open_2_job')
         results=[]
-        try:
-            self.jobpath1 = kwargs['jobpath1']
-            self.step = kwargs['step']
-            self.jobpath2 = kwargs['jobpath2']
-        except Exception as e:
-            print(e)
-            print("*"*100)
-            return results
-        job1 = os.path.basename(self.jobpath1).lower()
-        job2 = os.path.basename(self.jobpath2).lower()
+        job1 = kwargs['job1']
+        step = kwargs['step']
+        job2 = kwargs['job2']
         cmd_list1 = [
             'COM check_inout,mode=out,type=job,job={}'.format(job1),
             'COM clipb_open_job,job={},update_clipboard=view_job'.format(job1),
             'COM open_job,job={}'.format(job1),
-            'COM open_entity,job={},type=step,name={},iconic=no'.format(job1, self.step),
+            'COM open_entity,job={},type=step,name={},iconic=no'.format(job1, step),
             'COM units,type=inch',
             'COM open_job,job={}'.format(job2),
 

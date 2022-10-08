@@ -268,7 +268,9 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     asw.import_odb_folder(jobpath1)
     asw.import_odb_folder(jobpath2)
     #G打开要比图的2个料号
-    asw.layer_compare_g_open_2_job(jobpath1=jobpath1, step='orig',jobpath2=jobpath2)
+    job1 = os.path.basename(jobpath1).lower()
+    job2 = os.path.basename(jobpath2).lower()
+    asw.layer_compare_g_open_2_job(job1=job1, step='orig',job2=job2)
     step = "orig"
     for layer in all_layer_g:
         print("g_layer:", layer)
@@ -468,7 +470,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     ep_out_put_gerber_folder = os.path.join(temp_path,r'output_gerber',job_name_ep,r'orig')
 
 
-    job_name_g2 = job_name + '_g2'#epcam输出gerber，再用g软件input。
+    job_g2_name = job_name + '_g2'#epcam输出gerber，再用g软件input。
     step = 'orig'
 
     file_path = os.path.join(temp_path, ep_out_put_gerber_folder)
@@ -487,13 +489,14 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     os.mkdir(temp_out_put_gerber_g_input_path)
     out_path = temp_out_put_gerber_g_input_path
 
-    asw.g_Gerber2Odb2_no_django(job_name_g2, step, gerberList_path, out_path, job_id)
+    asw.g_Gerber2Odb2_no_django(job_g2_name, step, gerberList_path, out_path, job_id)
     # 输出tgz到指定目录
-    asw.g_export(job_name_g2, os.path.join(g_temp_path,r'g2'))
+    asw.g_export(job_g2_name, os.path.join(g_temp_path,r'g2'))
 
     # -----------------------------------------开始用G软件比图，g2和g-------------------------------------------------
     # 以G2转图为主来比对
-
+    # G打开要比图的2个料号
+    asw.layer_compare_g_open_2_job(job1=job_g2_name, step='orig',job2=job_g_name)
 
     for layer in other_layers:
         print("other_layers:", other_layers)
