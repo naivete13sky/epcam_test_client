@@ -909,8 +909,8 @@ class Asw():
 
         try:
             Print().print_with_delimiter("开始定位")
-            layer_all = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer')]
-            print("layer_all []:",layer_all)
+            # layer_all = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer')]
+            # print("layer_all []:",layer_all)
             print(path.replace(' ', '-').replace('(', '-').replace(')', '-'))
             print(os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
             print("fuck!")

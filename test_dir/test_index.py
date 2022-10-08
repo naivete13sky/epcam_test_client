@@ -475,7 +475,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     print("file_path:",file_path)
     gerberList = cc_method.getFlist(file_path)
     print(gerberList)
-    g_temp_path = r'//vmware-host/Shared Folders/share/temp_{}_{}/g2'.format(job_id,vs_time_g)
+    g_temp_path = r'//vmware-host/Shared Folders/share/temp_{}_{}'.format(job_id,vs_time_g)
     gerberList_path = []
     for each in gerberList:
         gerberList_path.append(os.path.join(g_temp_path, r'output_gerber',job_name_ep,r'orig', each))
@@ -489,7 +489,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     asw.g_Gerber2Odb2_no_django(job_name_g2, step, gerberList_path, out_path, job_id)
     # 输出tgz到指定目录
-    asw.g_export(job_name_g2, g_temp_path)
+    asw.g_export(job_name_g2, os.path.join(g_temp_path,r'g2'))
 
     # -----------------------------------------开始用G软件比图，g2和g-------------------------------------------------
     # 以G2转图为主来比对
