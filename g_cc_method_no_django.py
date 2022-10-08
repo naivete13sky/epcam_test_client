@@ -873,9 +873,6 @@ class Asw():
 
     def Gerber2ODB2_no_django(self, paras, _type,job_id):
         # print("*"*100,"gerber2odb")
-
-
-
         try:
             path = paras['path']
             job = paras['job']
@@ -916,12 +913,13 @@ class Asw():
             print("layer_all []:",layer_all)
             print(path.replace(' ', '-').replace('(', '-').replace(')', '-'))
             print(os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
+            print("fuck!")
 
             layer_e2=DMS().get_job_layer_fields_from_dms_db_pandas_one_layer(job_id,filter=os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
 
-            print('*'*100,"layer_e2:",layer_e2)
+            print('*'*50,'/n',"layer_e2:",layer_e2)
 
-            print("*"*100,layer_e2.layer_file_type)
+            print("*"*50,'/n','layer_e2.status:',layer_e2.status,'layer_e2.layer_file_type:',layer_e2.layer_file_type)
             if layer_e2.status == 'published' and layer_e2.layer_file_type=='excellon2':
                 pass
                 print("我是Excellon2!!!!!")

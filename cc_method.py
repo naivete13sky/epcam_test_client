@@ -88,8 +88,9 @@ class DMS():
     def get_job_layer_fields_from_dms_db_pandas_one_layer(self, job_id,*args, **kwargs):
         layer=kwargs['filter']
         sql = '''SELECT a.* from layer a
-            where a.job_id = {} and a.layer={}
+            where a.job_id = {} and lower(a.layer)='{}'
                 '''.format(job_id,layer)
+        # print("sql:",sql)
         engine = create_engine('postgresql+psycopg2://readonly:123456@10.97.80.147/dms')
         pd_job_current_layer = pd.read_sql(sql=sql, con=engine)
         return pd_job_current_layer

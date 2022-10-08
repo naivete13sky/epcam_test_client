@@ -464,14 +464,12 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     Print().print_with_delimiter('输出gerber完成')
 
-    #-----------------------------------------开始用G软件input，并比图。-------------------------------------------------
+    #-----------------------------------------开始用G软件input-------------------------------------------------
     ep_out_put_gerber_folder = os.path.join(temp_path,r'output_gerber',job_name_ep,r'orig')
 
 
     job_name_g2 = job_name + '_g2'#epcam输出gerber，再用g软件input。
     step = 'orig'
-
-
 
     file_path = os.path.join(temp_path, ep_out_put_gerber_folder)
     print("file_path:",file_path)
@@ -490,8 +488,37 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     out_path = temp_out_put_gerber_g_input_path
 
     asw.g_Gerber2Odb2_no_django(job_name_g2, step, gerberList_path, out_path, job_id)
+    # 输出tgz到指定目录
+    asw.g_export(job_name_g2, g_temp_path)
 
+    # -----------------------------------------开始用G软件比图，g2和g-------------------------------------------------
+    # 以G2转图为主来比对
 
+    for layer in other_layers:
+        print("other_layers:", other_layers)
+        if layer in all_layer_g:
+            map_layer = layer + '-com'
+            result = asw.layer_compare_do_compare(jobpath1, step1, layer, jobpath2, step2, layer, layer2_ext, tol,
+                                                  map_layer, map_layer_res)
+            if result == 'inner error':
+                pass
+                print(layer, "比对异常！")
+        else:
+            pass
+            print("悦谱转图中没有此层")
+
+    asw.save_job(job1)
+    asw.save_job(job2)
+
+    asw.layer_compare_close_job(jobpath1=jobpath1, jobpath2=jobpath2)
+
+    temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
+        'temp' + "_" + str(job_id) + "_" + vs_time_g)
+
+    if not os.path.exists(os.path.join(temp_path, 'ze')):
+        os.mkdir(os.path.join(temp_path, 'ze'))
+
+    asw.g_export(job1, temp_path_g_export)
 
 
 

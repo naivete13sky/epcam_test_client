@@ -1,4 +1,4 @@
-import time
+import time,os
 from config import RunConfig
 from cc_method import DMS
 
@@ -23,5 +23,9 @@ temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
 # print(cc3)
 
 
-layer_all = DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer')
-print("layer_all", layer_all)
+# layer_all = DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer')
+# print("layer_all", layer_all)
+
+path=r"C:\cc\share\temp_2015_1665218506\output_gerber\eol04204_ep\orig\0420440e.bot"
+layer_e2=DMS().get_job_layer_fields_from_dms_db_pandas_one_layer(job_id,filter=os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
+print('*'*100,"layer_e2:",layer_e2)
