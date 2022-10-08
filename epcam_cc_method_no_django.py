@@ -208,6 +208,90 @@ class EpGerberToODB:
         # time.sleep(20)
         # job_operation.delete_job(job)#delete会把odb文件夹删除的
 
+
+class EpExport:
+    # 导出
+    def layer_export(self,job, step, layer, _type, filename, gdsdbu, resize, angle, scalingX, scalingY, isReverse,mirror, rotate, scale, profiletop, cw, cutprofile, mirrorpointX, mirrorpointY, rotatepointX,rotatepointY, scalepointX, scalepointY, mirrordirection, cut_polygon):
+        data = {
+            'func': 'LAYER_EXPORT',
+            'paras': {
+                'job': job,
+                'step': step,
+                'layer': layer,
+                'type': _type,
+                'filename': filename,
+                'gdsdbu': gdsdbu,
+                'resize': resize,
+                'angle': angle,
+                'scalingX': scalingX,
+                'scalingY': scalingY,
+                'isReverse': isReverse,
+                'mirror': mirror,
+                'rotate': rotate,
+                'scale': scale,
+                'profiletop': profiletop,
+                'cw': cw,
+                'cutprofile': cutprofile,
+                'mirrorpointX': mirrorpointX,
+                'mirrorpointY': mirrorpointY,
+                'rotatepointX': rotatepointX,
+                'rotatepointY': rotatepointY,
+                'scalepointX': scalepointX,
+                'scalepointY': scalepointY,
+                'mirrordirection': mirrordirection,
+                'cut_polygon': cut_polygon
+            }
+        }
+        js = json.dumps(data)
+        print(js)
+        return epcam.process(json.dumps(data))
+
+class Information:
+    def get_steps(self,job):
+        try:
+            ret = epcam_api.get_matrix(job)
+            data = json.loads(ret)
+            steps = data['paras']['steps']
+            return steps
+        except Exception as e:
+            print(e)
+        return []
+
+    def get_layers(self,job):
+        try:
+            ret = epcam_api.get_matrix(job)
+            data = json.loads(ret)
+            layer_infos = data['paras']['info']
+            layer_list = []
+            for i in range(0, len(layer_infos)):
+                layer_list.append(layer_infos[i]['name'])
+            return layer_list
+        except Exception as e:
+            print(e)
+        return []
+
+    def get_drill_layer_name(self,job):
+        """
+        #获取孔层layer名
+        :param     job:
+        :param     step:
+        :return    drill_list:孔层名列表
+        :raises    error:
+        """
+        try:
+            ret = epcam_api.get_graphic(job)
+            data = json.loads(ret)
+            drill_list = []
+            layer_info = data['paras']['info']
+            for i in range(0, len(layer_info)):
+                if layer_info[i]['type'] == 'drill' and layer_info[i]['context'] == 'board':
+                    drill_list.append(layer_info[i]['name'])
+            return drill_list
+        except Exception as e:
+            print(e)
+            # sys.exit(0)
+        return ''
+
 if __name__ == "__main__":
     pass
     epcam.init()

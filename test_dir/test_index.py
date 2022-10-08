@@ -178,8 +178,9 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     print('所有层：',all_result)
     Print().print_with_delimiter('比对结果信息展示--结束')
 
-    #断言
+    #导入--断言
     assert g_vs_total_result_flag == True
     for key in all_result_g:
         # print(key + ':' + all_result[key])
         assert all_result_g[key] == "正常"
+

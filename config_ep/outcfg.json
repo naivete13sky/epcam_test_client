@@ -1,0 +1,26 @@
+
+{
+    "paras": {
+                "type": 0,
+                "gdsdbu": 0.001,
+                "resize": 0,
+                "angle": 0,
+                "scalingX": 1,
+                "scalingY": 1,
+                "isReverse": false,
+                "mirror": false,
+                "rotate": false,
+                "scale": false,
+                "profiletop": false,
+                "cw": false,
+                "cutprofile": true,
+                "mirrorpointX": 0,
+                "mirrorpointY": 0,
+                "rotatepointX": 0,
+                "rotatepointY": 0,
+                "scalepointX": 0,
+                "scalepointY": 0,
+                "mirrordirection": "X",
+                "cut_polygon": []
+                }                    
+} 
