@@ -112,9 +112,9 @@ if __name__ =='__main__':
     time_time = end_time - start_time
     value["step_time"] = time_time
     job_result[step] = value
-    print(job_result)
+    print('job_result:',job_result)
     out_put.append(job_result)
-    print(out_put)
+    print('out_put:',out_put)
     out_path = os.path.join(output_path, 'out_put' + '.json')
     if out_json == '':
         with open(out_path, 'w+') as f:  # 不能是a,w+会覆盖原有的，a只会追加
