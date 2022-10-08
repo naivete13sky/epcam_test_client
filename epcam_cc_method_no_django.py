@@ -208,44 +208,6 @@ class EpGerberToODB:
         # time.sleep(20)
         # job_operation.delete_job(job)#delete会把odb文件夹删除的
 
-
-class EpExport:
-    # 导出
-    def layer_export(self,job, step, layer, _type, filename, gdsdbu, resize, angle, scalingX, scalingY, isReverse,mirror, rotate, scale, profiletop, cw, cutprofile, mirrorpointX, mirrorpointY, rotatepointX,rotatepointY, scalepointX, scalepointY, mirrordirection, cut_polygon):
-        data = {
-            'func': 'LAYER_EXPORT',
-            'paras': {
-                'job': job,
-                'step': step,
-                'layer': layer,
-                'type': _type,
-                'filename': filename,
-                'gdsdbu': gdsdbu,
-                'resize': resize,
-                'angle': angle,
-                'scalingX': scalingX,
-                'scalingY': scalingY,
-                'isReverse': isReverse,
-                'mirror': mirror,
-                'rotate': rotate,
-                'scale': scale,
-                'profiletop': profiletop,
-                'cw': cw,
-                'cutprofile': cutprofile,
-                'mirrorpointX': mirrorpointX,
-                'mirrorpointY': mirrorpointY,
-                'rotatepointX': rotatepointX,
-                'rotatepointY': rotatepointY,
-                'scalepointX': scalepointX,
-                'scalepointY': scalepointY,
-                'mirrordirection': mirrordirection,
-                'cut_polygon': cut_polygon
-            }
-        }
-        js = json.dumps(data)
-        print(js)
-        return epcam.process(json.dumps(data))
-
 class Information:
     def get_steps(self,job):
         try:
