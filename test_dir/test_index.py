@@ -494,6 +494,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     # -----------------------------------------开始用G软件比图，g2和g-------------------------------------------------
     # 以G2转图为主来比对
 
+
     for layer in other_layers:
         print("other_layers:", other_layers)
         if layer in all_layer_g:
