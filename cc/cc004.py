@@ -28,4 +28,5 @@ temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
 
 path=r"C:\cc\share\temp_2015_1665218506\output_gerber\eol04204_ep\orig\0420440e.bot"
 layer_e2=DMS().get_job_layer_fields_from_dms_db_pandas_one_layer(job_id,filter=os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
-print('*'*100,"layer_e2:",layer_e2)
+print('*'*50,'\n',"layer_e2:",layer_e2)
+print("*"*50,'\n','layer_e2.status:',layer_e2.status.values[0],'layer_e2.layer_file_type:',layer_e2.layer_file_type.values[0])

@@ -917,11 +917,10 @@ class Asw():
 
             layer_e2=DMS().get_job_layer_fields_from_dms_db_pandas_one_layer(job_id,filter=os.path.basename(path).replace(' ', '-').replace('(', '-').replace(')', '-'))
 
-            print('*'*50,'/n',"layer_e2:",layer_e2)
+            print('*'*50,'\n',"layer_e2:",layer_e2)
 
-            print("*"*50,'/n','layer_e2.status:',layer_e2.status,'layer_e2.layer_file_type:',layer_e2.layer_file_type)
-            if layer_e2.status == 'published' and layer_e2.layer_file_type=='excellon2':
-                pass
+            print("*"*50,'\n','layer_e2.status:',layer_e2.status.values[0],'layer_e2.layer_file_type:',layer_e2.layer_file_type.values[0])
+            if layer_e2.status.values[0] == 'published' and layer_e2.layer_file_type.values[0]=='excellon2':
                 print("我是Excellon2!!!!!")
                 format='Excellon2'
                 units=layer_e2.units_g.lower()
