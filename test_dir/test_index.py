@@ -330,6 +330,10 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
 
     #----------------------------------------开始测试输出gerber功能--------------------------------------------------------
+    g2_vs_total_result_flag = True
+
+
+
     out_put = []
     job_result = {}
     out_json = ''
@@ -491,18 +495,24 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     asw.layer_compare_close_job(job1=job_g2_name, job2=job_g_name)
 
-    temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
-        'temp' + "_" + str(job_id) + "_" + vs_time_g)
+    temp_path_g2_export = r'//vmware-host/Shared Folders/share/{}/ze2'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
+    if not os.path.exists(os.path.join(temp_path, 'ze2')):
+        os.mkdir(os.path.join(temp_path, 'ze2'))
+    asw.g_export(job_g2_name, temp_path_g2_export)
 
-    if not os.path.exists(os.path.join(temp_path, 'ze')):
-        os.mkdir(os.path.join(temp_path, 'ze'))
-
-    asw.g_export(job_g2_name, temp_path_g_export)
-
-
-
-
-
+    # 开始查看比对结果
+    # 先解压
+    temp_path_ze2 = r'C:\cc\share\{}\ze2'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
+    job_operation.untgz(os.path.join(temp_path_ze2, os.listdir(temp_path_ze2)[0]), temp_path)
+    all_result_g2 = {}
+    for layer in other_layers:
+        layer_result = asw.layer_compare_analysis_temp_path(job=job_g2_name, step='orig', layer2=layer,
+                                                            layer2_ext='_copy', map_layer=layer + '-com',
+                                                            temp_path=temp_path)
+        all_result_g2[layer] = layer_result
+        if layer_result != "正常":
+            g2_vs_total_result_flag = False
+    data["all_result_g2"] = all_result_g2
 
 
 
@@ -519,6 +529,8 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     print('G转图的层：', all_result_g)
     Print().print_with_delimiter('分割线', sign='-')
     print('所有层：', all_result)
+    Print().print_with_delimiter('分割线', sign='-')
+    print('G2转图的层：', all_result_g2)
     Print().print_with_delimiter('比对结果信息展示--结束')
 
 
@@ -527,6 +539,11 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     for key in all_result_g:
         # print(key + ':' + all_result[key])
         assert all_result_g[key] == "正常"
+
+    assert g2_vs_total_result_flag == True
+    for key in all_result_g2:
+        # print(key + ':' + all_result[key])
+        assert all_result_g2[key] == "正常"
     Print().print_with_delimiter("断言--结束")
 
 
