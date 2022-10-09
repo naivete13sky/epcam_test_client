@@ -241,27 +241,27 @@ class Asw():
                 print('inner error')
                 return results
 
-    def layer_compare_do_compare(self, step1,layer1,job2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res):
+    def layer_compare_do_compare(self, *args,**kwargs):
         Print().print_with_delimiter("do_comare")
         results = []
         try:
-            self.step1 = step1
-            self.layer1 = layer1
-            self.job2 = job2
-            self.step2 = step2
-            self.layer2 = layer2
-            self.layer2_ext = layer2_ext
-            self.tol = tol
-            self.map_layer = map_layer
-            self.map_layer_res = map_layer_res
+            self.step1 = kwargs['step1']
+            self.layer1 = kwargs['layer1']
+            self.job2 = kwargs['job2']
+            self.step2 = kwargs['step2']
+            self.layer2 = kwargs['layer2']
+            self.layer2_ext = kwargs['layer2_ext']
+            self.tol = kwargs['tol']
+            self.map_layer = kwargs['map_layer']
+            self.map_layer_res = kwargs['map_layer_res']
         except Exception as e:
             print(e)
             print("*" * 100)
             return results
 
 
-        self.job2 = job2.lower()
-        layer_cp = layer2 + layer2_ext
+
+        layer_cp = self.layer2 + self.layer2_ext
 
         cmd_list1 = [
             'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
@@ -392,17 +392,17 @@ class Asw():
 
         return result
 
-    def layer_compare_analysis_temp_path(self, jobpath,step,layer2,layer2_ext,map_layer,temp_path):
-        # print("*" * 80,layer2 ,":查看比图结果--开始","*" * 80)
+    def layer_compare_analysis_temp_path(self, *args,**kwargs):
         results = []
-
-        job = os.path.basename(jobpath)
-        layer_cp = layer2 + layer2_ext
-        temp_path = temp_path
+        job = kwargs['job']
+        step=kwargs['step']
+        layer_cp = kwargs['layer2'] + kwargs['layer2_ext']
+        map_layer=kwargs['map_layer']
+        temp_path = kwargs['temp_path']
 
         features = (r"{}\{}\steps\{}\layers\{}\features".format(temp_path,job, step,map_layer))
         features_Z = (r"{}\{}\steps\{}\layers\{}\features.Z".format(temp_path,job, step,map_layer))
-        # print(features, "\n", features_Z)
+        print(features, "\n", features_Z)
         if os.path.isfile(features_Z):
             pass
             compress = Compress()
@@ -458,15 +458,8 @@ class Asw():
     def layer_compare_close_job(self, *args,**kwargs):
         Print().print_with_delimiter('close job',sign='-')
         results = []
-        try:
-            self.jobpath1 = kwargs['jobpath1']
-            self.jobpath2 = kwargs['jobpath2']
-        except Exception as e:
-            print(e)
-            print("*" * 100)
-            return results
-        self.job1 = os.path.basename(self.jobpath1)
-        self.job2 = os.path.basename(self.jobpath2)
+        self.job1 = kwargs['job1']
+        self.job2 = kwargs['job2']
 
         cmd_list1 = [
             'COM editor_page_close',

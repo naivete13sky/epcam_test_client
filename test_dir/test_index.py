@@ -242,15 +242,8 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         print('G软件tgz中的层信息：', all_layer_g)
 
     #以G转图为主来比对
-    job1 = os.listdir(os.path.join(temp_path, 'g'))[0]
-    jobpath1 = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job1)
-    step1 = 'orig'
-
-    job2 = os.listdir(os.path.join(temp_path, 'ep'))[0]
-    jobpath2 = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job2)
-    step2 = 'orig'
-    layer2_ext = '_copy'
-
+    job_g_g_path = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_g_name)
+    job_ep_g_path = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_ep_name)
     # 读取配置文件
     with open(r'C:\EPSemicon\cc\config.json', encoding='utf-8') as f:
         cfg = json.load(f)
@@ -258,27 +251,22 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     print("tol:", tol)
     map_layer_res = 200
 
-    print("job1:", job1, "job2:", job2)
+    print("job1:", job_g_name, "job2:", job_ep_name)
 
-    # 先删除同名料号
-    # asw.delete_job(job1)
-    # asw.delete_job(job2)
 
     # 导入要比图的资料
-    asw.import_odb_folder(jobpath1)
-    asw.import_odb_folder(jobpath2)
+    asw.import_odb_folder(job_g_g_path)
+    asw.import_odb_folder(job_ep_g_path)
     #G打开要比图的2个料号
-    job1 = os.path.basename(jobpath1).lower()
-    job2 = os.path.basename(jobpath2).lower()
-    asw.layer_compare_g_open_2_job(job1=job1, step='orig',job2=job2)
-    step = "orig"
+    job_g_name = job_g_name.lower()
+    job_ep_name = job_ep_name.lower()
+    asw.layer_compare_g_open_2_job(job1=job_g_name, step='orig',job2=job_ep_name)
     for layer in all_layer_g:
         print("g_layer:", layer)
-        print("比对参数:", job_g_name, step, layer, job_ep_name, step, layer)
         if layer in all_layer_ep:
             map_layer = layer + '-com'
-            result = asw.layer_compare_do_compare(step1, layer, job2, step2, layer, layer2_ext, tol,
-                                                  map_layer, map_layer_res)
+            result = asw.layer_compare_do_compare(step1='orig', layer1=layer, job2=job_ep_name, step2='orig', layer2=layer, layer2_ext='_copy', tol=tol,
+                                                  map_layer=map_layer, map_layer_res=map_layer_res)
             if result == 'inner error':
                 pass
                 print(layer, "比对异常！")
@@ -286,10 +274,10 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
             pass
             print("悦谱转图中没有此层")
 
-    asw.save_job(job1)
-    asw.save_job(job2)
+    asw.save_job(job_g_name)
+    asw.save_job(job_ep_name)
 
-    asw.layer_compare_close_job(jobpath1=jobpath1, jobpath2=jobpath2)
+    asw.layer_compare_close_job(job1=job_g_name, job2=job_ep_name)
 
     temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
         'temp' + "_" + str(job_id) + "_" + vs_time_g)
@@ -297,7 +285,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     if not os.path.exists(os.path.join(temp_path, 'ze')):
         os.mkdir(os.path.join(temp_path, 'ze'))
 
-    asw.g_export(job1, temp_path_g_export)
+    asw.g_export(job_g_name, temp_path_g_export)
     # asw.delete_job(job1)
     # asw.delete_job(job2)
 
@@ -310,7 +298,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     job_operation.untgz(os.path.join(temp_path_ze, os.listdir(temp_path_ze)[0]), temp_path)
     all_result_g = {}
     for layer in all_layer_g:
-        layer_result = asw.layer_compare_analysis_temp_path(jobpath1, step, layer, layer2_ext, layer + '-com', temp_path)
+        layer_result = asw.layer_compare_analysis_temp_path(job=job_g_name, step='orig', layer2=layer, layer2_ext='_copy', map_layer=layer + '-com', temp_path=temp_path)
         all_result_g[layer] = layer_result
         if layer_result != "正常":
             g_vs_total_result_flag = False
@@ -334,23 +322,9 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     data["all_result"] = all_result
 
 
-    Print().print_with_delimiter('比对结果信息展示--开始')
-    if g_vs_total_result_flag == True:
-        print("恭喜您！料号比对通过！")
-        # print("\033[1;32m 字体颜色：深黄色\033[0m")
-    if g_vs_total_result_flag == False:
-        print("Sorry！料号比对未通过，请人工检查！")
-    Print().print_with_delimiter('分割线',sign='-')
-    print('G转图的层：',all_result_g)
-    Print().print_with_delimiter('分割线',sign='-')
-    print('所有层：',all_result)
-    Print().print_with_delimiter('比对结果信息展示--结束')
 
-    #导入--断言
-    assert g_vs_total_result_flag == True
-    for key in all_result_g:
-        # print(key + ':' + all_result[key])
-        assert all_result_g[key] == "正常"
+
+
 
 
 
@@ -503,8 +477,8 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         if layer in all_layer_g:
             map_layer = layer + '-com'
             #准备改一下下面这行的参数，换成job名称，不要jobpath。另外job1是已经打开了的，不需要传参数了。
-            result = asw.layer_compare_do_compare(step1, layer, job2, step2, layer, layer2_ext, tol,
-                                                  map_layer, map_layer_res)
+            result = asw.layer_compare_do_compare(step1='orig', layer1=layer, job2=job_g_name, step2='orig', layer2=layer, layer2_ext='_copy', tol=tol,
+                                                  map_layer=map_layer, map_layer_res=map_layer_res)
             if result == 'inner error':
                 pass
                 print(layer, "比对异常！")
@@ -512,10 +486,10 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
             pass
             print("悦谱转图中没有此层")
 
-    asw.save_job(job1)
-    asw.save_job(job2)
+    asw.save_job(job_g2_name)
+    asw.save_job(job_g_name)
 
-    asw.layer_compare_close_job(jobpath1=jobpath1, jobpath2=jobpath2)
+    asw.layer_compare_close_job(job1=job_g2_name, job2=job_g_name)
 
     temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
         'temp' + "_" + str(job_id) + "_" + vs_time_g)
@@ -523,9 +497,37 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     if not os.path.exists(os.path.join(temp_path, 'ze')):
         os.mkdir(os.path.join(temp_path, 'ze'))
 
-    asw.g_export(job1, temp_path_g_export)
+    asw.g_export(job_g2_name, temp_path_g_export)
 
 
+
+
+
+
+
+
+
+
+
+    Print().print_with_delimiter('比对结果信息展示--开始')
+    if g_vs_total_result_flag == True:
+        print("恭喜您！料号比对通过！")
+        # print("\033[1;32m 字体颜色：深黄色\033[0m")
+    if g_vs_total_result_flag == False:
+        print("Sorry！料号比对未通过，请人工检查！")
+    Print().print_with_delimiter('分割线', sign='-')
+    print('G转图的层：', all_result_g)
+    Print().print_with_delimiter('分割线', sign='-')
+    print('所有层：', all_result)
+    Print().print_with_delimiter('比对结果信息展示--结束')
+
+
+    Print().print_with_delimiter("断言--开始")
+    assert g_vs_total_result_flag == True
+    for key in all_result_g:
+        # print(key + ':' + all_result[key])
+        assert all_result_g[key] == "正常"
+    Print().print_with_delimiter("断言--结束")
 
 
     # 删除temp_path
