@@ -241,14 +241,13 @@ class Asw():
                 print('inner error')
                 return results
 
-    def layer_compare_do_compare(self, jobpath1,step1,layer1,jobpath2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res):
+    def layer_compare_do_compare(self, step1,layer1,job2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res):
         Print().print_with_delimiter("do_comare")
         results = []
         try:
-            self.jobpath1 = jobpath1
             self.step1 = step1
             self.layer1 = layer1
-            self.jobpath2 = jobpath2
+            self.job2 = job2
             self.step2 = step2
             self.layer2 = layer2
             self.layer2_ext = layer2_ext
@@ -260,8 +259,8 @@ class Asw():
             print("*" * 100)
             return results
 
-        self.job1 = os.path.basename(jobpath1).lower()
-        self.job2 = os.path.basename(jobpath2).lower()
+
+        self.job2 = job2.lower()
         layer_cp = layer2 + layer2_ext
 
         cmd_list1 = [

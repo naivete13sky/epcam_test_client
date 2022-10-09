@@ -277,7 +277,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         print("比对参数:", job_g_name, step, layer, job_ep_name, step, layer)
         if layer in all_layer_ep:
             map_layer = layer + '-com'
-            result = asw.layer_compare_do_compare(jobpath1, step1, layer, jobpath2, step2, layer, layer2_ext, tol,
+            result = asw.layer_compare_do_compare(step1, layer, job2, step2, layer, layer2_ext, tol,
                                                   map_layer, map_layer_res)
             if result == 'inner error':
                 pass
@@ -502,7 +502,8 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         print("other_layers:", other_layers)
         if layer in all_layer_g:
             map_layer = layer + '-com'
-            result = asw.layer_compare_do_compare(jobpath1, step1, layer, jobpath2, step2, layer, layer2_ext, tol,
+            #准备改一下下面这行的参数，换成job名称，不要jobpath。另外job1是已经打开了的，不需要传参数了。
+            result = asw.layer_compare_do_compare(step1, layer, job2, step2, layer, layer2_ext, tol,
                                                   map_layer, map_layer_res)
             if result == 'inner error':
                 pass
