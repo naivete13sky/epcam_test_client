@@ -402,7 +402,6 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
                 other_layers.append(other_layer)
         for layer in other_layers:
             layer_stime = (int(time.time()))
-            ##对geber文件加.gbr后缀
             filename = step_path + '\\' + layer  # 当前step下的每个层的gerber文件路径
             ret = epcam_api.layer_export(job_ep_name, step, layer, _type, filename, gdsdbu, resize, angle, scalingX, scalingY,
                                          isReverse,
@@ -412,8 +411,9 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
             layer_etime = (int(time.time()))
             layer_time = layer_etime - layer_stime
             value[layer] = layer_time
+
+        print("drill_layers:",drill_layers)
         for drill_layer in drill_layers:
-            # ，对孔文件加.drl后缀
             layer_stime = (int(time.time()))
             drillname = step_path + '\\' + drill_layer
             drill_info = epcam_api.drill2file(job_ep_name, step, drill_layer, drillname, False)
