@@ -402,7 +402,7 @@ class Asw():
 
         features = (r"{}\{}\steps\{}\layers\{}\features".format(temp_path,job, step,map_layer))
         features_Z = (r"{}\{}\steps\{}\layers\{}\features.Z".format(temp_path,job, step,map_layer))
-        print(features, "\n", features_Z)
+        # print(features, "\n", features_Z)
         if os.path.isfile(features_Z):
             pass
             compress = Compress()

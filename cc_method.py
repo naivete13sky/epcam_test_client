@@ -95,6 +95,15 @@ class DMS():
         pd_job_current_layer = pd.read_sql(sql=sql, con=engine)
         return pd_job_current_layer
 
+    def get_job_layer_drill_from_dms_db_pandas_one_job(self, job_id,*args, **kwargs):
+
+        sql = '''SELECT a.* from layer a
+            where a.job_id = {} and a.status = 'published' and a.layer_file_type = 'excellon2'
+                '''.format(job_id)
+        # print("sql:",sql)
+        engine = create_engine('postgresql+psycopg2://readonly:123456@10.97.80.147/dms')
+        pd_job_current_layer_drill = pd.read_sql(sql=sql, con=engine)
+        return pd_job_current_layer_drill
 
     def get_file_from_dms_db(self,temp_path,job_id,*args, **kwargs):
         job_current_all_fields = self.get_job_fields_from_dms_db_pandas(job_id)
@@ -194,5 +203,8 @@ def else1():
 
 if __name__ == "__main__":
     print("我是main()")
-    cc=Print().print_with_delimiter("abc")
-    print(cc)
+    job_id = 2182
+    layer_drill = DMS().get_job_layer_drill_from_dms_db_pandas_one_job(job_id)
+    print('*' * 50, '\n', "layer_drill:", layer_drill)
+    print([each.lower() for each in DMS().get_job_layer_drill_from_dms_db_pandas_one_job(job_id)['layer'] ])
+

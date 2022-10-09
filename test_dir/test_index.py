@@ -394,12 +394,16 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
         # 开始时间
         start_time = (int(time.time()))
         step_path = file_path + '\\' + step
-        drill_layers = Information().get_drill_layer_name(job_ep_name)
+        # drill_layers = Information().get_drill_layer_name(job_ep_name)#这个方法的前提是定好层别属性才行。如果没有定，可以从DMS数据库的layer表里拉信息。
+        drill_layers = [each.lower() for each in DMS().get_job_layer_drill_from_dms_db_pandas_one_job(job_id)['layer'] ]
+        print("drill_layers:",drill_layers)
+
         other_layers = []
         layer_result = {}
         for other_layer in layers:
             if other_layer not in drill_layers:
                 other_layers.append(other_layer)
+        # 输出gerber
         for layer in other_layers:
             layer_stime = (int(time.time()))
             filename = step_path + '\\' + layer  # 当前step下的每个层的gerber文件路径
@@ -412,14 +416,14 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
             layer_time = layer_etime - layer_stime
             value[layer] = layer_time
 
-        print("drill_layers:",drill_layers)
-        for drill_layer in drill_layers:
-            layer_stime = (int(time.time()))
-            drillname = step_path + '\\' + drill_layer
-            drill_info = epcam_api.drill2file(job_ep_name, step, drill_layer, drillname, False)
-            layer_etime = (int(time.time()))
-            layer_time = layer_etime - layer_stime
-            value[layer] = layer_time
+        #输出excellon2
+        # for drill_layer in drill_layers:
+        #     layer_stime = (int(time.time()))
+        #     drillname = step_path + '\\' + drill_layer
+        #     drill_info = epcam_api.drill2file(job_ep_name, step, drill_layer, drillname, False)
+        #     layer_etime = (int(time.time()))
+        #     layer_time = layer_etime - layer_stime
+        #     value[layer] = layer_time
 
     #
     # 记录下输出step的时间
