@@ -417,13 +417,13 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
             value[layer] = layer_time
 
         #输出excellon2
-        # for drill_layer in drill_layers:
-        #     layer_stime = (int(time.time()))
-        #     drillname = step_path + '\\' + drill_layer
-        #     drill_info = epcam_api.drill2file(job_ep_name, step, drill_layer, drillname, False)
-        #     layer_etime = (int(time.time()))
-        #     layer_time = layer_etime - layer_stime
-        #     value[layer] = layer_time
+        for drill_layer in drill_layers:
+            layer_stime = (int(time.time()))
+            drillname = step_path + '\\' + drill_layer
+            drill_info = epcam_api.drill2file(job_ep_name, step, drill_layer, drillname, False)
+            layer_etime = (int(time.time()))
+            layer_time = layer_etime - layer_stime
+            value[layer] = layer_time
 
     #
     # 记录下输出step的时间

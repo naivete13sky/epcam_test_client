@@ -1117,7 +1117,7 @@ class Asw():
             ret = self.Gerber2ODB2_no_django(paras, 0,job_id)
             result['result'] = ret
             results.append(result)
-        self.Gerber2ODB2(paras, 1,job_id)#保存
+        self.Gerber2ODB2_no_django(paras, 1,job_id)#保存
         return results
 
     def g_export(self,job,export_to_path):
