@@ -856,7 +856,7 @@ class Asw():
                 return False
         return True
 
-    def Gerber2ODB2_no_django(self, paras, _type,job_id):
+    def Gerber2ODB2_no_django(self, paras, _type,job_id,*args,**kwargs):
         # print("*"*100,"gerber2odb")
         try:
             path = paras['path']
@@ -908,15 +908,24 @@ class Asw():
             if layer_e2.status.values[0] == 'published' and layer_e2.layer_file_type.values[0]=='excellon2':
                 print("我是Excellon2!!!!!")
                 format='Excellon2'
-                units=layer_e2.units_g.lower()
-                zeroes=layer_e2.zeroes_omitted_g.lower()
-                nf1 = int(layer_e2.number_format_A_g)
-                nf2 = int(layer_e2.number_format_B_g)
-                #g软件的tool_units没有mils选项
-                if layer_e2.tool_units_g.lower() == 'mils':
-                    tool_units = 'inch'
-                else:
-                    tool_units = layer_e2.tool_units_g.lower()
+                if 'drill_para' in kwargs:
+                    # print("drill_para2:", kwargs['drill_para'])
+                    if kwargs['drill_para'] == 'epcam_default':
+                        units = 'inch'
+                        zeroes = 'trailing'
+                        nf1 = "2"
+                        nf2 ="6"
+                        tool_units = 'mm'
+                    elif kwargs['drill_para'] == 'from_dms':
+                        units=layer_e2.units_g.values[0].lower()
+                        zeroes=layer_e2.zeroes_omitted_g.values[0].lower()
+                        nf1 = int(layer_e2.number_format_A_g.values[0])
+                        nf2 = int(layer_e2.number_format_B_g.values[0])
+                        #g软件的tool_units没有mils选项
+                        if layer_e2.tool_units_g.values[0].lower() == 'mils':
+                            tool_units = 'inch'
+                        else:
+                            tool_units = layer_e2.tool_units_g.values[0].lower()
 
                 separator='nl'
             else:
@@ -1075,7 +1084,7 @@ class Asw():
         self.Gerber2ODB2(paras, 1,job_id)#保存
         return results
 
-    def g_Gerber2Odb2_no_django(self,job_name, step, gerberList_path, out_path,job_id):
+    def g_Gerber2Odb2_no_django(self,job_name, step, gerberList_path, out_path,job_id,*args,**kwargs):
         paras = {}
         paras['path'] = ''
         paras['job'] = job_name
@@ -1114,10 +1123,10 @@ class Asw():
             result = {'gerber': gerberPath}
             paras['path'] = gerberPath
             paras['layer'] = os.path.basename(gerberPath).lower()
-            ret = self.Gerber2ODB2_no_django(paras, 0,job_id)
+            ret = self.Gerber2ODB2_no_django(paras, 0,job_id,*args,**kwargs)
             result['result'] = ret
             results.append(result)
-        self.Gerber2ODB2_no_django(paras, 1,job_id)#保存
+        self.Gerber2ODB2_no_django(paras, 1,job_id,*args,**kwargs)#保存
         return results
 
     def g_export(self,job,export_to_path):

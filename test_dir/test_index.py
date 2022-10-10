@@ -471,7 +471,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     os.mkdir(temp_out_put_gerber_g_input_path)
     out_path = temp_out_put_gerber_g_input_path
 
-    asw.g_Gerber2Odb2_no_django(job_g2_name, step, gerberList_path, out_path, job_id)
+    asw.g_Gerber2Odb2_no_django(job_g2_name, step, gerberList_path, out_path, job_id,drill_para='epcam_default')
     # 输出tgz到指定目录
     asw.g_export(job_g2_name, os.path.join(g_temp_path,r'g2'))
 
@@ -480,8 +480,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     # G打开要比图的2个料号
     asw.layer_compare_g_open_2_job(job1=job_g2_name, step='orig',job2=job_g_name)
 
-    for layer in other_layers:
-        print("other_layers:", other_layers)
+    for layer in layers:
         if layer in all_layer_g:
             map_layer = layer + '-com'
             #准备改一下下面这行的参数，换成job名称，不要jobpath。另外job1是已经打开了的，不需要传参数了。
@@ -509,7 +508,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     temp_path_ze2 = r'C:\cc\share\{}\ze2'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
     job_operation.untgz(os.path.join(temp_path_ze2, os.listdir(temp_path_ze2)[0]), temp_path)
     all_result_g2 = {}
-    for layer in other_layers:
+    for layer in layers:
         layer_result = asw.layer_compare_analysis_temp_path(job=job_g2_name, step='orig', layer2=layer,
                                                             layer2_ext='_copy', map_layer=layer + '-com',
                                                             temp_path=temp_path)
