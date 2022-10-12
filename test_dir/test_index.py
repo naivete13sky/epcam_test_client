@@ -209,7 +209,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     # 悦谱转图
     job_name_ep = os.listdir(temp_gerber_path)[0] + '_ep'
-    job_name = os.listdir(temp_gerber_path)[0]
+    job_name = os.listdir(temp_gerber_path)[0].lower()
     file_path_gerber = os.path.join(temp_gerber_path, os.listdir(temp_gerber_path)[0])
     out_path = temp_ep_path
     #先清空同名料号
