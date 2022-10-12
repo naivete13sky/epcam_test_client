@@ -188,18 +188,19 @@ class Asw():
                 self.exec_cmd(cmd)
         return result
 
-    def import_odb_folder(self, jobpath):
+    def import_odb_folder(self, jobpath,*args,**kwargs):
         Print().print_with_delimiter('import job')
         results=[]
         self.jobpath = jobpath
-        #远程调用时不能判断下面这个
-        # if not os.path.exists(self.jobpath):
-        #     print('{} does not exist'.format(self.jobpath))
-        #     results.append('{} does not exist'.format(self.jobpath))
-        #     return results
-        job = os.path.basename(self.jobpath)
+
+        if "job_name" in kwargs:
+            # print("job_name of para:",kwargs['job_name'])
+            job_name = kwargs['job_name']
+        else:
+            job_name = os.path.basename(self.jobpath)
+        # print("job_name now is:",job_name)
         cmd_list1 = [
-            'COM import_job,db=genesis,path={},name={},analyze_surfaces=no'.format(jobpath, job.lower()),
+            'COM import_job,db=genesis,path={},name={},analyze_surfaces=no'.format(jobpath, job_name.lower()),
 
         ]
 
