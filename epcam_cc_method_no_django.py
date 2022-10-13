@@ -204,7 +204,7 @@ class EpGerberToODB:
         all_layer = layer_info.get_all_layer_name(job)  # 获得料号下所有layer
         gl.all_layer=all_layer
         #清空内存，防止同名料号出问题
-        epcam_api.close_job(job)
+        # epcam_api.close_job(job)
         # time.sleep(20)
         # job_operation.delete_job(job)#delete会把odb文件夹删除的
 

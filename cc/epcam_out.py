@@ -42,7 +42,7 @@ if __name__ =='__main__':
         cut_polygon = infos_['cut_polygon']
 
     #打开料号
-    temp_ep_path = r'C:\cc\share\temp_2015_1665194954\ep'
+    temp_ep_path = r'C:\cc\share\temp_269_1665639749\ep'
     job_ep_name = os.listdir(temp_ep_path)[0]
     job = job_ep_name
     res = job_operation.open_job(temp_ep_path, job_ep_name)

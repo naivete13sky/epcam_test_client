@@ -213,7 +213,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
     file_path_gerber = os.path.join(temp_gerber_path, os.listdir(temp_gerber_path)[0])
     out_path = temp_ep_path
     #先清空同名料号
-    epcam_api.close_job(job_name_ep)
+    # epcam_api.close_job(job_name_ep)
     EpGerberToODB().ep_gerber_to_odb_pytest(job_name_ep, 'orig', file_path_gerber, out_path, job_id)
 
     #下载G转图tgz，并解压好
@@ -221,6 +221,7 @@ def test_gerber_to_odb_ep_local_convert(job_id,prepare_test_job_clean_g):
 
     # 打开job_ep
     job_ep_name = os.listdir(temp_ep_path)[0]
+    print("job_name_ep,job_ep_name:",job_name_ep,job_ep_name)
     res = job_operation.open_job(temp_ep_path, job_ep_name)
     print("open ep result:", res)
     all_layer_ep=job_operation.get_all_layers(job_ep_name)
