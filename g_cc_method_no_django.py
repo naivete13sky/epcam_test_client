@@ -913,7 +913,8 @@ class Asw():
                     # print("drill_para2:", kwargs['drill_para'])
                     if kwargs['drill_para'] == 'epcam_default':
                         units = 'inch'
-                        zeroes = 'trailing'
+                        # zeroes = 'trailing'#055s13版本是trailing
+                        zeroes = 'leading'
                         nf1 = "2"
                         nf2 ="6"
                         tool_units = 'mm'
