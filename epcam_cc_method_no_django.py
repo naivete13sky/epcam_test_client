@@ -17,7 +17,7 @@ import re
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
 import gl as gl
-
+from config import RunConfig
 
 class EpGerberToODB:
 
@@ -162,6 +162,7 @@ class EpGerberToODB:
                 if file_format == 'Gerber274x':
                     print(file)
                     if (offsetFlag == False) and (abs(min_1 - sys.maxsize) > 1e-6 and abs(min_2 - sys.maxsize) > 1e-6):
+                        offset1 = min_1
                         offset2 = min_2
                         offsetFlag = True
                     file_param['offset_numbers'] = {'first': offset1, 'second': offset2}
@@ -184,16 +185,13 @@ class EpGerberToODB:
         :raises    error:
         """
         # epcam.init()
+
+
+
         new_job_path = os.path.join(out_path, job)  # job若存在则删除
         if os.path.exists(new_job_path):
             shutil.rmtree(new_job_path)
         epcam_api.create_job(out_path, job)
-
-
-        # time.sleep(20)
-
-
-
         job_operation.open_job(out_path, job)
         job_operation.create_step(job, step)
         job_operation.save_job(job)
@@ -257,9 +255,12 @@ class Information:
 if __name__ == "__main__":
     pass
     epcam.init()
+    epcam_api.set_config_path(RunConfig.ep_cam_path)
+
+
     job = 'test1'
     step = 'orig'
-    file_path = r'C:\Users\cheng.chen\Desktop\nccb'
+    file_path = r'C:\cc\share\temp_2093_1665738392\gerber\hige001a'
     out_path = r'C:\job\test\odb'
     cc=EpGerberToODB()
-    cc.ep_gerber_to_odb_pytest(job, step, file_path, out_path,250)
+    cc.ep_gerber_to_odb_pytest(job, step, file_path, out_path,2093)
