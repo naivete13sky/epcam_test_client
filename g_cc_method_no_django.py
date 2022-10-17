@@ -914,9 +914,11 @@ class Asw():
                     if kwargs['drill_para'] == 'epcam_default':
                         units = 'inch'
                         # zeroes = 'trailing'#055s13版本是trailing
-                        zeroes = 'leading'
+                        # zeroes = 'leading'
+                        zeroes = 'none'
                         nf1 = "2"
-                        nf2 ="6"
+                        # nf2 ="6"
+                        nf2 = "4"
                         tool_units = 'mm'
                     elif kwargs['drill_para'] == 'from_dms':
                         units=layer_e2.units_g.values[0].lower()
