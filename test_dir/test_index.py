@@ -774,10 +774,12 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
         step_path = file_path + '\\' + step
         # drill_layers = Information().get_drill_layer_name(job_ep_name)#这个方法的前提是定好层别属性才行。如果没有定，可以从DMS数据库的layer表里拉信息。
         drill_layers = [each.lower() for each in DMS().get_job_layer_drill_from_dms_db_pandas_one_job(job_id)['layer'] ]
+        rout_layers = [each.lower() for each in DMS().get_job_layer_rout_from_dms_db_pandas_one_job(job_id)['layer'] ]
         print("drill_layers:",drill_layers)
 
         other_layers = []
         layer_result = {}
+        #other_layers代表是gerber
         for other_layer in layers:
             if other_layer not in drill_layers:
                 other_layers.append(other_layer)
@@ -798,7 +800,12 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
         for drill_layer in drill_layers:
             layer_stime = (int(time.time()))
             drillname = step_path + '\\' + drill_layer
-            drill_info = epcam_api.drill2file(job_ep_name, step, drill_layer, drillname, False)
+
+            if drill_layer in rout_layers:
+                Print().print_with_delimiter("我是rout")
+                drill_info = epcam_api.rout2file(job_ep_name, step, drill_layer, drillname)
+            else:
+                drill_info = epcam_api.drill2file(job_ep_name, step, drill_layer, drillname, False)
             layer_etime = (int(time.time()))
             layer_time = layer_etime - layer_stime
             value[layer] = layer_time

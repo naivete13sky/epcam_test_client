@@ -161,6 +161,18 @@ class DMS():
                     if os.path.exists(os.path.join(temp_g_path, g_tgz_file)):
                         os.remove(os.path.join(temp_g_path, g_tgz_file))
 
+    def get_job_layer_rout_from_dms_db_pandas_one_job(self, job_id,*args, **kwargs):
+
+        sql = '''SELECT a.* from layer a
+            where a.job_id = {} and a.status = 'published' and a.layer_file_type = 'excellon2' and a.layer_type = 'rout'
+                '''.format(job_id)
+        # print("sql:",sql)
+        engine = create_engine('postgresql+psycopg2://readonly:123456@10.97.80.147/dms')
+        pd_job_current_layer_rout = pd.read_sql(sql=sql, con=engine)
+        return pd_job_current_layer_rout
+
+
+
 class Print():
     def print_with_delimiter(self,text, sign='*', numbers=198):
         pass
