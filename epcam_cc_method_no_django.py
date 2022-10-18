@@ -54,7 +54,7 @@ class EpGerberToODB:
     def traverse_gerber_pytest(self,job, step, file_path, index,job_id):
         # print("*"*30,job_id)
         # job_current = models.Job.objects.get(id=job_id)
-        conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147", port="5432")
+        conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.119", port="5432")
         cursor = conn.cursor()
         sql = '''SELECT a.layer_org from layer a
             where a.job_id = {}
@@ -119,7 +119,7 @@ class EpGerberToODB:
                 if file_format == 'Excellon2':
                     print('file:',file)
                     print('''file.replace(' ','-').replace('(','-').replace(')','-'):''',file.replace(' ','-').replace('(','-').replace(')','-'))
-                    conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.147",port="5432")
+                    conn = psycopg2.connect(database="dms", user="readonly", password="123456", host="10.97.80.119",port="5432")
                     cursor = conn.cursor()
                     sql = '''SELECT a.layer,a.status,a.units_ep,a.zeroes_omitted_ep,a."number_format_A_ep",a."number_format_B_ep",a.tool_units_ep from layer a
                                 where a.job_id = {} and a.layer = '{}'
