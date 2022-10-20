@@ -1,15 +1,14 @@
-import os,sys,json,shutil
+import os,sys
 from py.xml import html
 from config import RunConfig
 sys.path.append(RunConfig.epcam_python_path)
-import epcam
 import pytest
 from os.path import dirname, abspath
 import epcam_api
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
 
-from g_cc_method_no_django import Asw
+from config_g.g_cc_method_no_django import Asw
 
 
 

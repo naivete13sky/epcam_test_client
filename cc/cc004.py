@@ -1,6 +1,6 @@
 import time,os
 from config import RunConfig
-from cc_method import DMS
+from cc.cc_method import DMS
 
 job_id = 2015
 vs_time_g = str(int(time.time()))#比对时间

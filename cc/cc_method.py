@@ -15,7 +15,7 @@ import epcam,job_operation,epcam_api
 class GetTestData():
     pass
     def get_job_id(self,fun):
-        pd_1=pd.read_excel(io=os.path.join(os.getcwd(),r"config.xlsx"),sheet_name="test_data")
+        pd_1=pd.read_excel(io=os.path.join(os.path.abspath('.'),r"config.xlsx"), sheet_name="test_data")
         return [ each2 for each1 in pd_1[(pd_1["测试功能"]==fun) & (pd_1["是否执行"] == 1)][['测试料号']].values.tolist() for each2 in each1]
 
 

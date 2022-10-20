@@ -6,7 +6,7 @@ import time
 sys.path.append(r'C:\EPSemicon\cc\epcam')
 import epcam
 import job_operation,epcam_api
-from epcam_cc_method_no_django import Information
+from config_ep.epcam_cc_method_no_django import Information
 from pathlib import Path
 
 epcam.init()
