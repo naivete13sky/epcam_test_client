@@ -97,7 +97,7 @@ class Asw():
             result = '正常'
         elif comp_result_text == 'yes':
             result = '错误'
-
+        print("比对结果：",result)
         return result
 
     def layer_compare_do_compare(self, *args,**kwargs):

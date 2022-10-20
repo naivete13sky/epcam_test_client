@@ -11,14 +11,16 @@ from pathlib import Path
 
 
 @pytest.mark.parametrize("job_id", GetTestData().get_job_id('Input'))
-def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_clean_g):
+def atest_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_clean_g):
     Print().print_with_delimiter("G软件VS开始啦！")
     asw = Asw(r"C:\EPSemicon\cc\gateway.exe")#拿到G软件
+
     data = {}#存放当前测试料号的每一层的比对结果。
     g_vs_total_result_flag = True  # True表示最新一次G比对通过
     vs_time_g = str(int(time.time()))#比对时间
     data["vs_time_g"] = vs_time_g#比对时间存入字典
     data["job_id"] = job_id
+
 
     #取到临时目录
     temp_path = RunConfig.temp_path_base + "_" + str(job_id) + "_" + vs_time_g
@@ -26,13 +28,18 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     temp_ep_path = os.path.join(temp_path, 'ep')
     temp_g_path = os.path.join(temp_path, 'g')
 
+
+
     #下载并解压原始gerber文件
     DMS().get_file_from_dms_db(temp_path, job_id, field='file_compressed', decompress='rar')
+
     # 悦谱转图
     job_name_ep = os.listdir(temp_gerber_path)[0] + '_ep'
     job_name = os.listdir(temp_gerber_path)[0].lower()
     file_path_gerber = os.path.join(temp_gerber_path, os.listdir(temp_gerber_path)[0])
     out_path = temp_ep_path
+    #先清空同名料号
+    # epcam_api.close_job(job_name_ep)
     EpGerberToODB().ep_gerber_to_odb_pytest(job_name_ep, 'orig', file_path_gerber, out_path, job_id)
 
     #下载G转图tgz，并解压好
@@ -70,7 +77,9 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     tol = cfg['job_manage']['vs']['vs_tol_g']
     print("tol:", tol)
     map_layer_res = 200
+
     print("job1:", job_g_name, "job2:", job_ep_name)
+
 
     # 导入要比图的资料
     asw.import_odb_folder(job_g_g_path)
@@ -79,6 +88,7 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     job_g_name = job_g_name.lower()
     job_ep_name = job_ep_name.lower()
     asw.layer_compare_g_open_2_job(job1=job_g_name, step='orig',job2=job_ep_name)
+
     g_compare_result_folder = 'g_compare_result'
     temp_g_compare_result_path = os.path.join(temp_path, g_compare_result_folder)
     if not os.path.exists(temp_g_compare_result_path):
@@ -89,26 +99,42 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
 
     all_result_g = {}
     for layer in all_layer_g:
-        # print("g_layer:", layer)
+        print("g_layer:", layer)
         if layer in all_layer_ep:
             map_layer = layer + '-com'
             result = asw.layer_compare_one_layer(job1=job_g_name,step1='orig', layer1=layer, job2=job_ep_name, step2='orig', layer2=layer, layer2_ext='_copy', tol=tol,
                                                   map_layer=map_layer, map_layer_res=map_layer_res,result_path_remote=temp_path_remote_g_compare_result,
                                                  result_path_local=temp_path_local_g_compare_result)
+
             all_result_g[layer] = result
             if result != "正常":
                 g_vs_total_result_flag = False
+
         else:
             pass
             print("悦谱转图中没有此层")
+
     asw.save_job(job_g_name)
     asw.save_job(job_ep_name)
     asw.layer_compare_close_job(job1=job_g_name, job2=job_ep_name)
 
+    # # 比图结果所在的料号导出
+    # temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
+    #     'temp' + "_" + str(job_id) + "_" + vs_time_g)
+    # if not os.path.exists(os.path.join(temp_path, 'ze')):
+    #     os.mkdir(os.path.join(temp_path, 'ze'))
+    # asw.g_export(job_g_name, temp_path_g_export)#比图结果所在的料号导出
+    # asw.delete_job(job1)
+    # asw.delete_job(job2)
+
+    # temp_path_ze = r'C:\cc\share\{}\ze'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
+    # job_operation.untgz(os.path.join(temp_path_ze, os.listdir(temp_path_ze)[0]), temp_path)# 先解压
+
     # 开始查看比对结果
     # 获取原始层文件信息，最全的
     all_layer_from_org = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer_org')]
-    all_result = {}#all_result存放原始文件中所有层的比对信息
+    #all_result存放原始文件中所有层的比对信息
+    all_result = {}
     for layer_org in all_layer_from_org:
         layer_org_find_flag = False
         layer_org_vs_value = ''
@@ -125,6 +151,11 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     data["all_result"] = all_result
 
 
+
+
+
+
+
     #----------------------------------------开始测试输出gerber功能--------------------------------------------------------
     g1_vs_total_result_flag = True
     out_put = []
@@ -136,6 +167,7 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     if os.path.exists(temp_out_put_gerber_path):
         shutil.rmtree(temp_out_put_gerber_path)
     os.mkdir(temp_out_put_gerber_path)
+
 
     # 设置导出参数
     with open(RunConfig.config_ep_output, 'r') as cfg:
@@ -224,7 +256,7 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
             layer_time = layer_etime - layer_stime
             value[layer] = layer_time
 
-
+    #
     # 记录下输出step的时间
     end_time = (int(time.time()))
     time_time = end_time - start_time
@@ -249,6 +281,8 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
 
     #-----------------------------------------开始用G软件input-------------------------------------------------
     ep_out_put_gerber_folder = os.path.join(temp_path,r'output_gerber',job_name_ep,r'orig')
+
+
     job_g2_name = job_name + '_g2'#epcam输出gerber，再用g软件input。
     step = 'orig'
 
@@ -288,9 +322,12 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
         'temp' + "_" + str(job_id) + "_" + vs_time_g, g1_compare_result_folder)
     temp_path_local_g1_compare_result = os.path.join(temp_path, g1_compare_result_folder)
 
+
+
     # 以G1转图为主来比对
     # G打开要比图的2个料号g1和g2。g1就是原始的G转图，g2是悦谱输出的gerber又input得到的
     asw.layer_compare_g_open_2_job(job1=job_g1_name, step='orig',job2=job_g2_name)
+
     all_result_g1 = {}
     for layer in all_layer_g:
         if layer in layers:
@@ -300,9 +337,12 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
                                                   map_layer=map_layer, map_layer_res=map_layer_res,
                                                  result_path_remote=temp_path_remote_g1_compare_result,
                                                  result_path_local=temp_path_local_g1_compare_result)
+
             all_result_g1[layer] = result
             if result != "正常":
                 g1_vs_total_result_flag = False
+
+
         else:
             pass
             print("悦谱转图中没有此层")
@@ -310,6 +350,17 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     asw.save_job(job_g1_name)
     asw.save_job(job_g2_name)
     asw.layer_compare_close_job(job1=job_g1_name, job2=job_g2_name)
+
+    # #导出g1比图结果所在的料
+    # temp_path_g1_export = r'//vmware-host/Shared Folders/share/{}/ze2'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
+    # if not os.path.exists(os.path.join(temp_path, 'ze2')):
+    #     os.mkdir(os.path.join(temp_path, 'ze2'))
+    # asw.g_export(job_g1_name, temp_path_g1_export)
+    # # 开始查看比对结果
+    # temp_path_ze2 = r'C:\cc\share\{}\ze2'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
+    # job_operation.untgz(os.path.join(temp_path_ze2, os.listdir(temp_path_ze2)[0]), temp_path)# 先解压
+
+
     data["all_result_g1"] = all_result_g1
 
 
