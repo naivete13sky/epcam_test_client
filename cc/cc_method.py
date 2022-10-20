@@ -206,9 +206,9 @@ def else1():
     pass
     all_result_g = {"layer1":"正常","layer2":"错误"}
     #结果存入josn文件，如果有需要的话
-    if os.path.exists(r'C:\EPSemicon\cc\result.json'):
-        os.remove(r'C:\EPSemicon\cc\result.json')
-    with open(r'C:\EPSemicon\cc\result.json', 'w') as f:
+    if os.path.exists(r'result.json'):
+        os.remove(r'result.json')
+    with open(r'result.json', 'w') as f:
         json.dump(all_result_g, f, indent=4, ensure_ascii=False)
 
 
