@@ -1,33 +1,9 @@
-"""
-* text：返回 alert/confirm/prompt 中的文字信息。
-* accept()：接受现有警告框。
-* dismiss()：解散现有警告框。
-* send_keys(keysToSend)： 发送文本至警告框。
-"""
-from selenium import webdriver
-from time import sleep
+import os
+with open(r"C:\cc\share\temp_2063_1666246568\g_compare_result\w-sm2.txt", 'r') as f:
+    comp_result_text = f.readlines()[0].split(" ")[-1].strip()
+print(comp_result_text)
+print(len(comp_result_text))
 
-driver = webdriver.Chrome()
-driver.get('https://www.baidu.com')
-
-sleep(5)
-# 打开搜索设置
-# link = driver.find_element_by_link_text('设置').click()
-settings = driver.find_element_by_css_selector("#s-usersetting-top").click()
-driver.find_element_by_link_text("搜索设置").click()
-sleep(2)
-
-# 保存设置
-driver.find_element_by_class_name("prefpanelgo").click()
-
-# 获得警告框
-alert = driver.switch_to.alert
-
-# 获得警告框提示信息
-alert_text = alert.text
-print(alert_text)
-
-# 接受警告框
-alert.accept()
-
-driver.quit()
+print("comp_result_text:", comp_result_text)
+print("comp_result_text == 'no'?", comp_result_text == 'no')
+assert comp_result_text == 'no'

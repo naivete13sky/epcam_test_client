@@ -63,7 +63,9 @@ class Asw():
 
     def layer_compare_one_layer(self, *args,**kwargs):
         Print().print_with_delimiter("do_comare")
-        results = []
+        results_cmd = []
+        result = '未比对'#比对结果
+
         self.job1 = kwargs['job1']
         self.step1 = kwargs['step1']
         self.layer1 = kwargs['layer1']
@@ -75,21 +77,28 @@ class Asw():
         self.map_layer = kwargs['map_layer']
         self.map_layer_res = kwargs['map_layer_res']
         layer_cp = self.layer2 + self.layer2_ext
-
-        result_path = kwargs['result_path']
+        result_path_remote = kwargs['result_path_remote']
+        result_path_local = kwargs['result_path_local']
         cmd_list = [
             'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
                 self.layer1, self.job2, self.step2, self.layer2, self.layer2_ext, self.tol, self.map_layer, self.map_layer_res),
             'COM info, out_file={}/{}.txt,args=  -t layer -e {}/{}/{} -m script -d EXISTS'.format(
-                result_path,self.layer1,self.job1,self.step1,self.layer1
+                result_path_remote,self.layer1,self.job1,self.step1,self.layer1 + self.layer2_ext
             ),
         ]
         for cmd in cmd_list:
             print(cmd)
             ret = self.exec_cmd(cmd)
-            results.append(ret)
+            results_cmd.append(ret)
 
+        with open(os.path.join(result_path_local,self.layer1 + '.txt'), 'r') as f:
+            comp_result_text = f.readlines()[0].split(" ")[-1].strip()
+        if comp_result_text == 'no':
+            result = '正常'
+        elif comp_result_text == 'yes':
+            result = '错误'
 
+        return result
 
     def layer_compare_do_compare(self, *args,**kwargs):
         Print().print_with_delimiter("do_comare")

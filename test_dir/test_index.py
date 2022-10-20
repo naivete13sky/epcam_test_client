@@ -93,51 +93,48 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     temp_g_compare_result_path = os.path.join(temp_path, g_compare_result_folder)
     if not os.path.exists(temp_g_compare_result_path):
         os.mkdir(temp_g_compare_result_path)
-    temp_path_g_compare_result = r'//vmware-host/Shared Folders/share/{}/{}'.format(
+    temp_path_remote_g_compare_result = r'//vmware-host/Shared Folders/share/{}/{}'.format(
         'temp' + "_" + str(job_id) + "_" + vs_time_g,g_compare_result_folder)
+    temp_path_local_g_compare_result = os.path.join(temp_path,g_compare_result_folder)
 
-
+    all_result_g = {}
     for layer in all_layer_g:
         print("g_layer:", layer)
         if layer in all_layer_ep:
             map_layer = layer + '-com'
             result = asw.layer_compare_one_layer(job1=job_g_name,step1='orig', layer1=layer, job2=job_ep_name, step2='orig', layer2=layer, layer2_ext='_copy', tol=tol,
-                                                  map_layer=map_layer, map_layer_res=map_layer_res,result_path=temp_path_g_compare_result)
-            if result == 'inner error':
-                pass
-                print(layer, "比对异常！")
+                                                  map_layer=map_layer, map_layer_res=map_layer_res,result_path_remote=temp_path_remote_g_compare_result,
+                                                 result_path_local=temp_path_local_g_compare_result)
+
+            all_result_g[layer] = result
+            if result != "正常":
+                g_vs_total_result_flag = False
+
         else:
             pass
             print("悦谱转图中没有此层")
 
     asw.save_job(job_g_name)
     asw.save_job(job_ep_name)
-
     asw.layer_compare_close_job(job1=job_g_name, job2=job_ep_name)
 
-    temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
-        'temp' + "_" + str(job_id) + "_" + vs_time_g)
-
-    if not os.path.exists(os.path.join(temp_path, 'ze')):
-        os.mkdir(os.path.join(temp_path, 'ze'))
-
-    asw.g_export(job_g_name, temp_path_g_export)
+    # # 比图结果所在的料号导出
+    # temp_path_g_export = r'//vmware-host/Shared Folders/share/{}/ze'.format(
+    #     'temp' + "_" + str(job_id) + "_" + vs_time_g)
+    # if not os.path.exists(os.path.join(temp_path, 'ze')):
+    #     os.mkdir(os.path.join(temp_path, 'ze'))
+    # asw.g_export(job_g_name, temp_path_g_export)#比图结果所在的料号导出
     # asw.delete_job(job1)
     # asw.delete_job(job2)
+
+    # temp_path_ze = r'C:\cc\share\{}\ze'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
+    # job_operation.untgz(os.path.join(temp_path_ze, os.listdir(temp_path_ze)[0]), temp_path)# 先解压
 
     # 开始查看比对结果
     # 获取原始层文件信息，最全的
     all_layer_from_org = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer_org')]
-    # print("all_layer_from_org:", all_layer_from_org)
-    # 先解压
-    temp_path_ze = r'C:\cc\share\{}\ze'.format('temp' + "_" + str(job_id) + "_" + vs_time_g)
-    job_operation.untgz(os.path.join(temp_path_ze, os.listdir(temp_path_ze)[0]), temp_path)
-    all_result_g = {}
-    for layer in all_layer_g:
-        layer_result = asw.layer_compare_analysis_temp_path(job=job_g_name, step='orig', layer2=layer, layer2_ext='_copy', map_layer=layer + '-com', temp_path=temp_path)
-        all_result_g[layer] = layer_result
-        if layer_result != "正常":
-            g_vs_total_result_flag = False
+
+
 
     #all_result存放原始文件中所有层的比对信息
     all_result = {}
@@ -152,7 +149,6 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
             all_result[layer_org] = layer_org_vs_value
         else:
             all_result[layer_org] = 'G转图中无此层'
-
 
     data["all_result_g"] = all_result_g
     data["all_result"] = all_result
