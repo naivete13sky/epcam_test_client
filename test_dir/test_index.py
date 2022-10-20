@@ -28,6 +28,8 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     temp_ep_path = os.path.join(temp_path, 'ep')
     temp_g_path = os.path.join(temp_path, 'g')
 
+
+
     #下载并解压原始gerber文件
     DMS().get_file_from_dms_db(temp_path, job_id, field='file_compressed', decompress='rar')
 
@@ -86,12 +88,21 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     job_g_name = job_g_name.lower()
     job_ep_name = job_ep_name.lower()
     asw.layer_compare_g_open_2_job(job1=job_g_name, step='orig',job2=job_ep_name)
+
+    g_compare_result_folder = 'g_compare_result'
+    temp_g_compare_result_path = os.path.join(temp_path, g_compare_result_folder)
+    if not os.path.exists(temp_g_compare_result_path):
+        os.mkdir(temp_g_compare_result_path)
+    temp_path_g_compare_result = r'//vmware-host/Shared Folders/share/{}/{}'.format(
+        'temp' + "_" + str(job_id) + "_" + vs_time_g,g_compare_result_folder)
+
+
     for layer in all_layer_g:
         print("g_layer:", layer)
         if layer in all_layer_ep:
             map_layer = layer + '-com'
-            result = asw.layer_compare_do_compare(step1='orig', layer1=layer, job2=job_ep_name, step2='orig', layer2=layer, layer2_ext='_copy', tol=tol,
-                                                  map_layer=map_layer, map_layer_res=map_layer_res)
+            result = asw.layer_compare_one_layer(step1='orig', layer1=layer, job2=job_ep_name, step2='orig', layer2=layer, layer2_ext='_copy', tol=tol,
+                                                  map_layer=map_layer, map_layer_res=map_layer_res,result_path=temp_path_g_compare_result)
             if result == 'inner error':
                 pass
                 print(layer, "比对异常！")

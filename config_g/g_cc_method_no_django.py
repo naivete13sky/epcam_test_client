@@ -25,8 +25,6 @@ class Asw():
         ret = int(line.decode().strip())
         return ret
 
-
-
     def import_odb_folder(self, jobpath,*args,**kwargs):
         Print().print_with_delimiter('import job')
         results=[]
@@ -50,27 +48,47 @@ class Asw():
         job1 = kwargs['job1']
         step = kwargs['step']
         job2 = kwargs['job2']
-        cmd_list1 = [
+        cmd_list = [
             'COM check_inout,mode=out,type=job,job={}'.format(job1),
             'COM clipb_open_job,job={},update_clipboard=view_job'.format(job1),
             'COM open_job,job={}'.format(job1),
             'COM open_entity,job={},type=step,name={},iconic=no'.format(job1, step),
             'COM units,type=inch',
             'COM open_job,job={}'.format(job2),
-
         ]
-
-        cmd_list2 = [
-
-        ]
-
-        for cmd in cmd_list1:
+        for cmd in cmd_list:
             print(cmd)
             ret = self.exec_cmd(cmd)
             results.append(ret)
-            if ret != 0:
-                print('inner error')
-                return results
+
+    def layer_compare_one_layer(self, *args,**kwargs):
+        Print().print_with_delimiter("do_comare")
+        results = []
+        self.step1 = kwargs['step1']
+        self.layer1 = kwargs['layer1']
+        self.job2 = kwargs['job2']
+        self.step2 = kwargs['step2']
+        self.layer2 = kwargs['layer2']
+        self.layer2_ext = kwargs['layer2_ext']
+        self.tol = kwargs['tol']
+        self.map_layer = kwargs['map_layer']
+        self.map_layer_res = kwargs['map_layer_res']
+        layer_cp = self.layer2 + self.layer2_ext
+
+        result_path = kwargs['result_path']
+        cmd_list = [
+            'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
+                self.layer1, self.job2, self.step2, self.layer2, self.layer2_ext, self.tol, self.map_layer, self.map_layer_res),
+            'COM info, out_file={}/{}.txt,args=  -t layer -e osrbp40l_g/orig/{} -m script -d EXISTS'.format(
+                result_path,self.layer1,self.layer1
+            ),
+        ]
+        for cmd in cmd_list:
+            print(cmd)
+            ret = self.exec_cmd(cmd)
+            results.append(ret)
+
+
 
     def layer_compare_do_compare(self, *args,**kwargs):
         Print().print_with_delimiter("do_comare")
@@ -902,4 +920,5 @@ if __name__ == '__main__':
 
     #删除所有料号
     # asw.clean_g_all_pre_get_job_list(r'//vmware-host/Shared Folders/share/job_list.txt')
-    asw.clean_g_all_do_clean(r'C:\cc\share\job_list.txt')
+    # asw.clean_g_all_do_clean(r'C:\cc\share\job_list.txt')
+
