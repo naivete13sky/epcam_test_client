@@ -102,6 +102,7 @@ class Asw():
             result = '正常'
         elif comp_result_text == 'yes':
             result = '错误'
+            Print().print_with_delimiter("第一次比图未通过")
             if layer_type == 'drill':
                 Print().print_with_delimiter("再给一次较正孔位置的机会！")
                 #先获取坐标，算出偏移量，然后用G移。
@@ -126,6 +127,27 @@ class Asw():
                 self.move_one_layer_by_x_y(layer=self.layer1, dx=dx, dy=dy)
                 Print().print_with_delimiter("已经移了孔位置！")
                 #再比一次图
+                cmd_list = [
+                    'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
+                        self.layer1, self.job2, self.step2, self.layer2, "_copy2", self.tol, self.map_layer,
+                        self.map_layer_res),
+                    'COM info, out_file={}/{}_2.txt,args=  -t layer -e {}/{}/{} -m script -d EXISTS'.format(
+                        result_path_remote, self.layer1, self.job1, self.step1, self.layer1 + "_copy2"
+                    ),
+                ]
+                for cmd in cmd_list:
+                    print(cmd)
+                    ret = self.exec_cmd(cmd)
+                    results_cmd.append(ret)
+
+                with open(os.path.join(result_path_local, self.layer1 + '_2.txt'), 'r') as f:
+                    comp_result_text = f.readlines()[0].split(" ")[-1].strip()
+                if comp_result_text == 'no':
+                    result = '正常'
+                elif comp_result_text == 'yes':
+                    result = '错误'
+
+                Print().print_with_delimiter("第二次比图结束！结果是：",result)
 
 
         print("比对结果：",result)
