@@ -1,7 +1,9 @@
-import os, time,json,shutil
+import os, time,json,shutil,sys
 from cc import cc_method
 from cc.cc_method import GetTestData,DMS,Print,getFlist
 import pytest
+# sys.path.append(r'C:\cc\python\epwork\epcam_test_client\config_ep\epcam')
+# import job_operation,epcam_api
 from config_ep.epcam import job_operation,epcam_api
 from config_ep.epcam_cc_method_no_django import EpGerberToODB,Information
 from config_g.g_cc_method_no_django import Asw
@@ -13,7 +15,7 @@ from pathlib import Path
 @pytest.mark.parametrize("job_id", GetTestData().get_job_id('Input'))
 def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_clean_g):
     Print().print_with_delimiter("G软件VS开始啦！")
-    asw = Asw(r"C:\EPSemicon\cc\gateway.exe")#拿到G软件
+    asw = Asw(r"C:\cc\python\epwork\epcam_test_client\config_g\bin\gateway.exe")#拿到G软件
     data = {}#存放当前测试料号的每一层的比对结果。
     g_vs_total_result_flag = True  # True表示最新一次G比对通过
     vs_time_g = str(int(time.time()))#比对时间
@@ -62,10 +64,12 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
         print('G软件tgz中的层信息：', all_layer_g)
 
     #以G转图为主来比对
-    job_g_g_path = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_g_name)
-    job_ep_g_path = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_ep_name)
+    # job_g_g_path = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_g_name)
+    job_g_g_path = r'Z:/share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_g_name)
+    # job_ep_g_path = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_ep_name)
+    job_ep_g_path = r'Z:/share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g,job_ep_name)
     # 读取配置文件
-    with open(r'C:\EPSemicon\cc\config.json', encoding='utf-8') as f:
+    with open(r'C:\cc\python\epwork\epcam_test_client\config_g\config.json', encoding='utf-8') as f:
         cfg = json.load(f)
     tol = cfg['job_manage']['vs']['vs_tol_g']
     print("tol:", tol)
@@ -73,6 +77,7 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     print("job1:", job_g_name, "job2:", job_ep_name)
 
     # 导入要比图的资料
+    print("job_g_g_path:",job_g_g_path,Path(job_g_g_path))
     asw.import_odb_folder(job_g_g_path)
     asw.import_odb_folder(job_ep_g_path)
     #G打开要比图的2个料号

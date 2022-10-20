@@ -1022,9 +1022,10 @@ def getFlist(path):
 
 if __name__ == '__main__':
     pass
-    asw = Asw(gl.gateway_path)
+    asw = Asw(gl.g_getway_path)
 
     #删除所有料号
     # asw.clean_g_all_pre_get_job_list(r'//vmware-host/Shared Folders/share/job_list.txt')
     # asw.clean_g_all_do_clean(r'C:\cc\share\job_list.txt')
-
+    asw.import_odb_folder(r'Z:/share/temp_502_1666269720/g/500a001w1-r.g')
+    # asw.import_odb_folder(r'')

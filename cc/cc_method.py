@@ -10,6 +10,7 @@ import pandas as pd
 from config import RunConfig
 
 sys.path.append(RunConfig.epcam_python_path)
+sys.path.append(r'C:\cc\python\epwork\epcam_test_client\config_ep\epcam')
 import epcam,job_operation,epcam_api
 
 

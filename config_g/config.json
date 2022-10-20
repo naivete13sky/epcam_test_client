@@ -1,0 +1,18 @@
+{
+    "job_manage": {
+        "vs": {
+            "vs_tol_ep": 0.9,
+            "vs_tol_g": 0.3
+        },
+        "port": 3306,
+        "user": "root",
+        "password": "123456",
+        "database": "test"
+    },
+    "else": {
+        "url": "https://www.baidu.com/",
+        "path": "config/",
+        "state": 4,
+        "city": "ss"
+    }
+}

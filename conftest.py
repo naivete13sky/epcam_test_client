@@ -127,7 +127,8 @@ def epcam():
 def prepare_test_job_clean_g():
     pass
     # 删除所有料号
-    asw = Asw(r"C:\EPSemicon\cc\gateway.exe")
+    # asw = Asw(r"C:\EPSemicon\cc\gateway.exe")
+    asw = Asw(RunConfig.gateway_path)
     asw.clean_g_all_pre_get_job_list(r'//vmware-host/Shared Folders/share/job_list.txt')
     asw.clean_g_all_do_clean(r'C:\cc\share\job_list.txt')
 

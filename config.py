@@ -22,7 +22,9 @@ class RunConfig:
     # ep_cam_path = r'C:\cc\ep_local\product\EP-CAM\version\20221013\EP-CAM_beta_2.29.055_s14_test_jiami\Release'
     ep_cam_path = r'C:\cc\ep_local\product\EP-CAM\version\20221017\EP-CAM_beta_2.29.055_s15_jiami\Release'
 
-    epcam_python_path=r'C:\EPSemicon\cc\epcam'
+    # epcam_python_path=r'C:\EPSemicon\cc\epcam'
+    epcam_python_path = r'config_ep/epcam'
+    # epcam_python_path = r'C:\cc\python\epwork\epcam_test_client\config_ep\epcam'
 
     # 配置运行的 URL
     url = "http://www.epsemicon.com/"
@@ -41,4 +43,6 @@ class RunConfig:
 
     temp_path_base = r'C:\cc\share\temp'
 
-    config_ep_output = r'C:\cc\python\epwork\epcam_test_client\config_ep\outcfg.json'
+    config_ep_output = r'config_ep\outcfg.json'
+
+    gateway_path = r'config_g\bin\gateway.exe'
