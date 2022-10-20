@@ -65,7 +65,6 @@ class Asw():
         Print().print_with_delimiter("do_comare")
         results_cmd = []
         result = '未比对'#比对结果
-
         self.job1 = kwargs['job1']
         self.step1 = kwargs['step1']
         self.layer1 = kwargs['layer1']
@@ -161,6 +160,47 @@ class Asw():
 
         time.sleep(1)
 
+    def get_info_layer_features_first_coor(self,*args,**kwargs):
+        Print().print_with_delimiter('get_info_layer_features_first_coor')
+        results = []
+        temp_path_local_g_info_folder = kwargs['temp_path_local_g_info_folder']
+        temp_path_remote_g_info_folder = kwargs['temp_path_remote_g_info_folder']
+        job = kwargs['job']
+        step = kwargs['step']
+        layer = kwargs['layer']
+
+        cmd_list = [
+            'COM info, out_file={}/{}.txt,args=  -t layer -e {}/{}/{} -m script -d FEATURES'.format(
+                temp_path_remote_g_info_folder,layer,job,step,layer),
+
+        ]
+        for cmd in cmd_list:
+            print(cmd)
+            ret = self.exec_cmd(cmd)
+            results.append(ret)
+
+        with open(os.path.join(temp_path_local_g_info_folder,layer + '.txt'), 'r') as f:
+            features_info_first_all_data = f.readlines()[1]
+            coor_x = features_info_first_all_data.split(" ")[1].strip()
+            coor_y = features_info_first_all_data.split(" ")[2].strip()
+        # print(coor_x,coor_y)
+        return (coor_x,coor_y)
+
+
+    def move_one_layer_by_x_y(self, *args,**kwargs):
+        Print().print_with_delimiter('move_one_layer_by_x_y')
+        results=[]
+        # job1 = kwargs['job1']
+
+        cmd_list = [
+            'COM display_layer,name=drl001.drl,display=yes,number=1',
+            'COM work_layer,name=drl001.drl',
+            'COM sel_move,dx=21.8091,dy=18.595489999999998',
+        ]
+        for cmd in cmd_list:
+            print(cmd)
+            ret = self.exec_cmd(cmd)
+            results.append(ret)
 
     def layer_compare_analysis(self, jobpath1,step1,layer1,jobpath2,step2,layer2,layer2_ext,tol,map_layer,map_layer_res):
         print("*" * 100, "comare")
