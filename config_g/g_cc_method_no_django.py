@@ -190,12 +190,14 @@ class Asw():
     def move_one_layer_by_x_y(self, *args,**kwargs):
         Print().print_with_delimiter('move_one_layer_by_x_y')
         results=[]
-        # job1 = kwargs['job1']
+        layer = kwargs['layer']
+        dx = kwargs['dx']
+        dy = kwargs['dy']
 
         cmd_list = [
-            'COM display_layer,name=drl001.drl,display=yes,number=1',
-            'COM work_layer,name=drl001.drl',
-            'COM sel_move,dx=21.8091,dy=18.595489999999998',
+            'COM display_layer,name={},display=yes,number=1'.format(layer),
+            'COM work_layer,name={}'.format(layer),
+            'COM sel_move,dx={},dy={}'.format(dx,dy),
         ]
         for cmd in cmd_list:
             print(cmd)

@@ -41,4 +41,4 @@ dy = y2 - y1
 print("dx:",dx,"dy:",dy)
 
 
-asw.move_one_layer_by_x_y()
+asw.move_one_layer_by_x_y(layer=layer_1,dx=dx,dy=dy)
