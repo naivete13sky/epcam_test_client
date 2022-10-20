@@ -143,3 +143,4 @@ cython_debug/
 test_report/
 .idea
 config.xlsx
+~$config.xlsx
