@@ -78,6 +78,12 @@ class Asw():
         layer_cp = self.layer2 + self.layer2_ext
         result_path_remote = kwargs['result_path_remote']
         result_path_local = kwargs['result_path_local']
+        if "layer_type" in kwargs:
+            layer_type=kwargs['layer_type']
+        else:
+            layer_type=""
+        temp_path=kwargs['temp_path']
+
         cmd_list = [
             'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
                 self.layer1, self.job2, self.step2, self.layer2, self.layer2_ext, self.tol, self.map_layer, self.map_layer_res),
@@ -96,6 +102,32 @@ class Asw():
             result = '正常'
         elif comp_result_text == 'yes':
             result = '错误'
+            if layer_type == 'drill':
+                Print().print_with_delimiter("再给一次较正孔位置的机会！")
+                #先获取坐标，算出偏移量，然后用G移。
+                temp_path_local_g_info1_folder = r'{}\info1'.format(temp_path)
+                temp_path_remote_g_info1_folder = r'\\vmware-host\Shared Folders\share\{}\info1'.format(os.path.basename(temp_path))
+                temp_path_local_g_info2_folder = r'{}\info2'.format(temp_path)
+                temp_path_remote_g_info2_folder = r'\\vmware-host\Shared Folders\share\{}\info2'.format(os.path.basename(temp_path))
+                coor_1 = self.get_info_layer_features_first_coor(job=self.job1, step=self.step1, layer=self.layer1,
+                                                              temp_path_local_g_info_folder=temp_path_local_g_info1_folder,
+                                                              temp_path_remote_g_info_folder=temp_path_remote_g_info1_folder)
+                coor_2 = self.get_info_layer_features_first_coor(job=self.job2, step=self.step2, layer=self.layer2,
+                                                                 temp_path_local_g_info_folder=temp_path_local_g_info2_folder,
+                                                                 temp_path_remote_g_info_folder=temp_path_remote_g_info2_folder)
+                x1 = float(coor_1[0])
+                y1 = float(coor_1[1])
+                x2 = float(coor_2[0])
+                y2 = float(coor_2[1])
+                dx = x2 - x1
+                dy = y2 - y1
+                # print("dx:", dx, "dy:", dy)
+                #开始移
+                self.move_one_layer_by_x_y(layer=self.layer1, dx=dx, dy=dy)
+                Print().print_with_delimiter("已经移了孔位置！")
+                #再比一次图
+
+
         print("比对结果：",result)
         return result
 

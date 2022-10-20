@@ -94,7 +94,8 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
             map_layer = layer + '-com'
             result = asw.layer_compare_one_layer(job1=job_g_name,step1='orig', layer1=layer, job2=job_ep_name, step2='orig', layer2=layer, layer2_ext='_copy', tol=tol,
                                                   map_layer=map_layer, map_layer_res=map_layer_res,result_path_remote=temp_path_remote_g_compare_result,
-                                                 result_path_local=temp_path_local_g_compare_result)
+                                                 result_path_local=temp_path_local_g_compare_result,
+                                                 temp_path=temp_path)
             all_result_g[layer] = result
             if result != "正常":
                 g_vs_total_result_flag = False
@@ -288,6 +289,15 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
         'temp' + "_" + str(job_id) + "_" + vs_time_g, g1_compare_result_folder)
     temp_path_local_g1_compare_result = os.path.join(temp_path, g1_compare_result_folder)
 
+    temp_path_local_info1 = os.path.join(temp_path,'info1')
+    if not os.path.exists(temp_path_local_info1):
+        os.mkdir(temp_path_local_info1)
+
+    temp_path_local_info2 = os.path.join(temp_path, 'info2')
+    if not os.path.exists(temp_path_local_info2):
+        os.mkdir(temp_path_local_info2)
+
+
     # 以G1转图为主来比对
     # G打开要比图的2个料号g1和g2。g1就是原始的G转图，g2是悦谱输出的gerber又input得到的
     asw.layer_compare_g_open_2_job(job1=job_g1_name, step='orig',job2=job_g2_name)
@@ -295,11 +305,17 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     for layer in all_layer_g:
         if layer in layers:
             map_layer = layer + '-com'
+            layer_type = ""
+            if layer in drill_layers:
+                print("我是孔层哈！")
+                layer_type = 'drill'
+
             #准备改一下下面这行的参数，换成job名称，不要jobpath。另外job1是已经打开了的，不需要传参数了。
             result = asw.layer_compare_one_layer(job1=job_g1_name,step1='orig', layer1=layer, job2=job_g2_name, step2='orig', layer2=layer, layer2_ext='_copy', tol=tol,
                                                   map_layer=map_layer, map_layer_res=map_layer_res,
                                                  result_path_remote=temp_path_remote_g1_compare_result,
-                                                 result_path_local=temp_path_local_g1_compare_result)
+                                                 result_path_local=temp_path_local_g1_compare_result,
+                                                 layer_type=layer_type,temp_path=temp_path)
             all_result_g1[layer] = result
             if result != "正常":
                 g1_vs_total_result_flag = False

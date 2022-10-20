@@ -18,27 +18,27 @@ job_2 = 'a202-main-v03_g2'
 step_2 = 'orig'
 layer_2 = 'drl001.drl'
 
-cc_1=asw.get_info_layer_features_first_coor(job=job_1,step=step_1,layer=layer_1,
-    temp_path_local_g_info_folder=temp_path_local_g_info_folder,temp_path_remote_g_info_folder=temp_path_remote_g_info_folder)
-print(cc_1)
+# cc_1=asw.get_info_layer_features_first_coor(job=job_1,step=step_1,layer=layer_1,
+#     temp_path_local_g_info_folder=temp_path_local_g_info_folder,temp_path_remote_g_info_folder=temp_path_remote_g_info_folder)
+# print(cc_1)
+#
+# cc_2=asw.get_info_layer_features_first_coor(job=job_2,step=step_2,layer=layer_2,
+#     temp_path_local_g_info_folder=temp_path_local_g_info_folder,temp_path_remote_g_info_folder=temp_path_remote_g_info_folder)
+# print(cc_2)
+#
+# x1 = float(cc_1[0])
+# y1 = float(cc_1[1])
+# print(x1,y1)
 
-cc_2=asw.get_info_layer_features_first_coor(job=job_2,step=step_2,layer=layer_2,
-    temp_path_local_g_info_folder=temp_path_local_g_info_folder,temp_path_remote_g_info_folder=temp_path_remote_g_info_folder)
-print(cc_2)
-
-x1 = float(cc_1[0])
-y1 = float(cc_1[1])
-print(x1,y1)
-
-
-x2 = float(cc_2[0])
-y2 = float(cc_2[1])
-print(x2,y2)
-
-dx = x2 - x1
-dy = y2 - y1
-
-print("dx:",dx,"dy:",dy)
-
-
-asw.move_one_layer_by_x_y(layer=layer_1,dx=dx,dy=dy)
+#
+# x2 = float(cc_2[0])
+# y2 = float(cc_2[1])
+# print(x2,y2)
+#
+# dx = x2 - x1
+# dy = y2 - y1
+#
+# print("dx:",dx,"dy:",dy)
+#
+#
+# asw.move_one_layer_by_x_y(layer=layer_1,dx=dx,dy=dy)
