@@ -64,6 +64,7 @@ class Asw():
     def layer_compare_one_layer(self, *args,**kwargs):
         Print().print_with_delimiter("do_comare")
         results = []
+        self.job1 = kwargs['job1']
         self.step1 = kwargs['step1']
         self.layer1 = kwargs['layer1']
         self.job2 = kwargs['job2']
@@ -79,8 +80,8 @@ class Asw():
         cmd_list = [
             'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
                 self.layer1, self.job2, self.step2, self.layer2, self.layer2_ext, self.tol, self.map_layer, self.map_layer_res),
-            'COM info, out_file={}/{}.txt,args=  -t layer -e osrbp40l_g/orig/{} -m script -d EXISTS'.format(
-                result_path,self.layer1,self.layer1
+            'COM info, out_file={}/{}.txt,args=  -t layer -e {}/{}/{} -m script -d EXISTS'.format(
+                result_path,self.layer1,self.job1,self.step1,self.layer1
             ),
         ]
         for cmd in cmd_list:
