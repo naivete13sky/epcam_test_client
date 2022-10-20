@@ -24,7 +24,7 @@ class RunConfig:
 
     # epcam_python_path=r'C:\EPSemicon\cc\epcam'
     epcam_python_path = r'config_ep/epcam'
-    # epcam_python_path = r'C:\cc\python\epwork\epcam_test_client\config_ep\epcam'
+
 
     # 配置运行的 URL
     url = "http://www.epsemicon.com/"

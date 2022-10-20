@@ -1,19 +1,7 @@
-import sys
-import json
-import time
-from time import sleep
-
 import psycopg2
-import pytest
 from os.path import dirname, abspath
 import os,sys,json,shutil
-# sys.path.append(r'C:\cc\ep_local\product\EP-CAM\version\20220919\EP-CAM_beta_2.28.054_s36_jiami\Release')
-sys.path.append(r'C:\EPSemicon\cc\epcam')
-import epcam
-import epcam_api
-import job_operation
-import layer_info
-import re
+from config_ep.epcam import epcam,job_operation,epcam_api,layer_info
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
 import gl as gl

@@ -2,8 +2,6 @@ import os, time,json,shutil,sys
 from cc import cc_method
 from cc.cc_method import GetTestData,DMS,Print,getFlist
 import pytest
-# sys.path.append(r'C:\cc\python\epwork\epcam_test_client\config_ep\epcam')
-# import job_operation,epcam_api
 from config_ep.epcam import job_operation,epcam_api
 from config_ep.epcam_cc_method_no_django import EpGerberToODB,Information
 from config_g.g_cc_method_no_django import Asw
@@ -64,10 +62,10 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
         print('G软件tgz中的层信息：', all_layer_g)
 
     #以G转图为主来比对
-    # job_g_g_path = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_g_name)
-    job_g_g_path = r'Z:/share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_g_name)
-    # job_ep_g_path = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_ep_name)
-    job_ep_g_path = r'Z:/share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g,job_ep_name)
+    job_g_g_path = r'\\vmware-host\Shared Folders\share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_g_name)
+    # job_g_g_path = r'Z:/share/{}/g/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_g_name)
+    job_ep_g_path = r'\\vmware-host\Shared Folders\share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g, job_ep_name)
+    # job_ep_g_path = r'Z:/share/{}/ep/{}'.format('temp' + "_" + str(job_id) + "_" + vs_time_g,job_ep_name)
     # 读取配置文件
     with open(r'C:\cc\python\epwork\epcam_test_client\config_g\config.json', encoding='utf-8') as f:
         cfg = json.load(f)
