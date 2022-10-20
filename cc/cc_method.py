@@ -12,6 +12,7 @@ from config import RunConfig
 sys.path.append(RunConfig.epcam_python_path)
 import epcam,job_operation,epcam_api
 
+
 class GetTestData():
     pass
     def get_job_id(self,fun):
