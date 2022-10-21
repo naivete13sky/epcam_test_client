@@ -1,13 +1,10 @@
-#coding=utf-8
 import os,shutil
 import subprocess
 import time
 import gl as gl
 from cc.cc_method import Print,DMS
 
-
 LAYER_COMPARE_JSON = 'layer_compare.json'
-
 
 class Asw():
     def __init__(self,gateway_path):
@@ -44,7 +41,6 @@ class Asw():
 
     def layer_compare_g_open_2_job(self, *args,**kwargs):
         Print.print_with_delimiter('comare_open_2_job')
-        results=[]
         job1 = kwargs['job1']
         step = kwargs['step']
         job2 = kwargs['job2']
@@ -56,6 +52,7 @@ class Asw():
             'COM units,type=inch',
             'COM open_job,job={}'.format(job2),
         ]
+        results = []
         for cmd in cmd_list:
             print(cmd)
             ret = self.exec_cmd(cmd)
@@ -149,7 +146,6 @@ class Asw():
 
                 Print.print_with_delimiter("第二次比图结束！结果是：",result)
 
-
         print("比对结果：",result)
         return result
 
@@ -239,7 +235,6 @@ class Asw():
             coor_y = features_info_first_all_data.split(" ")[2].strip()
         # print(coor_x,coor_y)
         return (coor_x,coor_y)
-
 
     def move_one_layer_by_x_y(self, *args,**kwargs):
         Print.print_with_delimiter('move_one_layer_by_x_y')
@@ -977,23 +972,7 @@ class Asw():
         return True
 
 
-class GetParas():
-    pass
-    def get_paras_compare(*, jobpath1, step1, layer1, jobpath2, step2, layer2, layer2_ext, tol, map_layer,map_layer_res):
-        pass
-        paras = {}
-        paras["jobpath1"] = jobpath1
-        paras["step1"] = step1
-        paras["layer1"] = layer1
-        paras["jobpath2"] = jobpath2
-        paras["step2"] = step2
-        paras["layer2"] = layer2
-        paras["layer2_ext"] = layer2_ext
-        paras["tol"] = tol
-        paras["map_layer"] = map_layer
-        paras["map_layer_res"] = map_layer_res
-        # print(paras)
-        return paras
+
 
 class Compress():
 

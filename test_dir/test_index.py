@@ -13,7 +13,7 @@ from pathlib import Path
 @pytest.mark.parametrize("job_id", GetTestData().get_job_id('Input'))
 def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_clean_g):
     Print.print_with_delimiter("G软件VS开始啦！")
-    asw = Asw(r"C:\cc\python\epwork\epcam_test_client\config_g\bin\gateway.exe")#拿到G软件
+    asw = Asw(RunConfig.gateway_path)#拿到G软件
     data = {}#存放当前测试料号的每一层的比对结果。
     g_vs_total_result_flag = True  # True表示最新一次G比对通过
     vs_time_g = str(int(time.time()))#比对时间
