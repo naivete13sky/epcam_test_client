@@ -8,7 +8,8 @@ import rarfile
 from sqlalchemy import create_engine
 import pandas as pd
 from config import RunConfig
-sys.path.append(RunConfig.epcam_python_path)
+print(os.path.dirname("__file__"))
+sys.path.append(RunConfig.epcam_python_interface_path)
 from config_ep.epcam import epcam,job_operation,epcam_api
 
 class GetTestData():

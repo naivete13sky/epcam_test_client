@@ -1,7 +1,7 @@
 import os,sys
 from py.xml import html
 from config import RunConfig
-sys.path.append(RunConfig.epcam_python_path)
+sys.path.append(RunConfig.epcam_python_interface_path)
 import pytest
 from os.path import dirname, abspath
 import epcam_api
