@@ -173,7 +173,8 @@ class DMS():
 
 
 class Print():
-    def print_with_delimiter(self,text, sign='*', numbers=198):
+    @staticmethod
+    def print_with_delimiter(text, sign='*', numbers=198):
         pass
         print(str(sign) * int((numbers - len(text)) / 2), text, str(sign) * int((numbers - len(text)) / 2))
 

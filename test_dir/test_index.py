@@ -12,7 +12,7 @@ from pathlib import Path
 
 @pytest.mark.parametrize("job_id", GetTestData().get_job_id('Input'))
 def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_clean_g):
-    Print().print_with_delimiter("G软件VS开始啦！")
+    Print.print_with_delimiter("G软件VS开始啦！")
     asw = Asw(r"C:\cc\python\epwork\epcam_test_client\config_g\bin\gateway.exe")#拿到G软件
     data = {}#存放当前测试料号的每一层的比对结果。
     g_vs_total_result_flag = True  # True表示最新一次G比对通过
@@ -220,7 +220,7 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
             drillname = step_path + '\\' + drill_layer
 
             if drill_layer in rout_layers:
-                Print().print_with_delimiter("我是rout")
+                Print.print_with_delimiter("我是rout")
                 drill_info = epcam_api.rout2file(job_ep_name, step, drill_layer, drillname)
             else:
                 drill_info = epcam_api.drill2file(job_ep_name, step, drill_layer, drillname, False)
@@ -249,7 +249,7 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
                 hh.write(json.dumps(ret_json, sort_keys=True, indent=4, separators=(',', ': ')))
     epcam_api.close_job(job_ep_name)
 
-    Print().print_with_delimiter('输出gerber完成')
+    Print.print_with_delimiter('输出gerber完成')
 
     #-----------------------------------------开始用G软件input-------------------------------------------------
     ep_out_put_gerber_folder = os.path.join(temp_path,r'output_gerber',job_name_ep,r'orig')
@@ -279,10 +279,10 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     # -----------------------------------------开始用G软件比图，g1和g2-------------------------------------------------
     #再导入一个标准G转图，加个后缀1。
     job_g1_name = job_g_name + "1"
-    Print().print_with_delimiter("job_g1_name")
+    Print.print_with_delimiter("job_g1_name")
     print(job_g1_name)
     asw.import_odb_folder(job_g_g_path,job_name=job_g1_name)
-    Print().print_with_delimiter("job_g1_name2")
+    Print.print_with_delimiter("job_g1_name2")
 
     g1_compare_result_folder = 'g1_compare_result'
     temp_g1_compare_result_path = os.path.join(temp_path, g1_compare_result_folder)
@@ -333,22 +333,22 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
 
 
 
-    Print().print_with_delimiter('比对结果信息展示--开始')
+    Print.print_with_delimiter('比对结果信息展示--开始')
     if g_vs_total_result_flag == True:
         print("恭喜您！料号导入比对通过！")
         # print("\033[1;32m 字体颜色：深黄色\033[0m")
     if g_vs_total_result_flag == False:
         print("Sorry！料号导入比对未通过，请人工检查！")
-    Print().print_with_delimiter('分割线', sign='-')
+    Print.print_with_delimiter('分割线', sign='-')
     print('G转图的层：', all_result_g)
-    Print().print_with_delimiter('分割线', sign='-')
+    Print.print_with_delimiter('分割线', sign='-')
     print('所有层：', all_result)
-    Print().print_with_delimiter('分割线', sign='-')
+    Print.print_with_delimiter('分割线', sign='-')
     print('G1转图的层：', all_result_g1)
-    Print().print_with_delimiter('比对结果信息展示--结束')
+    Print.print_with_delimiter('比对结果信息展示--结束')
 
 
-    Print().print_with_delimiter("断言--开始")
+    Print.print_with_delimiter("断言--开始")
     assert g_vs_total_result_flag == True
     for key in all_result_g:
         assert all_result_g[key] == "正常"
@@ -356,7 +356,7 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     assert g1_vs_total_result_flag == True
     for key in all_result_g1:
         assert all_result_g1[key] == "正常"
-    Print().print_with_delimiter("断言--结束")
+    Print.print_with_delimiter("断言--结束")
 
 
     # 删除temp_path

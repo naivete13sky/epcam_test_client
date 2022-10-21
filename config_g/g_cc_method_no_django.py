@@ -26,7 +26,7 @@ class Asw():
         return ret
 
     def import_odb_folder(self, jobpath,*args,**kwargs):
-        Print().print_with_delimiter('import job')
+        Print.print_with_delimiter('import job')
         results=[]
         self.jobpath = jobpath
         if "job_name" in kwargs:
@@ -43,7 +43,7 @@ class Asw():
         return results
 
     def layer_compare_g_open_2_job(self, *args,**kwargs):
-        Print().print_with_delimiter('comare_open_2_job')
+        Print.print_with_delimiter('comare_open_2_job')
         results=[]
         job1 = kwargs['job1']
         step = kwargs['step']
@@ -62,7 +62,7 @@ class Asw():
             results.append(ret)
 
     def layer_compare_one_layer(self, *args,**kwargs):
-        Print().print_with_delimiter("do_comare")
+        Print.print_with_delimiter("do_comare")
         results_cmd = []
         result = '未比对'#比对结果
         self.job1 = kwargs['job1']
@@ -102,9 +102,9 @@ class Asw():
             result = '正常'
         elif comp_result_text == 'yes':
             result = '错误'
-            Print().print_with_delimiter("第一次比图未通过")
+            Print.print_with_delimiter("第一次比图未通过")
             if layer_type == 'drill':
-                Print().print_with_delimiter("再给一次较正孔位置的机会！")
+                Print.print_with_delimiter("再给一次较正孔位置的机会！")
                 #先获取坐标，算出偏移量，然后用G移。
                 temp_path_local_g_info1_folder = r'{}\info1'.format(temp_path)
                 temp_path_remote_g_info1_folder = r'\\vmware-host\Shared Folders\share\{}\info1'.format(os.path.basename(temp_path))
@@ -125,7 +125,7 @@ class Asw():
                 # print("dx:", dx, "dy:", dy)
                 #开始移
                 self.move_one_layer_by_x_y(layer=self.layer1, dx=dx, dy=dy)
-                Print().print_with_delimiter("已经移了孔位置！")
+                Print.print_with_delimiter("已经移了孔位置！")
                 #再比一次图
                 cmd_list = [
                     'COM compare_layers,layer1={},job2={},step2={},layer2={},layer2_ext={},tol={},area=global,consider_sr=yes,ignore_attr=,map_layer={},map_layer_res={}'.format(
@@ -147,14 +147,14 @@ class Asw():
                 elif comp_result_text == 'yes':
                     result = '错误'
 
-                Print().print_with_delimiter("第二次比图结束！结果是：",result)
+                Print.print_with_delimiter("第二次比图结束！结果是：",result)
 
 
         print("比对结果：",result)
         return result
 
     def layer_compare_do_compare(self, *args,**kwargs):
-        Print().print_with_delimiter("do_comare")
+        Print.print_with_delimiter("do_comare")
         results = []
         try:
             self.step1 = kwargs['step1']
@@ -195,7 +195,7 @@ class Asw():
         time.sleep(1)
 
     def save_job(self, job):
-        Print().print_with_delimiter("save")
+        Print.print_with_delimiter("save")
         results = []
 
         cmd_list1 = [
@@ -215,7 +215,7 @@ class Asw():
         time.sleep(1)
 
     def get_info_layer_features_first_coor(self,*args,**kwargs):
-        Print().print_with_delimiter('get_info_layer_features_first_coor')
+        Print.print_with_delimiter('get_info_layer_features_first_coor')
         results = []
         temp_path_local_g_info_folder = kwargs['temp_path_local_g_info_folder']
         temp_path_remote_g_info_folder = kwargs['temp_path_remote_g_info_folder']
@@ -242,7 +242,7 @@ class Asw():
 
 
     def move_one_layer_by_x_y(self, *args,**kwargs):
-        Print().print_with_delimiter('move_one_layer_by_x_y')
+        Print.print_with_delimiter('move_one_layer_by_x_y')
         results=[]
         layer = kwargs['layer']
         dx = kwargs['dx']
@@ -411,7 +411,7 @@ class Asw():
         return result
 
     def layer_compare_close_job(self, *args,**kwargs):
-        Print().print_with_delimiter('close job',sign='-')
+        Print.print_with_delimiter('close job',sign='-')
         results = []
         self.job1 = kwargs['job1']
         self.job2 = kwargs['job2']
@@ -721,7 +721,7 @@ class Asw():
 
 
         try:
-            Print().print_with_delimiter("开始定位")
+            Print.print_with_delimiter("开始定位")
             # layer_all = [each for each in DMS().get_job_layer_fields_from_dms_db_pandas(job_id, field='layer')]
             # print("layer_all []:",layer_all)
             print(path.replace(' ', '-').replace('(', '-').replace(')', '-'))
@@ -762,7 +762,7 @@ class Asw():
             else:
                 print("我不是孔Excellon2!")
 
-            Print().print_with_delimiter("结束定位")
+            Print.print_with_delimiter("结束定位")
         except:
             pass
             print("有异常啊！")
@@ -961,7 +961,7 @@ class Asw():
         return results
 
     def g_export(self,job,export_to_path):
-        Print().print_with_delimiter("导出--开始")
+        Print.print_with_delimiter("导出--开始")
         cmd_list1 = [
             'COM export_job,job={},path={},mode=tar_gzip,submode=full,overwrite=yes'.format(job,export_to_path),
         ]
@@ -973,7 +973,7 @@ class Asw():
             if ret != 0:
                 print('inner error')
                 return False
-        Print().print_with_delimiter("导出--结束")
+        Print.print_with_delimiter("导出--结束")
         return True
 
 
