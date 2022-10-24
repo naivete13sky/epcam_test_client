@@ -63,7 +63,7 @@ def open_job(path, job):
 def close_job(job):
     data = {
         'func': 'CLOSE_JOB',
-        'paras': 
+        'paras':
                   {'job': job}
     }
     # print(json.dumps(data))
@@ -83,8 +83,8 @@ def save_job(job):
 def get_all_features_report(job, step, layer):
     data = {
         'func': 'GET_ALL_FEATURES_REPORT',
-        'paras': {'job': job, 
-                  'step': step, 
+        'paras': {'job': job,
+                  'step': step,
                   'layer': layer}
     }
     #print(json.dumps(data))
@@ -100,14 +100,14 @@ def get_select_param():
     return epcam.process(json.dumps(data))
 
 #设置新的筛选条件    profile_value//0: all 1: in  2: out
-def set_select_param(featuretypes, has_symbols, symbols, minline, maxline, dcode, attributes_flag, attributes_value, 
+def set_select_param(featuretypes, has_symbols, symbols, minline, maxline, dcode, attributes_flag, attributes_value,
                         profile_value, use_selection):
     data = {
         'func': 'SET_SELECT_PARAM',
         'paras': {'param':{
-                  'featuretypes': featuretypes, 
-                  'has_symbols': has_symbols, 
-                  'symbols': symbols, 
+                  'featuretypes': featuretypes,
+                  'has_symbols': has_symbols,
+                  'symbols': symbols,
                   'minline': minline,
                   'maxline': maxline,
                   'dcode': dcode,
@@ -125,7 +125,7 @@ def create_new_layer(job, step, layer, index):
     data = {
         'func': 'CREATE_NEW_LAYER',
         'paras': {'job': job,
-                  'step': step, 
+                  'step': step,
                   'layer': layer,
                   'index': index}
     }
@@ -136,7 +136,7 @@ def create_step(jobname, stepname, index):
     data = {
         'func': 'CREATE_STEP',
         'paras': {'jobname': jobname,
-                  'stepname': stepname, 
+                  'stepname': stepname,
                   'index': index}
     }
     epcam.process(json.dumps(data))
@@ -226,8 +226,8 @@ def clear_selected_features(job, step, layer):
 def get_selected_features_report(job, step, layer):
     data = {
         'func': 'GET_SELECTED_FEATURES_REPORT',
-        'paras': {'job': job, 
-                  'step': step, 
+        'paras': {'job': job,
+                  'step': step,
                   'layer': layer}
     }
     ret = epcam.process(json.dumps(data))
@@ -237,13 +237,13 @@ def filter_by_mode(jobname, step, layer, reference_layers, mode, feature_type_re
                     attrlogic = 0, attributes = []):
     data = {
         'func': 'FILTER_BY_MODE',
-        'paras': {'jobname': jobname, 
-                  'step': step, 
+        'paras': {'jobname': jobname,
+                  'step': step,
                   'layer': layer,
-                  'reference_layers': reference_layers, 
-                  'mode': mode, 
+                  'reference_layers': reference_layers,
+                  'mode': mode,
                   'feature_type_ref': feature_type_ref,
-                  'symbolflag': symbolflag, 
+                  'symbolflag': symbolflag,
                   'symbolnames': symbolnames,
                   'attrflag': attrflag,
                   'attrlogic': attrlogic,
@@ -255,17 +255,17 @@ def filter_by_mode(jobname, step, layer, reference_layers, mode, feature_type_re
     ret = epcam.process(json.dumps(data))
 
 #孔分析
-def drill_check(job, step, layers, erf, rout_distance, hole_size, extra_holes, hole_seperation, power_ground_short, missing_hole, 
+def drill_check(job, step, layers, erf, rout_distance, hole_size, extra_holes, hole_seperation, power_ground_short, missing_hole,
                 npth_to_rout, use_pth, use_npth, use_via, compensated_rout, ranges):
     data = {
         'func': 'DRILL_CHECK',
-        'paras': [{'job': job}, 
-                  {'step': step}, 
+        'paras': [{'job': job},
+                  {'step': step},
                   {'layers': layers},
-                  {'rout_distance': rout_distance}, 
-                  {'hole_size': hole_size}, 
+                  {'rout_distance': rout_distance},
+                  {'hole_size': hole_size},
                   {'extra_holes': extra_holes},
-                  {'hole_seperation': hole_seperation}, 
+                  {'hole_seperation': hole_seperation},
                   {'power_ground_short': power_ground_short},
                   {'missing_hole': missing_hole},
                   {'npth_to_rout': npth_to_rout},
@@ -283,7 +283,7 @@ def drill_check(job, step, layers, erf, rout_distance, hole_size, extra_holes, h
 def insert_layer(job, poi_layer_index):
     data = {
             'func': 'LAYER_INSERT',
-            'paras': [{'job': job}, 
+            'paras': [{'job': job},
                       {'poi_layer_index': poi_layer_index}]
     }
     #js = json.dumps(data)
@@ -294,7 +294,7 @@ def insert_layer(job, poi_layer_index):
 def filter_set_include_syms(has_symbols, symbols):
     data = {
             'func': 'FILTER_SET_INCLUDE_SYMS',
-            'paras': [{'has_symbols': True}, 
+            'paras': [{'has_symbols': True},
                       {'symbols': symbols}]
     }
     #js = json.dumps(data)
@@ -305,7 +305,7 @@ def filter_set_include_syms(has_symbols, symbols):
 def counter_election(job, step, layer):
     data = {
             'func': 'COUNTER_ELECTION',
-            'paras': [{'job': job}, 
+            'paras': [{'job': job},
                       {'step': step},
                       {'layer': layer}]
     }
@@ -351,19 +351,19 @@ def change_text(job, step, layers, text, font, x_size, y_size, width, polarity, 
     print(json.dumps(data))
     ret = epcam.process(json.dumps(data))
 #内外层分析
-def signal_layer_check(job, step, layers, erf, pp_spacing, drill2cu, rout2cu, sliver_min, min_pad_overlap, spacing, stubs, 
+def signal_layer_check(job, step, layers, erf, pp_spacing, drill2cu, rout2cu, sliver_min, min_pad_overlap, spacing, stubs,
                         drill, center, rout, smd, size, bottleneck, sliver, pad_connection_check,
                         apply_to, check_missing, use_compensated_rout, sort_spacing, ranges):
     data = {
         'func': 'SIGNAL_LAYER_CHECK',
-        'paras': [{'job': job}, 
-                  {'step': step}, 
+        'paras': [{'job': job},
+                  {'step': step},
                   {'layers': layers},
                   {'erf': erf},
-                  {'pp_spacing': pp_spacing}, 
-                  {'drill2cu': drill2cu}, 
+                  {'pp_spacing': pp_spacing},
+                  {'drill2cu': drill2cu},
                   {'rout2cu': rout2cu},
-                  {'sliver_min': sliver_min}, 
+                  {'sliver_min': sliver_min},
                   {'min_pad_overlap': min_pad_overlap},
                   {'spacing': spacing},
                   {'stubs': stubs},
@@ -392,14 +392,14 @@ def signal_layer_DFM(job, step, layers, erf, pth_ar_min, pth_ar_opt, via_ar_min,
                 laser_ar_opt, buried_min, buried_opt, ranges):
     data = {
         'func': 'SIGNAL_LAYER_DFM',
-        'paras': [{'job': job}, 
-                  {'step': step}, 
+        'paras': [{'job': job},
+                  {'step': step},
                   {'layers': layers},
                   {'erf': erf},
-                  {'pth_ar_min': pth_ar_min}, 
-                  {'pth_ar_opt': pth_ar_opt}, 
+                  {'pth_ar_min': pth_ar_min},
+                  {'pth_ar_opt': pth_ar_opt},
                   {'via_ar_min': via_ar_min},
-                  {'via_ar_opt': via_ar_opt}, 
+                  {'via_ar_opt': via_ar_opt},
                   {'mvia_ar_min': mvia_ar_min},
                   {'mvia_ar_opt': mvia_ar_opt},
                   {'spacing_min': spacing_min},
@@ -442,7 +442,7 @@ def sel_break(job, step, layers, sel_type):
                       {'sel_type': sel_type}
                       ]
         }
-    #print(json.dumps(data)) 
+    #print(json.dumps(data))
     ret = epcam.process(json.dumps(data))
 
 #复制Step
@@ -452,7 +452,7 @@ def copy_step(job, org_step_index, dst_step, poi_step_index):
             'paras': {'jobname': job,
                       'org_step_index': org_step_index,
                       'dst_step': dst_step,
-                      'poi_step_index': poi_step_index}                    
+                      'poi_step_index': poi_step_index}
         }
     ret = epcam.process(json.dumps(data))
     return ret
@@ -461,16 +461,16 @@ def copy_step(job, org_step_index, dst_step, poi_step_index):
 def insert_step(job, poi_step_index):
     data = {
             'func': 'INSERT_STEP',
-            'paras': {'jobname': job, 
+            'paras': {'jobname': job,
                       'poi_step_index': poi_step_index}
     }
     ret = epcam.process(json.dumps(data))
 
-#layer_compare_bmp 
+#layer_compare_bmp
 def layer_compare_bmp(jobname1, stepname1, layername1, jobname2, stepname2,layername2, tolerance, grid_size, savepath, suffix, bmp_width, bmp_height):
     data = {
                 'func': 'LAYER_COMPARE_BMP',
-                'paras': {  'jobname1': jobname1, 
+                'paras': {  'jobname1': jobname1,
                             'stepname1': stepname1,
                             'layername1': layername1,
                             'jobname2': jobname2,
@@ -482,24 +482,24 @@ def layer_compare_bmp(jobname1, stepname1, layername1, jobname2, stepname2,layer
                             'suffix': suffix,
                             'bmp_width': bmp_width,
                             'bmp_height': bmp_height}
-           }      
+           }
     ret = epcam.process(json.dumps(data))
     return ret
 
 #泪滴优化
-def teardrop_create_DFM(job, step, layers, erf, sel_type, drilled_pads, undrilled_pads, ann_ring_min, drill_size_min, drill_size_max, 
-                        cu_spacing, drill_spacing, delete_old_teardrops, apply_to, work_mode, use_arc_tear, arc_angle, bga_pads, 
+def teardrop_create_DFM(job, step, layers, erf, sel_type, drilled_pads, undrilled_pads, ann_ring_min, drill_size_min, drill_size_max,
+                        cu_spacing, drill_spacing, delete_old_teardrops, apply_to, work_mode, use_arc_tear, arc_angle, bga_pads,
                         tear_line_width_ratio, ranges):
     data = {
         'func': 'TEARDROP_CREATE_DFM',
-        'paras': [{'job': job}, 
-                  {'step': step}, 
+        'paras': [{'job': job},
+                  {'step': step},
                   {'layers': layers},
                   {'erf': erf},
-                  {'type': sel_type}, 
-                  {'drilled_pads': drilled_pads}, 
+                  {'type': sel_type},
+                  {'drilled_pads': drilled_pads},
                   {'undrilled_pads': undrilled_pads},
-                  {'ann_ring_min': ann_ring_min}, 
+                  {'ann_ring_min': ann_ring_min},
                   {'drill_size_min': drill_size_min},
                   {'drill_size_max': drill_size_max},
                   {'cu_spacing': cu_spacing},
@@ -520,7 +520,7 @@ def teardrop_create_DFM(job, step, layers, erf, sel_type, drilled_pads, undrille
 def step_repeat(job, parentstep, childsteps):
     data = {
             'func': 'STEP_REPEAT',
-            'paras': {'jobname': job, 
+            'paras': {'jobname': job,
                       'parentstep': parentstep,
                       'childsteps': childsteps}
     }
@@ -532,7 +532,7 @@ def step_repeat(job, parentstep, childsteps):
 def set_datum_point(job, stepname, point_x, point_y):
     data = {
             'func': 'SET_DATUM_POINT',
-            'paras': {'jobname': job, 
+            'paras': {'jobname': job,
                       'stepname': stepname,
                       'point': {'ix': point_x, 'iy': point_y}}
     }
@@ -544,7 +544,7 @@ def set_datum_point(job, stepname, point_x, point_y):
 def get_profile_box(job, step):
     data = {
             'func': 'PROFILE_BOX',
-            'paras': {'job': job, 
+            'paras': {'job': job,
                       'step': step}
     }
     js = json.dumps(data)
@@ -556,7 +556,7 @@ def get_profile_box(job, step):
 def sel_index(job, step, layers, mode):
     data = {
             'func': 'SEL_INDEX',
-            'paras': [{'job': job}, 
+            'paras': [{'job': job},
                       {'step': step},
                       {'layers': layers},
                       {'mode': mode}]
@@ -569,7 +569,7 @@ def sel_index(job, step, layers, mode):
 def create_profile(jobname, stepname, layername):
     data = {
         'func': 'CREATE_PROFILE',
-        'paras': {'jobname': jobname, 
+        'paras': {'jobname': jobname,
                   'stepname': stepname,
                   'layername': layername}
     }
@@ -600,7 +600,7 @@ def add_line(job, step, layers, layer, symbol, start_x, start_y, end_x, end_y, p
     epcam.process(json.dumps(data))
 
 #跨层复制feature
-def sel_copy_other(src_job, src_step, src_layers, dst_layers, invert, offset_x, offset_y, 
+def sel_copy_other(src_job, src_step, src_layers, dst_layers, invert, offset_x, offset_y,
                     mirror, resize, rotation, x_anchor, y_anchor):
     data = {
         'func': 'SEL_COPY_OTHER',
@@ -632,7 +632,7 @@ def delete_layer(job, layer_index):
     data = {
             'func': 'DELETE_LAYER',
             'paras': {'jobname': job,
-                      'layer_index': layer_index}                    
+                      'layer_index': layer_index}
         }
     ret = epcam.process(json.dumps(data))
 
@@ -678,14 +678,14 @@ def clip_area_use_profile(job, step, layers, clipinside, clipcontour, margin, fe
                       'clipinside': clipinside,
                       'clipcontour': clipcontour,
                       'margin': margin,
-                      'featuretype': featuretype,}                    
+                      'featuretype': featuretype,}
         }
     js = json.dumps(data)
     #print(js)
     epcam.process(json.dumps(data))
 
 #避铜
-def avoid_conductor_DFM_op(jobname, stepname, layernames, erf, coverage_min, coverage_opt, radius_opt, mending_copper_wire, 
+def avoid_conductor_DFM_op(jobname, stepname, layernames, erf, coverage_min, coverage_opt, radius_opt, mending_copper_wire,
                             is_fast, use_global, viadrill2cu, pthdrill2cu):
     data = {
             'func': 'AVOID_CONDUCTOR_DFM_OP',
@@ -700,7 +700,7 @@ def avoid_conductor_DFM_op(jobname, stepname, layernames, erf, coverage_min, cov
                       {'is_fast': is_fast},
                       {'use_global': use_global},
                       {'pthdrill2cu': pthdrill2cu},
-                      {'viadrill2cu': viadrill2cu}]                    
+                      {'viadrill2cu': viadrill2cu}]
         }
     js = json.dumps(data)
     #print(js)
@@ -710,7 +710,7 @@ def avoid_conductor_DFM_op(jobname, stepname, layernames, erf, coverage_min, cov
 def remove_sharp_angle(job, step, layers, scope, radius, remove_type, is_round):
     data = {
             'func': 'REMOVE_SHARP_ANGLE',
-            'paras': {'para': 
+            'paras': {'para':
                      {'job': job,
                       'step': step,
                       'layers': layers,
@@ -718,7 +718,7 @@ def remove_sharp_angle(job, step, layers, scope, radius, remove_type, is_round):
                       'radius': radius,
                       'type': remove_type,
                       'is_round': is_round}
-                      }                  
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -739,8 +739,8 @@ type:   1        pad
 def get_selected_feature_infos(job, step, layer):
     data = {
         'func': 'GET_SELECTED_FEATURE_INFOS',
-        'paras': {'jobname': job, 
-                  'stepname': step, 
+        'paras': {'jobname': job,
+                  'stepname': step,
                   'layername': layer}
     }
     ret = epcam.process(json.dumps(data))
@@ -750,21 +750,21 @@ def get_selected_feature_infos(job, step, layer):
 # def get_all_feature_infos(job, step, layer):
 #     data = {
 #         'func': 'GET_ALL_FEATURE_INFOS',
-#         'paras': {'jobname': job, 
-#                   'stepname': step, 
+#         'paras': {'jobname': job,
+#                   'stepname': step,
 #                   'layername': layer}
 #     }
 #     ret = epcam.process(json.dumps(data))
 #     return ret
 
 #防焊层优化
-def solder_mask_DFM(job, step, layers, erf, clearance_min, clearance_opt, coverage_min, coverage_opt, bridge_size, 
-                    apply_to, use_existing_mask, use_shaves, do_resize, max_oversized_clearance, intersect_width, 
-                    cut_surplus_width, cut_surplus_height, is_round, fan_shaved, prevent_vertical_flow_add_sm, 
-                    prevent_vertical_flow_del_sm, 
+def solder_mask_DFM(job, step, layers, erf, clearance_min, clearance_opt, coverage_min, coverage_opt, bridge_size,
+                    apply_to, use_existing_mask, use_shaves, do_resize, max_oversized_clearance, intersect_width,
+                    cut_surplus_width, cut_surplus_height, is_round, fan_shaved, prevent_vertical_flow_add_sm,
+                    prevent_vertical_flow_del_sm,
                     drill_clearance_min , drill_clearance_opt , smd_clearance_min,
-				    smd_clearance_opt , bga_clearance_min, bga_clearance_opt, add_outline, outline_width, 
-                    he_hong_resize_sm_in_surface, resize_gas_sm_no_drill, resize_gas_sm_has_drill, 
+				    smd_clearance_opt , bga_clearance_min, bga_clearance_opt, add_outline, outline_width,
+                    he_hong_resize_sm_in_surface, resize_gas_sm_no_drill, resize_gas_sm_has_drill,
                     add_v_cut_sm_size, resize_sm_surface_size, pth_fan_shave, pad_covered_clearance, ranges):
     data = {
             'func': 'SOLDER_MASK_DFM',
@@ -805,7 +805,7 @@ def solder_mask_DFM(job, step, layers, erf, clearance_min, clearance_opt, covera
                       {'pth_fan_shave': pth_fan_shave},
                       {'pad_covered_clearance': pad_covered_clearance},
                       {'ranges': ranges}
-                     ]                
+                     ]
         }
     js = json.dumps(data)
     #print(js)
@@ -821,7 +821,7 @@ def get_selected_feature_min_spacing(jobname, stepname, layername, search_radium
                       'layername': layername,
                       'search_radium': search_radium,
                       'min_spacing': min_spacing
-                      }             
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -836,7 +836,7 @@ def move_layer(jobname, org_layer_index, dst_layer_index):
                       'jobname': jobname,
                       'org_layer_index': org_layer_index,
                       'dst_layer_index': dst_layer_index,
-                      }             
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -884,7 +884,7 @@ def get_min_tolerance(jobname, stepname, layername1, layername2, selectbox):
                       'layername1': layername1,
                       'layername2': layername2,
                       'selectbox': selectbox
-                      }             
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -902,11 +902,11 @@ def delete_step(job, step_index):
     data = {
             'func': 'DELETE_STEP',
             'paras': {'jobname': job,
-                      'step_index': step_index}                    
+                      'step_index': step_index}
         }
     ret = epcam.process(json.dumps(data))
 #跨层移动feature
-def sel_move_other(src_job, src_step, src_layers, dst_job, dst_step, dst_layer, invert, offset_x, offset_y, 
+def sel_move_other(src_job, src_step, src_layers, dst_job, dst_step, dst_layer, invert, offset_x, offset_y,
                     mirror, resize, rotation, x_anchor, y_anchor):
     data = {
         'func': 'SEL_MOVE_OTHER',
@@ -938,7 +938,7 @@ def smd_bga_DFM_op(jobname, stepname, layernames, erf, smd_bga_spacing_opt, max_
                       {'layernames': layernames},
                       {'erf': erf},
                       {'smd_bga_spacing_opt': smd_bga_spacing_opt},
-                      {'max_padup_value': max_padup_value}]                    
+                      {'max_padup_value': max_padup_value}]
         }
     js = json.dumps(data)
     #print(js)
@@ -951,7 +951,7 @@ def load_layer(jobname, stepname, layername):
             'func': 'LOAD_LAYER',
             'paras': {'jobname': jobname,
                       'stepname': stepname,
-                      'layername': layername}                   
+                      'layername': layername}
         }
     js = json.dumps(data)
     #print(js)
@@ -962,7 +962,7 @@ def load_layer(jobname, stepname, layername):
 def set_display_widths(width):
     data = {
             'func': 'SET_DISPLAY_WIDTHS',
-            'paras': [{'width': width}]                    
+            'paras': [{'width': width}]
         }
     js = json.dumps(data)
     #print(js)
@@ -973,7 +973,7 @@ def set_display_widths(width):
 def set_display_text(disp):
     data = {
             'func': 'SET_DISPLAY_TEXT',
-            'paras': [{'disp': disp}]                    
+            'paras': [{'disp': disp}]
         }
     js = json.dumps(data)
     #print(js)
@@ -984,7 +984,7 @@ def set_display_text(disp):
 def set_units(units):
     data = {
             'func': 'SET_UNITS',
-            'paras': [{'units': units}]                    
+            'paras': [{'units': units}]
         }
     js = json.dumps(data)
     #print(js)
@@ -995,7 +995,7 @@ def set_units(units):
 def set_display_profile(mode):
     data = {
             'func': 'SET_DISPLAY_PROFILE',
-            'paras': [{'mode': mode}]                    
+            'paras': [{'mode': mode}]
         }
     js = json.dumps(data)
     #print(js)
@@ -1006,7 +1006,7 @@ def set_display_profile(mode):
 def get_show_para(mode):
     data = {
             'func': 'SET_DISPLAY_PROFILE',
-            'paras': [{'mode': mode}]                    
+            'paras': [{'mode': mode}]
         }
     js = json.dumps(data)
     #print(js)
@@ -1014,7 +1014,7 @@ def get_show_para(mode):
 
 
 #避npth孔和profile线 优化
-def avoid_features_DFM_op(jobname, stepname, layernames, erf, avoid_profile, avoid_profile_size, avoid_npth, avoid_npth_size, 
+def avoid_features_DFM_op(jobname, stepname, layernames, erf, avoid_profile, avoid_profile_size, avoid_npth, avoid_npth_size,
                             avoid_alone_drill, avoid_alone_drill_size, npth_add_solder_mask, npth_add_solder_mask_size, avoid_v_cut):
     data = {
             'func': 'AVOID_FEATURES_DFM_OP',
@@ -1030,7 +1030,7 @@ def avoid_features_DFM_op(jobname, stepname, layernames, erf, avoid_profile, avo
                       {'avoid_alone_drill_size': avoid_alone_drill_size},
                       {'npth_add_solder_mask': npth_add_solder_mask},
                       {'npth_add_solder_mask_size': npth_add_solder_mask_size},
-                      {'avoid_v_cut_size': avoid_v_cut}]                    
+                      {'avoid_v_cut_size': avoid_v_cut}]
         }
     js = json.dumps(data)
     #print(js)
@@ -1046,7 +1046,7 @@ def sliver_DFM_op(jobname, stepname, layernames, erf, max_width, max_height):
                       {'layernames': layernames},
                       {'erf': erf},
                       {'max_width': max_width},
-                      {'max_height': max_height}]                    
+                      {'max_height': max_height}]
         }
     js = json.dumps(data)
     #print(js)
@@ -1063,7 +1063,7 @@ def contourize(job, step, layers, accuracy, separate_to_islands, size, mode):
                       {'accuracy': accuracy},
                       {'separate_to_islands': separate_to_islands},
                       {'size': size},
-                      {'mode': mode},]                    
+                      {'mode': mode},]
         }
     js = json.dumps(data)
     #print(js)
@@ -1073,7 +1073,7 @@ def contourize(job, step, layers, accuracy, separate_to_islands, size, mode):
 def file_identify(path):
     data = {
             'func': 'FILE_IDENTIFY',
-            'paras': {'pathname': path}                   
+            'paras': {'pathname': path}
         }
     js = json.dumps(data)
     #print(js)
@@ -1089,15 +1089,15 @@ def set_selection(is_standard, is_clear, all_layers, is_select, inside, exclude)
                       'all_layers': all_layers,
                       'is_select': is_select,
                       'inside': inside,
-                      'exclude': exclude} 
-                      }              
+                      'exclude': exclude}
+                      }
         }
     js = json.dumps(data)
     #print(js)
     epcam.process(json.dumps(data))
 
 #去除独立pad优化
-def NFP_removal_DFM(job, step, layers, erf, isolated, drill_over, duplicate, covered, work_on, pth, pth_pressfit, npth, 
+def NFP_removal_DFM(job, step, layers, erf, isolated, drill_over, duplicate, covered, work_on, pth, pth_pressfit, npth,
                     via_laser, via, via_photo, remove_undrilled_pads, apply_to, remove_mark_NFP, ranges):
     data = {
             'func': 'NFP_REMOVAL_DFM',
@@ -1119,7 +1119,7 @@ def NFP_removal_DFM(job, step, layers, erf, isolated, drill_over, duplicate, cov
                       {'remove_undrilled_pads': remove_undrilled_pads},
                       {'apply_to': apply_to},
                       {'remove_mark_NFP': remove_mark_NFP},
-                      {'ranges': ranges}]                    
+                      {'ranges': ranges}]
         }
     js = json.dumps(data)
     #print(js)
@@ -1130,8 +1130,8 @@ def NFP_removal_DFM(job, step, layers, erf, isolated, drill_over, duplicate, cov
 def New_signal_layer_DFM(job, step, layers, erf, cut_pad_touch_pad, drill_to_cu):
     data = {
         'func': 'NEW_SIGNAL_LAYER_DFM',
-        'paras': [{'job': job}, 
-                  {'step': step}, 
+        'paras': [{'job': job},
+                  {'step': step},
                   {'layers': layers},
                   {'erf': erf},
                   {'cut_pad_touch_pad': cut_pad_touch_pad},
@@ -1144,8 +1144,8 @@ def New_signal_layer_DFM(job, step, layers, erf, cut_pad_touch_pad, drill_to_cu)
 def setRelationship(colname, rowname, relation_value, relation_ratio):
     data = {
         'func': 'SETRELATIONSHIP',
-        'paras': [{'colname': colname}, 
-                  {'rowname': rowname}, 
+        'paras': [{'colname': colname},
+                  {'rowname': rowname},
                   {'relation_value': relation_value},
                   {'relation_ratio': relation_ratio}]
     }
@@ -1166,8 +1166,8 @@ def getRelationship():
 def setIntroduction(attributename, min_resize, min_ring, opt_resize, opt_ring, is_shave):
     data = {
         'func': 'SETINTRODUCTION',
-        'paras': [{'attributename': attributename}, 
-                  {'min_resize': min_resize}, 
+        'paras': [{'attributename': attributename},
+                  {'min_resize': min_resize},
                   {'min_ring': min_ring},
                   {'opt_resize': opt_resize},
                   {'opt_ring': opt_ring},
@@ -1194,7 +1194,7 @@ def save_job_as(job, path):
             'paras': {
                       'job': job,
                       'path': path
-                      }             
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -1239,7 +1239,7 @@ def unselect_features(job, step, layer):
                       'job': job,
                       'step': step,
                       'layer': layer
-                      }             
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -1254,7 +1254,7 @@ def unselect_features_by_filter(job, step, layer):
                       'job': job,
                       'step': step,
                       'layer': layer
-                      }             
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -1266,7 +1266,7 @@ def DMS_create_job(job):
     data = {
         'func': 'DMS_CREATE_JOB',
         'paras': {'job': job}
-                    
+
         }
     js = json.dumps(data)
     #print(js)
@@ -1278,7 +1278,7 @@ def load_job_from_db(job_id, odb_jobname, db_jobname):
         'paras': {'job_id': job_id,
                     'odb_jobname': odb_jobname,
                     'db_jobname': db_jobname }
-                    
+
         }
     js = json.dumps(data)
     #print(js)
@@ -1288,18 +1288,18 @@ def login(username, password):
     data = {
         'func': 'LOGIN',
         'paras': {'name': username,
-                    'pwd': password }                    
+                    'pwd': password }
         }
     js = json.dumps(data)
     #print(js)
     epcam.process(json.dumps(data))
-    
+
 # #设置机器人参数
 # def setParameter(layer, pa, value):
 #     data = {
 #         'func': 'SETPARAMETER',
-#         'paras': [{'layer': layer}, 
-#                   {'pa': pa}, 
+#         'paras': [{'layer': layer},
+#                   {'pa': pa},
 #                   {'value': value}]
 #     }
 #     #print(json.dumps(data))
@@ -1322,7 +1322,7 @@ def setJobParameter(jobName,rules):
         'paras': {
                       'rules': rules,
                       'jobName': jobName
-                      }   
+                      }
     }
     ret = epcam.process(json.dumps(data))
     return ret
@@ -1333,7 +1333,7 @@ def getJobParameter(jobName):
         'func': 'GETJOBPARAMETER',
         'paras': {
                       'job': jobName
-                      }   
+                      }
     }
     ret = epcam.process(json.dumps(data))
     return ret
@@ -1354,7 +1354,7 @@ def open_eps(job, path):
         'paras': {
                       'job': job,
                       'path': path
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1368,11 +1368,11 @@ def set_layer_checklist(jobName, stepName,layerName,checkList):
                       'stepName': stepName,
                       'layerName':layerName,
                       'checkList':checkList
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
- 
+
 #translate
 def file_translate(path, job, step, layer, parameters, start_time, end_time, assigned_dcodes, defect_reports):
     data = {
@@ -1387,7 +1387,7 @@ def file_translate(path, job, step, layer, parameters, start_time, end_time, ass
                     'end_time': end_time,
                     'assigned_dcodes': assigned_dcodes,
                     'defect_reports': defect_reports
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1398,7 +1398,7 @@ def job_create(job):
         'func': 'JOB_CREATE',
         'paras': {
                     'job': job
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1409,7 +1409,7 @@ def file_translate_init(job):
         'func': 'FILE_TRANSLATE_INIT',
         'paras': {
                     'job': job
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1421,18 +1421,18 @@ def create_job(path, job):
         'paras': {
                     'path': path,
                     'job': job
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
-    
+
 #删除料号
 def delete_job(job):
     data = {
             'func': 'JOB_DELETE',
             'paras': {
                       'src_jobname': job
-                      }             
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -1446,7 +1446,7 @@ def identify_eps(job, path):
             'paras': {
                       'job': job,
                       'path': path
-                      }           
+                      }
         }
     js = json.dumps(data)
     #print(js)
@@ -1456,8 +1456,8 @@ def identify_eps(job, path):
 def add_outline_drill(job, step, outerline_layer, drill_layer, add_drill_symbolname, move_offset_in_corner, angle_tolerance):
     data = {
         'func': 'ADD_OUTLINE_DRILL',
-        'paras': [{'job': job}, 
-                  {'step': step}, 
+        'paras': [{'job': job},
+                  {'step': step},
                   {'outerline_layer': outerline_layer},
                   {'drill_layer': drill_layer},
                   {'add_drill_symbolname': add_drill_symbolname},
@@ -1468,7 +1468,7 @@ def add_outline_drill(job, step, outerline_layer, drill_layer, add_drill_symboln
     ret = epcam.process(json.dumps(data))
 
 #get_coupon_single_end_drill_positions
-def get_coupon_single_end_drill_positions(xmin, ymin, xmax, ymax, x_margin, y_margin, npth_size, pth_size, pth_ring, avoid_cu_global, clearance, 
+def get_coupon_single_end_drill_positions(xmin, ymin, xmax, ymax, x_margin, y_margin, npth_size, pth_size, pth_ring, avoid_cu_global, clearance,
                                         pth_to_gnd_drill, min_cu_width, single_lines, differential_lines):
     data = {
         'func': 'GET_COUPON_SINGLE_END_DRILL_POSITIONS',
@@ -1488,7 +1488,7 @@ def get_coupon_single_end_drill_positions(xmin, ymin, xmax, ymax, x_margin, y_ma
                     'min_cu_width': min_cu_width,
                     'single_lines': single_lines,
                     'differential_lines': differential_lines
-                    }   
+                    }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1502,7 +1502,7 @@ def select_feature_by_id(job, step, layer, ids):
                     'step': step,
                     'layer': layer,
                     'ids': ids
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1515,7 +1515,7 @@ def set_step_profile(job, step, points):
                     'job': job,
                     'step': step,
                     'points': points
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1530,7 +1530,7 @@ def change_feature_symbols(job, step, layers, symbol, pad_angle):
                     'layers': layers,
                     'symbol': symbol,
                     'pad_angle': pad_angle
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1547,7 +1547,7 @@ def clip_area_use_reference(jobname, stepname, work_layers, reference_layer, mar
                     'margin': margin,
                     'clipcontour': clipcontour,
                     'featuretype': featuretype
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1565,7 +1565,7 @@ def clip_area_use_manual(jobname, stepname, layers, points, margin, clipcontour,
                     'clipcontour': clipcontour,
                     'clipinside': clipinside,
                     'featuretype': featuretype
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1578,7 +1578,7 @@ def line2pad_new(job, step, layers):
                     'job': job,
                     'step': step,
                     'layers': layers
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1595,7 +1595,7 @@ def npth_and_pth_prepare_op(job, step, sm_clearance, sm_np_clearance, add_sm_pad
                     'sm_np_clearance': sm_np_clearance,
                     'add_sm_pads': add_sm_pads,
                     'add_signal_pads': add_signal_pads
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1610,13 +1610,13 @@ def modify_attributes(job, step, layers, mode, attributes):
                     'layernames': layers,
                     'mode': mode,
                     'attributes': attributes
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
 
 #coupon获取线的坐标
-def get_coupon_drill_line_relations(xmin, ymin, xmax, ymax, x_margin, y_margin, npth_size, pth_size, pth_ring, avoid_cu_global, clearance, 
+def get_coupon_drill_line_relations(xmin, ymin, xmax, ymax, x_margin, y_margin, npth_size, pth_size, pth_ring, avoid_cu_global, clearance,
                                         pth_to_gnd_drill, min_cu_width, single_lines, differential_lines, single_group_count, diff_group_count,drill_positions):
     data = {
         'func': 'GET_COUPON_DRILL_LINE_RELATIONS',
@@ -1638,8 +1638,8 @@ def get_coupon_drill_line_relations(xmin, ymin, xmax, ymax, x_margin, y_margin, 
                     'differential_lines': differential_lines,
                     'single_group_count':single_group_count,
                     'diff_group_count':diff_group_count,
-                    'drill_positions': drill_positions                    
-                    }   
+                    'drill_positions': drill_positions
+                    }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -1695,9 +1695,9 @@ def layer_compare_point(jobname1, stepname1, layername1, jobname2, stepname2, la
                         'layername1': layername1,
                         'jobname2': jobname2,
                         'stepname2': stepname2,
-                        'layername2': layername2 
-                      }                    
-            }   
+                        'layername2': layername2
+                      }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -1710,8 +1710,8 @@ def get_selected_features_box(job, step, layers):
                         'job': job,
                         'step': step,
                         'layers': layers
-                      }                    
-            }   
+                      }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -1720,7 +1720,7 @@ def get_selected_features_box(job, step, layers):
 def layer_export(job, step, layer, _type, filename, gdsdbu, resize, angle, scalingX, scalingY, isReverse,
                     mirror, rotate, scale, profiletop, cw, cutprofile, mirrorpointX, mirrorpointY, rotatepointX,
                     rotatepointY, scalepointX, scalepointY, mirrordirection, cut_polygon,numberFormatL=2,numberFormatR=6,
-                    zeros=1,unit=0):
+                    zeros=2,unit=0):
     data = {
             'func': 'LAYER_EXPORT',
             'paras': {
@@ -1753,8 +1753,8 @@ def layer_export(job, step, layer, _type, filename, gdsdbu, resize, angle, scali
                         'numberFormatR': numberFormatR,
                         'zeros': zeros,
                         'unit': unit
-                      }                    
-            }   
+                      }
+            }
     js = json.dumps(data)
     print(js)
     return epcam.process(json.dumps(data))
@@ -1768,8 +1768,8 @@ def layer_export(job, step, layer, _type, filename, gdsdbu, resize, angle, scali
 #                         'layer': layer,
 #                         'type': _type,
 #                         'filename': filename
-#                       }                    
-#             }   
+#                       }
+#             }
 #     js = json.dumps(data)
 #     print(js)
 #     return epcam.process(json.dumps(data))
@@ -1781,8 +1781,8 @@ def get_profile(job, step):
             'paras': {
                         'jobname': job,
                         'stepname': step
-                      }                    
-            }   
+                      }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -1800,14 +1800,14 @@ def copy_layer_features(src_job, src_step, src_layers, dst_job, dst_step, dst_la
                         'dst_layer': dst_layers,
                         'mode': mode,
                         'invert': invert
-                      }                    
-            }   
+                      }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
 
 #层别比对
-def layer_compare(jobname1, stepname1, layername1, jobname2, stepname2, layername2, tolerance, mode, consider_SR, 
+def layer_compare(jobname1, stepname1, layername1, jobname2, stepname2, layername2, tolerance, mode, consider_SR,
                     comparison_map_layername, map_layer_resolution):
     data = {
             'func': 'LAYER_COMPARE',
@@ -1823,8 +1823,8 @@ def layer_compare(jobname1, stepname1, layername1, jobname2, stepname2, layernam
                         'consider_SR': consider_SR,
                         'comparison_map_layername': comparison_map_layername,
                         'map_layer_resolution': map_layer_resolution,
-                      }                    
-            }   
+                      }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -1849,8 +1849,8 @@ def transform(jobname,stepname,layernames,mode,rotate,scale,mirror_X,mirror_Y,du
                         'yscale': yscale,
                         'xoffset': xoffset,
                         'yoffset': yoffset
-                     }                    
-            } 
+                     }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -1863,8 +1863,8 @@ def auto_classify_attribute(job, step, layers):
                         'job': job,
                         'step': step,
                         'layers': layers
-                     }                    
-            } 
+                     }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -1878,8 +1878,8 @@ def outline2surface(job, step, layers, can_to_pad):
                         'stepname': step,
                         'layernames': layers,
                         'can_to_pad': can_to_pad,
-                     }                    
-            } 
+                     }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -1890,8 +1890,8 @@ def get_usersymbol_list(job):
             'func': 'RESHAPE_OUTLINE_TO_SURFACE',
             'paras': {
                         'jobname': job
-                     }                    
-            } 
+                     }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -1902,26 +1902,26 @@ def ok_step_check(result):
             'func': 'OK_STEP_CHECK',
             'paras': [{
                         'result': result
-                     }]                   
-            } 
+                     }]
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
 
-def silk_screen_check(job, step, layers, erf, spacing, sm_clearance, rout_clearance, smd_clearance, line_width, pad_clearance, 
+def silk_screen_check(job, step, layers, erf, spacing, sm_clearance, rout_clearance, smd_clearance, line_width, pad_clearance,
                 copper_coverage, hole_clearance, apply_to, use_compensated_rout):
     """
     docstring
     """
     data = {
         'func': 'DRILL_CHECK',
-        'paras': [{'job': job}, 
-                  {'step': step}, 
+        'paras': [{'job': job},
+                  {'step': step},
                   {'layers': layers},
-                  {'erf': erf}, 
-                  {'spacing': spacing}, 
+                  {'erf': erf},
+                  {'spacing': spacing},
                   {'sm_clearance': sm_clearance},
-                  {'rout_clearance': rout_clearance}, 
+                  {'rout_clearance': rout_clearance},
                   {'smd_clearance': smd_clearance},
                   {'line_width': line_width},
                   {'pad_clearance': pad_clearance},
@@ -2067,7 +2067,7 @@ def get_total_square(job,step):
     print(js)
     return epcam.process(json.dumps(data))
 
-    #计算选中的feature的面积                     单位nm² 
+    #计算选中的feature的面积                     单位nm²
 def get_selected_feature_areas(job,step,layer):
     data = {
             'func':'GET_SELECTED_FEATURE_AREAS',
@@ -2093,7 +2093,7 @@ def resize_polygon(input_poly,resize_value):
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
-    
+
 def get_sr_coupon_plan(Panel_Height, Panel_Width, x_margin, y_margin, pannel_left, pannel_bottom,pannel_top,pannel_right,job,pcs_step,
 panel_step,coupon_x_margin,coupon_y_margin,coupon_to_set_margin,npth_size,pth_size,pth_ring,avoid_cu_global,clearance,pth_to_gnd_drill,min_cu_width,single_lines,differential_lines):
     data = {
@@ -2122,8 +2122,8 @@ panel_step,coupon_x_margin,coupon_y_margin,coupon_to_set_margin,npth_size,pth_si
                         'min_cu_width': min_cu_width,
                         'single_lines': single_lines,
                         'differential_lines': differential_lines
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     print(js)
     return epcam.process(json.dumps(data))
@@ -2134,8 +2134,8 @@ def get_step_repeat(job,step):
             'paras': {
                         'job': job,
                         'step': step
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2148,8 +2148,8 @@ def draw_panel_picture(job,step,layer,path):
                         'step': step,
                         'layer': layer,
                         'path': path
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     print(js)
     return epcam.process(json.dumps(data))
@@ -2160,8 +2160,8 @@ def get_all_step_repeat_steps(job,step):
             'paras': {
                         'job': job,
                         'step': step
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2181,8 +2181,8 @@ def fill_profile(job,step,layer,profile_resize,child_profile_resize,avoid_drill_
                         'dx':dx,
                         'dy':dy,
                         'avoid_drill':avoid_drill
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2197,16 +2197,16 @@ def use_pattern_fill_contours(jobname,stepname,layername,symbolname,dx,dy,break_
                         'symbolname':symbolname,
                         'dx':dx,
                         'dy':dy,
-                        'break_partial':break_partial,  
-                        'cut_primitive':cut_primitive,          
+                        'break_partial':break_partial,
+                        'cut_primitive':cut_primitive,
                         'origin_point':origin_point,
                         'outline':outline,
                         'outlinewidth':outlinewidth,
                         'outline_invert':outline_invert,
                         'odd_offset':odd_offset,
                         'even_offset':even_offset
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     print(js)
     return epcam.process(json.dumps(data))
@@ -2216,8 +2216,8 @@ def SL_panel_banding(job):
         'func': 'SL_PANEL_BANDING',
         'paras': {
                     'job': job
-                    }                    
-        } 
+                    }
+        }
     js = json.dumps(data)
     print(js)
     return epcam.process(json.dumps(data))
@@ -2229,8 +2229,8 @@ def negative_layer_to_positive(jobname,stepname,layernames):
                 'jobname': jobname,
                 'stepname': stepname,
                 'layernames': layernames
-                }                    
-    } 
+                }
+    }
     js = json.dumps(data)
     print(js)
     return epcam.process(json.dumps(data))
@@ -2245,7 +2245,7 @@ def translate_lines(job,step,layer,op_type,type1,select_edge):
                 'op_type': op_type,
                 'type': type1,
                 'select_edge': select_edge
-                }                    
+                }
     }
     js = json.dumps(data)
     print(js)
@@ -2258,7 +2258,7 @@ def is_selected(job,step,layer):
                 'job': job,
                 'step': step,
                 'layer': layer
-                }                    
+                }
     }
     js = json.dumps(data)
     #print(js)
@@ -2276,11 +2276,11 @@ def reshape_contourize(jobname, stepname, layernames, accuracy, separate_to_isla
                     'separate_to_islands': separate_to_islands,
                     'max_size': max_size,
                     'clear_mode': clear_mode #int 0
-                }   
+                }
     }
     return epcam.process(json.dumps(data))
 
-#Guide map 
+#Guide map
 #sub_kind:sub map 需添加的类型
 #panel_kind:panel map 需添加的类型
 def run_map(jobname,layername,run_sub,run_panel,sub_kind,panel_kind):
@@ -2293,7 +2293,7 @@ def run_map(jobname,layername,run_sub,run_panel,sub_kind,panel_kind):
                     'run_panel': run_panel,
                     'sub_kind': sub_kind,
                     'panel_kind': panel_kind
-                }   
+                }
     }
     return epcam.process(json.dumps(data))
 
@@ -2304,7 +2304,7 @@ def add_sub_jobname_arrow(jobname,step,layername):
                     'jobname': jobname,
                     'layername': layername,
                     'step': step
-                }   
+                }
     }
     return epcam.process(json.dumps(data))
 
@@ -2317,7 +2317,7 @@ def move_select_feature_to_other_step(jobname,stepname,layername,dest_stepname,d
                     'stepname': stepname,
                     'dest_stepname':dest_stepname,
                     'delete_org':delete_org
-                }   
+                }
     }
     return epcam.process(json.dumps(data))
 
@@ -2336,7 +2336,7 @@ def run_edge(job,step,maplayer,is_ol1_top,is_ol2_top,is_smt_top,is_srd_top,is_ps
                     'is_laser_top':is_laser_top,
                     'is_et_top':is_et_top,
                     'is_fi_top':is_fi_top
-                }   
+                }
     }
     return epcam.process(json.dumps(data))
 
@@ -2349,13 +2349,13 @@ def copy_usersymbol_to_other_job(job1, job2, symbol1, symbol2):
                         'job2': job2,
                         'symbol1':symbol1,
                         'symbol2':symbol2
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
 
-#网格铜 
+#网格铜
 	# int dx = 0;//横向骨架线距离
 	# int dy = 0;//纵向
 	# int linewidth = 0;
@@ -2375,8 +2375,8 @@ def fill_select_feature_by_grid(job,step,layer,dx,dy,linewidth,x_offset,y_offset
                         'x_offset':x_offset,
                         'y_offset':y_offset,
                         'angle':angle
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2389,8 +2389,8 @@ def move_selected_features_index(job,step,layers,put_last):
                         'step': step,
                         'layers':layers,
                         'put_last':put_last
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2429,8 +2429,8 @@ def move_same_layer(jobname, stepname, layernames, offset_x, offset_y):
                         'layername':layernames,
                         'offset_x':offset_x,
                         'offset_y':offset_y
-                        }                    
-            } 
+                        }
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2443,7 +2443,7 @@ def get_step_header_infos(job, step):
                         'job': job,
                         'step': step
                         }
-            } 
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2457,7 +2457,7 @@ def classify_polyline(job,step,layer):
                         'step': step,
                         'layer': layer,
                         }
-            } 
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2498,21 +2498,21 @@ def profile_to_outerline(job, step, layers, linewidth):
                   'step': step,
                   'layernames': layers,
                   'linewidth': linewidth}
-                  
+
         }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
 
-    
+
 #防焊分析
 def solder_mask_check(job, step, layers, erf, sm_ar, sm_coverage, sm_to_rout, sliver_min, spacing_min, bridge_min, overlap,
                         drill, silver, pads, missing, coverage, spacing, rout, clearance_connection, bridge, apply_to,
                         use_compensated_rout, min_sliver_len, dist2sliver_ratio, apply_range, classify_pad_ar, ranges):
     data = {
         'func': 'SOLDER_MASK_CHECK',
-        'paras': [{'job': job}, 
-                  {'step': step}, 
+        'paras': [{'job': job},
+                  {'step': step},
                   {'layers': layers},
                   {'erf': erf},
                   {'sm_ar': sm_ar},
@@ -2532,12 +2532,12 @@ def solder_mask_check(job, step, layers, erf, sm_ar, sm_coverage, sm_to_rout, sl
                   {'clearance_connection': clearance_connection},
                   {'bridge': bridge},
                   {'apply_to': apply_to},
-                  {'use_compensated_rout': use_compensated_rout},  
-                  {'min_sliver_len': min_sliver_len}, 
-                  {'dist2sliver_ratio': dist2sliver_ratio}, 
+                  {'use_compensated_rout': use_compensated_rout},
+                  {'min_sliver_len': min_sliver_len},
+                  {'dist2sliver_ratio': dist2sliver_ratio},
                   {'apply_range': apply_range},
-                  {'classify_pad_ar': classify_pad_ar},    
-                  {'ranges' : ranges}]        
+                  {'classify_pad_ar': classify_pad_ar},
+                  {'ranges' : ranges}]
     }
     js = json.dumps(data)
     # print(js)
@@ -2567,7 +2567,7 @@ def flatten_step(job, step, flatten_layer, dst_layer):
                   'step': step,
                   'flatten_layer': flatten_layer,
                   'dst_layer': dst_layer}
-                  
+
         }
     js = json.dumps(data)
     #print(js)
@@ -2577,21 +2577,21 @@ def flatten_step(job, step, flatten_layer, dst_layer):
 def get_drill_info(job,step,drllayer):
     data = {
         'func': 'GET_DRILL_INFO',
-        'paras': {'jobname': job, 
-                  'stepname': step, 
+        'paras': {'jobname': job,
+                  'stepname': step,
                   'layername': drllayer
                   }
-                  
+
     }
     js = json.dumps(data)
     # print(js)
     return epcam.process(js)
-    
+
 #清空撤销堆栈
 def clear_all_options(job,step):
     data = {
         'func': 'CLEAR_ALL_OPTIONS',
-        'paras': {'job': job, 
+        'paras': {'job': job,
                   'step': step
                   }
     }
@@ -2604,7 +2604,7 @@ def clear_all_options(job,step):
 def identify_symbol(symbolname):
     data = {
         'func': 'IDENTIFY_SYMBOL',
-        'paras': {'content': symbolname    
+        'paras': {'content': symbolname
                   }
     }
     js = json.dumps(data)
@@ -2621,7 +2621,7 @@ def is_job_open(job):
     return epcam.process(js)
 
 def use_solid_fill_contours(jobname, stepname, layernames, solid_type, min_brush, use_arcs):
-    data = {      
+    data = {
             "func": "USE_SOLID_FILL_CONTOURS",
             "paras":{
                         "jobname":jobname,
@@ -2643,7 +2643,7 @@ def save_eps(job, path):
         'paras': {
                       'job': job,
                       'path': path
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -2657,11 +2657,11 @@ def rounding_line_corner(job, step,layers,radius):
                       'step': step,
                       'layers': layers,
                       'radius': radius
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
-    
+
 def get_rest_cu_rate(job,step,layer,resolution_define,thickness):
     data = {
         'func':'GET_REST_CU_RATE',
@@ -2687,7 +2687,7 @@ def set_config_path(path):
         'func': 'SET_CONFIG_PATH',
         'paras': {
                       'path': path
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -2700,7 +2700,7 @@ def get_quote_price_info(job,step,layer):
                     'job': job,
                     'step': step,
                     'layer': layer
-                }   
+                }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -2716,7 +2716,7 @@ def drillmap_output(job,step,drilllayer,outlinelayer,outputlayer,unit):
                     'outlinelayer': outlinelayer,
                     'outputlayer': outputlayer,
                     'unit': unit
-                }   
+                }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -2741,11 +2741,11 @@ def layer_export2(job, step, layer, _type, filename):
                         'layer': layer,
                         'type': _type,
                         'filename': filename
-                      }                    
-            }   
+                      }
+            }
     js = json.dumps(data)
     print(js)
-    return epcam.process(json.dumps(data))  
+    return epcam.process(json.dumps(data))
 
 # 合并铜与轮廓线
 def merge_cu_edge_lines(jobname, stepname, layernames):
@@ -2794,7 +2794,7 @@ def classify_layer_net(job,step,layer):
                         'step': step,
                         'layer': layer
                         }
-            } 
+            }
     js = json.dumps(data)
     #print(js)
     return epcam.process(json.dumps(data))
@@ -2803,12 +2803,12 @@ def classify_layer_net(job,step,layer):
 def set_drill_info(job,step,drllayer,vecDrillTools):
     data = {
         'func': 'SET_DRILL_INFO',
-        'paras': {'jobname': job, 
-                  'stepname': step, 
+        'paras': {'jobname': job,
+                  'stepname': step,
                   'layername': drllayer,
                   'vecDrillTools':vecDrillTools
                   }
-                  
+
     }
     js = json.dumps(data)
     # print(js)
@@ -2817,8 +2817,8 @@ def set_drill_info(job,step,drllayer,vecDrillTools):
 def add_text_by_drill(jobname, stepname, layername, drill_name, textsize, clear_org_features, toolID_to_text):
     data = {
         'func': 'ADD_TEXT_BY_DRILL',
-        'paras': {'jobname': jobname, 
-                  'stepname': stepname, 
+        'paras': {'jobname': jobname,
+                  'stepname': stepname,
                   'layername': layername,
                   'drill_name': drill_name,
                   'textsize': textsize,
@@ -2830,12 +2830,12 @@ def add_text_by_drill(jobname, stepname, layername, drill_name, textsize, clear_
     # print(js)
     return epcam.process(js)
 
-# 
+#
 def create_table(jobname, stepname, layername, clear_org_features, ix, iy, linewidth, rows):
     data = {
         'func': 'CREATE_TABLE',
-        'paras': {'jobname': jobname, 
-                  'stepname': stepname, 
+        'paras': {'jobname': jobname,
+                  'stepname': stepname,
                   'layername': layername,
                   'clear_org_features':clear_org_features,
                   'ix': ix,
@@ -2847,11 +2847,11 @@ def create_table(jobname, stepname, layername, clear_org_features, ix, iy, linew
     js = json.dumps(data)
     # print(js)
     return epcam.process(js)
-    
+
 def output_image(job,step,layers,size,xmin,ymin,xmax,ymax,picpath,picname,backcolor,layercolors):
     data = {
         'func': 'OUTPUT_PICTURE',
-        'paras': {'job': job, 
+        'paras': {'job': job,
                   'step': step,
                   'layers':layers,
                   'size':size,
@@ -2868,12 +2868,12 @@ def output_image(job,step,layers,size,xmin,ymin,xmax,ymax,picpath,picname,backco
     js = json.dumps(data)
     # print(js)
     return epcam.process(js)
-   
+
 def polygon_is_interacts(polygon1,polygon2):
     data = {
         'func': 'POLYGON_IS_INTERACTS',
         'paras': {
-                 'polygon1': polygon1, 
+                 'polygon1': polygon1,
                  'polygon2': polygon2
                  }
     }
@@ -2889,7 +2889,7 @@ def pad2line(job, step, layers):
                     'job': job,
                     'step': step,
                     'layers': layers
-                      }   
+                      }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
@@ -2903,7 +2903,7 @@ def auto_move_drill_pad(job,step, move_sm_via, laser_min_ring, via_pad_min_ring,
     data = {
         'func': 'AUTO_MOVE_DRILL_PAD',
         'paras': {
-                 'job': job, 
+                 'job': job,
                  'step': step,
                  'move_sm_via': move_sm_via,
                  'laser_min_ring': laser_min_ring,
@@ -2942,7 +2942,7 @@ trace_pad_trace_connection_tol, delete_previous_attribute):
     data = {
         'func': 'TEARDROP_ATTRIBUTE_CLASSIFY',
         'paras': {
-                 'jobname': jobname, 
+                 'jobname': jobname,
                  'stepname': stepname,
                  'layernames': layernames,
                  'line_arc': line_arc,
@@ -2956,7 +2956,7 @@ trace_pad_trace_connection_tol, delete_previous_attribute):
     js = json.dumps(data)
     # print(js)
     return epcam.process(js)
-    
+
 #获取旋转角度pad信息
 def get_feature_rotated_box(job, step, layer, featureID):
     data = {
@@ -2966,10 +2966,10 @@ def get_feature_rotated_box(job, step, layer, featureID):
                       'step': step,
                       'layer': layer,
                       'featureID': featureID
-                      }   
+                      }
     }
     return epcam.process(json.dumps(data))
-    
+
 # 输出rout
 def rout2file(job, step, layer,path,number_format_l=2,number_format_r=4,
                     zeroes=2,unit=0,tool_unit=1,x_scale=1,y_scale=1,x_anchor=0,y_anchor=0, partial_order = 0
@@ -3035,7 +3035,7 @@ def create_drill_map_by_info(job,step,drilllayer,outlinelayer,outputlayer,unit,v
                     'outputlayer': outputlayer,
                     'unit': unit,
                     'vecDrillTools': vecDrillTools
-                }   
+                }
     }
     #print(json.dumps(data))
     return epcam.process(json.dumps(data))
