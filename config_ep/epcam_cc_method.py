@@ -1,9 +1,10 @@
 import psycopg2
 from os.path import dirname, abspath
 import os,sys,json,shutil
-from config_ep.epcam import epcam,job_operation,epcam_api,layer_info
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
+sys.path.insert(0, os.path.join(base_path,r'config_ep/epcam'))
+from config_ep.epcam import epcam,job_operation,epcam_api,layer_info
 import gl as gl
 from config import RunConfig
 
