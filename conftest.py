@@ -7,7 +7,7 @@ from os.path import dirname, abspath
 import epcam_api
 base_path = dirname(dirname(abspath(__file__)))
 sys.path.insert(0, base_path)
-from config_g.g_cc_method_no_django import Asw
+from config_g.g_cc_method import Asw
 
 
 
