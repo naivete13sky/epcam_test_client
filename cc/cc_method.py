@@ -10,6 +10,9 @@ import pandas as pd
 from config import RunConfig
 print(os.path.dirname("__file__"))
 sys.path.append(RunConfig.epcam_python_interface_path)
+base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, base_path)
+sys.path.insert(0, os.path.join(base_path,r'config_ep/epcam'))
 from config_ep.epcam import epcam,job_operation,epcam_api
 
 class GetTestData():
