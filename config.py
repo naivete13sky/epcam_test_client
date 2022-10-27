@@ -1,3 +1,4 @@
+import json
 
 
 class RunConfig:
@@ -7,8 +8,15 @@ class RunConfig:
 
 
     #配置EPCAM路径，只要换了版本就要更改
-    ep_cam_path = r'C:\cc\ep_local\product\EP-CAM\version\20221017\EP-CAM_beta_2.29.055_s15_jiami\Release'
+    with open(r'C:\cc\python\epwork\epcam_test_client\my_config.json', encoding='utf-8') as f:
+        cfg = json.load(f)
 
+    ep_cam_path = cfg['epcam']['path']
+    print("epcam_path:", ep_cam_path)
+
+
+
+    # ep_cam_path = r'C:\cc\ep_local\product\EP-CAM\version\20221017\EP-CAM_beta_2.29.055_s15_jiami\Release'
     # ep_cam_path=r'C:\cc\ep_local\product\EP-CAM\version\20220920\EP-CAM_beta_2.28.054_s37_jiami\Release'
     # ep_cam_path=r'C:\cc\ep_local\product\EP-CAM\version\20220920\EP-CAM_beta_2.28.054_s38_jiami\Release'
     # ep_cam_path = r'C:\cc\ep_local\product\EP-CAM\version\20220921\EP-CAM_beta_2.28.054_s39_jiami\Release'
