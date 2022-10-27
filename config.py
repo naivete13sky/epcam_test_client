@@ -6,7 +6,6 @@ class RunConfig:
     运行测试配置
     """
 
-
     #配置EPCAM路径，只要换了版本就要更改
     with open(r'C:\cc\python\epwork\epcam_test_client\my_config.json', encoding='utf-8') as f:
         cfg = json.load(f)
