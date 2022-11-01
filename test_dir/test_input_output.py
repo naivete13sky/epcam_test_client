@@ -128,6 +128,8 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     data["all_result_g"] = all_result_g
     data["all_result"] = all_result
 
+    Print.print_with_delimiter("断言--看一下G转图中的层是不是都有比对结果")
+    assert len(all_layer_g) == len(all_result_g)
 
     #----------------------------------------开始测试输出gerber功能--------------------------------------------------------
     g1_vs_total_result_flag = True
@@ -330,6 +332,9 @@ def test_gerber_to_odb_ep_local_convert_drill_none_2_4(job_id,prepare_test_job_c
     asw.save_job(job_g2_name)
     asw.layer_compare_close_job(job1=job_g1_name, job2=job_g2_name)
     data["all_result_g1"] = all_result_g1
+
+    Print.print_with_delimiter("断言--看一下G1转图中的层是不是都有比对结果")
+    assert len(all_layer_g) == len(all_result_g1)
 
 
 
