@@ -142,10 +142,13 @@ class EpGerberToODB:
                             file_param['Number_format_integer'] = int(layer_e2_number_format_A_ep)
                             file_param['Number_format_decimal'] = int(layer_e2_number_format_B_ep)
                             file_param['tool_units'] = layer_e2_tool_units_ep
+
+                        file_param['format'] = file_format
                         print('现在：',file_param)
                         re = epcam_api.file_translate(os.path.join(root, file.replace(' ','-').replace('(','-').replace(')','-')), job, step, file_name, file_param, '', '', '',[])
                     except:
                         print("except:"*5)
+                        file_param['format'] = file_format
                         re = epcam_api.file_translate(os.path.join(root, file.replace(' ','-').replace('(','-').replace(')','-')), job, step, file_name, file_param, '', '', '',[])
 
                 if file_format == 'Gerber274x':
@@ -155,10 +158,12 @@ class EpGerberToODB:
                         offset2 = min_2
                         offsetFlag = True
                     file_param['offset_numbers'] = {'first': offset1, 'second': offset2}
+                    file_param['format'] = file_format
                     re = epcam_api.file_translate(
                         os.path.join(root, file.replace(' ', '-').replace('(', '-').replace(')', '-')), job, step,
                         file_name, file_param, '', '', '', [])  # translate
                 if file_format == 'DXF':
+                    file_param['format'] = file_format
                     print(file)
                     re = epcam_api.file_translate(
                         os.path.join(root, file.replace(' ', '-').replace('(', '-').replace(')', '-')), job, step,
