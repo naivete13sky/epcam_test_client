@@ -1719,7 +1719,7 @@ def get_selected_features_box(job, step, layers):
 #导出
 def layer_export(job, step, layer, _type, filename, gdsdbu, resize, angle, scalingX, scalingY, isReverse,
                     mirror, rotate, scale, profiletop, cw, cutprofile, mirrorpointX, mirrorpointY, rotatepointX,
-                    rotatepointY, scalepointX, scalepointY, mirrordirection, cut_polygon,numberFormatL=2,numberFormatR=4,
+                    rotatepointY, scalepointX, scalepointY, mirrordirection, cut_polygon,numberFormatL=2,numberFormatR=6,
                     zeros=2,unit=0):
     data = {
             'func': 'LAYER_EXPORT',
@@ -2760,7 +2760,7 @@ def merge_cu_edge_lines(jobname, stepname, layernames):
     return epcam.process(json.dumps(data))
 
 # 输出drill
-def drill2file(job, step, layer,path,isMetric,number_format_l=2,number_format_r=4,
+def drill2file(job, step, layer,path,isMetric,number_format_l=2,number_format_r=6,
                     zeroes=2,unit=0,tool_unit=1,x_scale=1,y_scale=1,x_anchor=0,y_anchor=0, manufacator = '', tools_order = []):
     data = {
         'func': 'DRILL2FILE',
@@ -2971,7 +2971,7 @@ def get_feature_rotated_box(job, step, layer, featureID):
     return epcam.process(json.dumps(data))
 
 # 输出rout
-def rout2file(job, step, layer,path,number_format_l=2,number_format_r=4,
+def rout2file(job, step, layer,path,number_format_l=2,number_format_r=6,
                     zeroes=2,unit=0,tool_unit=1,x_scale=1,y_scale=1,x_anchor=0,y_anchor=0, partial_order = 0
                     , num_in_x = 0, num_in_y = 0, order_type = 0, serial_no = 0, break_arcs = False):
     data = {
